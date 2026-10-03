@@ -1,0 +1,41 @@
+{
+  "previous": {
+    "version": "2.0.2",
+    "startup_seconds": 0.789,
+    "startup_memory": {
+      "working_mib": 46.87,
+      "private_mib": 28.77
+    },
+    "catalogue_seconds": 24.694,
+    "catalogue_memory": {
+      "working_mib": 216.03,
+      "private_mib": 194.36
+    },
+    "image_cache": 487,
+    "idle_cpu_seconds_per_3_seconds": 0.0,
+    "callback_errors": [],
+    "notes": "Same Windows host and Python environment; no Elden Ring process or minimum-spec PC tested."
+  },
+  "current": {
+    "version": "3.0.0",
+    "startup_seconds": 0.631,
+    "startup_memory": {
+      "working_mib": 49.46,
+      "private_mib": 28.82
+    },
+    "catalogue_seconds": 0.144,
+    "catalogue_memory": {
+      "working_mib": 56.16,
+      "private_mib": 35.11
+    },
+    "visible_cards": 18,
+    "image_cache": 18,
+    "idle_cpu_seconds_per_3_seconds": 0.0312,
+    "callback_errors": [],
+    "notes": "Same Windows host and Python environment; no Elden Ring process or minimum-spec PC tested."
+  },
+  "music": {
+    "status": "PASS",
+    "check": "Native MCI open/play/pause/close using a generated silent WAV; MP3 and audible output not tested."
+  }
+}

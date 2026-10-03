@@ -220,6 +220,8 @@ light_greatsword|Light greatswords|Espadons légers|Lehké velké meče|Leichte 
 great_katana|Great katanas|Grands katanas|Velké katany|Großkatanas|Grandes katanas|大刀
 beast_claw|Beast claws|Griffes bestiales|Zvířecí drápy|Bestienklauen|Garras de bestia|獣爪
 """
+from .i18n_v3 import ROWS as EXTRA_ROWS
+ROWS=ROWS.strip()+"\n"+EXTRA_ROWS.strip()
 TEXT = {language:{} for language in LANGUAGE_NAMES}
 for row in ROWS.strip().splitlines():
     key,*values = row.split("|")
@@ -229,11 +231,19 @@ for row in ROWS.strip().splitlines():
         TEXT[language][key] = value
 
 
+from functools import lru_cache
+
+
+@lru_cache(maxsize=1)
+def weapon_names():
+    return json.loads(resource_path("assets/weapon_names.json").read_text(encoding="utf-8"))
+
+
 class Translator:
     def __init__(self,language="en"):
         self.language = language
         self.text = TEXT[language]
-        self.names = json.loads(resource_path("assets/weapon_names.json").read_text(encoding="utf-8"))
+        self.names = weapon_names()
 
     def __call__(self,key,**values):
         return TEXT[self.language].get(key,key).format(**values)

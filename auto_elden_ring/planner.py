@@ -8,16 +8,19 @@ from fractions import Fraction
 from classes_data import CLASS_DATA, ATTRIBUTES
 from .core import (integer, stats_level, generic_weapon, inverse_base,
                    shopping_plan, STONE_PRICES, MAX_LEVEL)
+from .styles import STYLES, PALETTES
 
 LANGUAGES = ("en","fr","cs","de","es","ja")
-THEMES = ("calm","elden","slate")
+THEMES = tuple(PALETTES)
 TALISMANS = {"none":100,"gold":120,"silver":100}
 CONSUMABLES = {"none":100,"gold_foot":130,"silver_foot":100,"gold_horn":140,"silver_horn":100}
 
 
 def default_state():
     stats = deepcopy(CLASS_DATA["Vagabond"]["stats"])
-    return {"language":"en","theme":"calm","class_name":"Vagabond",
+    return {"language":"en","theme":"calm","style":"modern","dyslexic":False,
+            "character_name":"Tarnished","journey_name":"Journey 1","music_file":"",
+            "purchased":{},"class_name":"Vagabond",
             "stats_current":deepcopy(stats),"stats_target":deepcopy(stats),"runes":0,
             "wallet_baseline":None,"runes_spent":0,"weapon_mode":"manual",
             "manual":{"name":"","kind":"normal","base":130,"input_mode":"base",
@@ -39,6 +42,17 @@ def validate_state(state,db):
         raise ValueError("Invalid project structure.")
     if state["language"] not in LANGUAGES or state["theme"] not in THEMES:
         raise ValueError("Unknown language or theme.")
+    if state["style"] not in STYLES or state["theme"] not in STYLES[state["style"]]["themes"]:
+        raise ValueError("The selected color palette does not belong to this style.")
+    if not isinstance(state["dyslexic"],bool):
+        raise ValueError("Invalid reading preference.")
+    for key in ("character_name","journey_name","music_file"):
+        if not isinstance(state[key],str) or len(state[key])>4096:
+            raise ValueError("Invalid profile text.")
+    for key,value in state["purchased"].items():
+        if key not in state["stock"]:
+            raise ValueError("Invalid purchased material.")
+        integer(value,"Purchased quantity",1)
     for key in ("stats_current","stats_target"):
         stats_level(state["class_name"],state[key])
     for key in ("runes","runes_spent"):
@@ -163,12 +177,17 @@ class Planner:
             return [],self.state["runes"]
         best = [{**item,"target":item["current"]} for item in items]
         paid = 0
-        for common in range(1,25):
+        low,high=1,24
+        # Total costs are monotone: at most five shared-budget evaluations.
+        while low<=high:
+            common=(low+high)//2
             candidate = [{**i,"target":max(i["current"],min(common,24 if i["weapon"].maximum==25 else 9 if i["weapon"].maximum==10 else 0))} for i in items]
             cost = self.weapons(candidate)["total"]
             if cost>self.state["runes"]:
-                break
-            best,paid = candidate,cost
+                high=common-1
+            else:
+                best,paid = candidate,cost
+                low=common+1
         return best,self.state["runes"]-paid
 
     def toggle_weapon(self,name):
@@ -195,30 +214,24 @@ class Planner:
         row = next((r for r in self.weapons()["stones"] if r["key"]==key),None)
         if not row or not row["missing"]:
             raise ValueError("No missing stones of this type.")
-        if row["cost"]>self.state["runes"]:
-            raise ValueError("Not enough held runes for this purchase.")
         self.state["stock"][key] = self.state["stock"].get(key,0)+row["missing"]
-        self.state["runes"] -= row["cost"]
-        self.state["runes_spent"] += row["cost"]
+        # This acknowledges an in-game action, independent of the planning wallet.
+        self.state["purchased"][key]=self.state["purchased"].get(key,0)+row["missing"]
         return row["missing"],row["cost"]
 
     def complete_upgrades(self,dragon_confirmed=False):
         plan = self.weapons()
-        if any(r["missing"] for r in plan["stones"] if not r["key"].endswith("dragon")):
-            raise ValueError("Buy or record the missing smithing stones first.")
-        if plan["dragon_needed"] and not dragon_confirmed:
-            raise ValueError("Confirm that the required ancient dragon stones were obtained separately.")
-        if plan["forge"]>self.state["runes"]:
-            raise ValueError("Not enough held runes for the blacksmith.")
-        for row in plan["stones"]:
-            if not row["key"].endswith("dragon"):
-                self.state["stock"][row["key"]] -= row["required"]
-        self.state["runes"] -= plan["forge"]
-        self.state["runes_spent"] += plan["forge"]
+        # The user confirms the real outcome, not a simulated purchase transaction.
+        base=self.manual_weapon().base if self.state["weapon_mode"]=="manual" else None
+        self.state["stock"]={key:0 for key in self.state["stock"]}
+        self.state["runes"]=0
+        self.state["wallet_baseline"]=0
+        self.state["runes_spent"]=0
+        self.state["purchased"]={}
         if self.state["weapon_mode"]=="manual":
             m = self.state["manual"]
             # Preserve the recovered base when the observed next passage expires.
-            m["base"] = self.manual_weapon().base
+            m["base"] = base
             m["current"] = m["target"]
             m["input_mode"] = "base"
         else:

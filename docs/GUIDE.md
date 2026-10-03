@@ -1,4 +1,4 @@
-# User guide — 2.0.2
+# User guide — 3.0.0
 
 ## Character
 
@@ -22,7 +22,8 @@ is inverted before remaining costs are calculated.
 
 Choose weapons opens category headings and illustrated cards. Click to select,
 click again to deselect. Search accepts English and localized names. Done opens
-the selected weapon rows with individual current/target upgrades and copies.
+the selected weapon overview. Choose a weapon in the editor to set its individual
+current/target upgrades and copies; the other selected weapons retain their values.
 
 Maximum without dragon stones sets +24 normal and +9 somber without reducing
 already higher upgrades. Totals separate forge fees and missing-stone purchases.
@@ -39,22 +40,23 @@ Twin Maiden Husks. Enter owned counts or select I have none. Stock is shared:
 one stone cannot be allocated twice.
 
 Missing stones lists quantities and costs. Confirm Purchased after acquiring
-the indicated batch: runes are deducted and stones added. The same satisfied
-requirement cannot be purchased twice.
+the indicated batch: stones are added and the row stays checked in green.
+No wallet value is required. This records what you did in the game; it does not
+simulate a rune transaction. The same satisfied requirement cannot be purchased twice.
 
 After buying materials and visiting the blacksmith, confirm Upgrades completed.
-Forge fees are deducted, required stones consumed and current upgrades updated.
-Surplus stock is preserved. Final +25/+10 steps require separate confirmation
-that the ancient dragon stones were obtained.
+Current upgrades become their targets and ALL recorded ordinary stock, held
+runes and purchase checks reset to zero, including surplus materials. Actual
+leftovers can be entered again. This acknowledgement is accepted even if the
+planning wallet or materials were insufficient. The app trusts your confirmation.
 
 Ancient prices, ordinary requirements and stock show question marks. Rune totals
 exclude their acquisition. Double-click an ordinary unit price to override it
 after confirming the standard value is being replaced. Restore prices removes
 overrides.
 
-Held runes are user-reported; the application never reads the game. Tracked gain
-is wallet growth plus recorded purchases/forge spending since the first balance.
-It cannot infer unreported losses.
+Held runes are user-reported and only calculate the remaining farming deficit;
+the application never reads the game.
 
 ## Rune farming
 
@@ -95,3 +97,34 @@ for current owned stones.
 Autosave lives at %LOCALAPPDATA%\AutoEldenRing\session-v2.json, outside the source
 and download folders. Failed loads start a new session and show the error in
 Settings. Version-1 projects remain tied to version 1.
+
+
+## Visual styles and reading mode
+
+Style changes button geometry, font, navigation layout and decoration. Modern
+uses rounded panels; Elden Ring uses serif text, gold accents, icons and bundled
+fantasy landscape art; XP nostalgia uses square buttons and a horizontal toolbar;
+Rainbow uses static multicolored headings/navigation. Each style has three color
+palettes. No animation loop runs in the background.
+
+Reading mode temporarily applies larger OpenDyslexic text and a cream palette.
+The selected style/palette remain saved and return when reading mode is disabled.
+Music is optional: choose a local MP3/WAV, play/restart, pause or stop. Closing
+the app closes its own playback device. Playback does not start automatically.
+
+## Characters and journal
+
+Open Journal or the character button, then New character. Enter a character
+name, journey name and original class. Profiles have independent attributes,
+weapons, stock, runes and checkpoints. Switching saves the valid current state
+and stops the active timer/music before changing context.
+
+To record progress, enter a checkpoint note and an ISO date/time, or Use now.
+Save checkpoint creates an immutable snapshot, sorted by date. View checkpoint
+shows the saved class, attributes, level and weapon upgrades. Later edits do
+not change earlier snapshots. Names/journey labels can be renamed.
+
+The library saves locally to %LOCALAPPDATA%/AutoEldenRing/profiles-v3.json.
+Back up this file for all profiles and checkpoint history. Save project exports
+one current build state, rather than the entire library. Schema-2 builds import
+with default profile/style preferences; new exports use schema 3.

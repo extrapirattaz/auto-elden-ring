@@ -61,3 +61,18 @@ Python/Tk, [CustomTkinter](https://github.com/TomSchimansky/CustomTkinter),
 [Pillow](https://python-pillow.org/) and [PyInstaller](https://pyinstaller.org/)
 provide the desktop and packaged runtime. Versions are pinned in the two
 requirements files.
+
+
+## Version-3 presentation assets
+
+Catalogue PNGs were resized to at most 136px and encoded as WebP quality 84.
+The manifest retains source URLs, source SHA-256 hashes and processed hashes.
+The Elden-style landscape is original AI-generated fantasy artwork, created
+for this project through the imagegen skill; it is not an official game screenshot
+or logo. Runtime file: assets/elden-landscape.webp.
+
+[OpenDyslexic](https://github.com/antijingoist/opendyslexic) Regular and Bold
+are bundled from commit 1824da5c0e41dc3e13ffc7f3a636dcaf695d61b7.
+The SIL Open Font License is included in assets/fonts/OFL.txt. Fonts are loaded
+privately for this process, without installing a system font. The reading mode
+offers a preference; no medical effectiveness claim is made.

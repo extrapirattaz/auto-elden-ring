@@ -1,5 +1,24 @@
 # Changelog
 
+## 3.0.0 — 2026-10-03
+
+- Restored native Windows caption, move, maximize, resize and close handling;
+  colored the caption through DWM without removing native window styles.
+- Cached pages, updated controls in place, bounded catalogue image caching,
+  rendered only visible cards and compressed icons to WebP.
+- Fixed callback ownership during popup/page destruction and debounced autosave.
+- Disabled CTk's withdraw/update/reveal titlebar cycle after reproducing and
+  fixing a native Tk access violation during resize and popup destruction.
+- Added four visual styles with independent palettes, including generated Elden
+  landscape art, XP square controls/toolbars and static rainbow text.
+- Added bundled OpenDyslexic reading mode and optional local MP3/WAV playback.
+- Made purchase acknowledgement independent of runes; satisfied rows stay checked.
+- Made upgrade acknowledgement update weapon levels and reset all stock/runes.
+- Added independent character/journey profiles and immutable dated checkpoints.
+- Clarified inverse next-upgrade input and kept selected-weapon editing bounded.
+- Added schema-2 migration, schema-3 build files and atomic profile libraries.
+- Added lifecycle, profile, checklist, presentation and performance verification.
+
 ## 2.0.2 — 2026-10-03
 
 - Added an integrated Windows title bar with dragging, minimize/maximize/close

@@ -14,7 +14,7 @@ class Planning(unittest.TestCase):
     def setUpClass(cls):
         cls.db=Database()
 
-    def test_multi_weapon_purchase_consumes_once_preserves_surplus(self):
+    def test_acknowledgements_ignore_wallet_and_reset_inventory(self):
         p=Planner(self.db)
         p.state["weapon_mode"]="catalogue"
         p.toggle_weapon("Dagger")
@@ -30,30 +30,31 @@ class Planning(unittest.TestCase):
             p.purchase("normal:1")
         p.state["stock"]["normal:1"]+=5
         p.complete_upgrades()
-        self.assertEqual(p.state["stock"]["normal:1"],5)
-        self.assertEqual(p.state["runes"],10000-before["total"])
+        self.assertTrue(all(v==0 for v in p.state["stock"].values()))
+        self.assertEqual(p.state["runes"],0)
         self.assertTrue(all(i["current"]==1 for i in p.state["selected"]))
         self.assertEqual(p.weapons()["total"],0)
 
-    def test_failed_transactions_do_not_change_state(self):
+    def test_purchase_without_wallet_and_duplicate_rejected(self):
         p=Planner(self.db)
+        p.state["manual"]["target"]=1
+        p.set_wallet(0)
+        self.assertEqual(p.purchase("normal:1"),(2,400))
         original=deepcopy(p.state)
         with self.assertRaises(ValueError):
             p.purchase("normal:1")
         self.assertEqual(p.state,original)
-        with self.assertRaises(ValueError):
-            p.complete_upgrades()
-        self.assertEqual(p.state,original)
+        self.assertEqual(p.state["runes"],0)
+        self.assertEqual(p.state["purchased"]["normal:1"],2)
 
-    def test_ancient_material_needs_separate_confirmation(self):
+    def test_upgrade_acknowledges_real_outcome_without_material_checks(self):
         p=Planner(self.db)
         p.state["manual"].update(kind="somber",current=9,target=10,base=160)
         p.set_wallet(1000)
         self.assertEqual(p.weapons()["dragon_needed"],1)
-        with self.assertRaises(ValueError):
-            p.complete_upgrades()
-        p.complete_upgrades(True)
-        self.assertEqual(p.state["runes"],40)
+        p.complete_upgrades()
+        self.assertEqual(p.state["runes"],0)
+        self.assertEqual(p.state["manual"]["current"],10)
 
     def test_buff_normalization_and_weighted_samples(self):
         p=Planner(self.db)
@@ -87,7 +88,7 @@ class Planning(unittest.TestCase):
             self.assertEqual(set(translator.names[language]),set(self.db.weapons))
             for name,w in self.db.weapons.items():
                 entry=self.db.raw["weapons_by_category"][w.category][name]
-                self.assertTrue(resource_path(f'assets/catalogue/{entry["id"]}.png').is_file())
+                self.assertTrue(resource_path(f'assets/catalogue/{entry["id"]}.webp').is_file())
 
 
 if __name__=="__main__":

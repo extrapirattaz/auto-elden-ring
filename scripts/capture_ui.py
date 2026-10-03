@@ -26,8 +26,13 @@ def main():
     app.data["farm"]["runes"]=50000
     app.planner.toggle_weapon("Dagger")
     app.planner.toggle_weapon("Black Knife")
+    app.profiles.checkpoint(app.data,"Starting journey","2026-10-03T12:00:00+02:00")
+    app.data["stats_current"]["vigor"]=25
+    app.data["selected"][0]["current"]=6
+    app.profiles.checkpoint(app.data,"After exploring Limgrave","2026-10-03T14:30:00+02:00")
+    app.replace_views()
     try:
-        for page in ("character","weapons","stones","farm","settings"):
+        for page in ("character","weapons","stones","farm","journal","settings"):
             app.show(page)
             app.lift()
             app.update()
@@ -35,15 +40,15 @@ def main():
             app.update()
             box=(app.winfo_rootx(),app.winfo_rooty(),app.winfo_rootx()+app.winfo_width(),app.winfo_rooty()+app.winfo_height())
             capture(app,directory/(page+".png"))
-        app.data["theme"]="elden"
+        app.set_visual_style("style_elden")
         app.data["language"]="fr"
-        app.build_shell()
+        app.apply_appearance()
         app.show("weapons")
         app.update()
         time.sleep(.3)
         capture(app,directory/"elden-fr.png")
         app.catalogue()
-        until=time.monotonic()+8
+        until=time.monotonic()+.3
         while time.monotonic()<until:
             app.update()
             time.sleep(.02)
@@ -54,6 +59,18 @@ def main():
         time.sleep(.4)
         box=(window.winfo_rootx(),window.winfo_rooty(),window.winfo_rootx()+window.winfo_width(),window.winfo_rooty()+window.winfo_height())
         capture(window,directory/"catalogue.png")
+        window.destroy()
+        for style in ("modern","elden","xp","rainbow"):
+            app.set_visual_style("style_"+style)
+            app.show("settings")
+            app.update()
+            time.sleep(.2)
+            app.update()
+            capture(app,directory/("style-"+style+".png"))
+        app.data["dyslexic"]=True
+        app.apply_appearance()
+        app.update()
+        capture(app,directory/"reading.png")
     finally:
         app.destroy()
 

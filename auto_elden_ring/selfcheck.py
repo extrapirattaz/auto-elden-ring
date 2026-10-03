@@ -28,7 +28,9 @@ def self_check():
     from .i18n import Translator
     from .core import resource_path
     checks["six complete name tables"]=all(len(Translator(locale).names[locale])==487 for locale in ("en","fr","cs","de","es","ja"))
-    checks["487 bundled icons"]=len(list(resource_path("assets/catalogue").glob("*.png")))==487
+    checks["487 bundled icons"]=len(list(resource_path("assets/catalogue").glob("*.webp")))==487
+    checks["bundled reading font"]=resource_path("assets/fonts/OpenDyslexic-Regular.otf").is_file()
+    checks["bundled landscape"]=resource_path("assets/elden-landscape.webp").is_file()
     p=Planner(db)
     p.add_sample(1000,60)
     p.add_sample(2000,60)

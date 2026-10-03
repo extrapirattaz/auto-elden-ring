@@ -14,8 +14,8 @@ def main():
             app.update()
             for language in ("en","fr","cs","de","es","ja"):
                 app.data["language"]=language
-                app.build_shell()
-                for page in ("character","weapons","stones","farm","settings"):
+                app.apply_appearance()
+                for page in ("character","weapons","stones","farm","journal","settings"):
                     app.show(page)
                     app.update()
                 checks[language]=True
@@ -23,15 +23,19 @@ def main():
             app.planner.toggle_weapon("Dagger")
             app.planner.toggle_weapon("Black Knife")
             app.show("weapons")
+            app.rebuild_weapon_form()
             app.catalogue()
             app.update()
-            checks["bundled images"]=len(app.images)>0
+            checks["bundled images"]=len(app.gallery.cache)>0
             checks["selected catalogue costs"]=app.planner.weapons()["total"]>0
-            checks["three themes"]=True
-            for theme in ("calm","elden","slate"):
-                app.data["theme"]=theme
-                app.build_shell()
+            checks["four styles"]=True
+            for style in ("modern","elden","xp","rainbow"):
+                app.set_visual_style("style_"+style)
                 app.update()
+            app.data["dyslexic"]=True
+            app.apply_appearance()
+            checks["reading font"]=app.font_family=="OpenDyslexic"
+            checks["no callback errors"]=not app.callback_errors
             report=json.dumps({"app_version":__version__,"status":"PASS" if all(checks.values()) else "FAIL","checks":checks},indent=2)
             if "--report" in sys.argv:
                 Path(sys.argv[sys.argv.index("--report")+1]).write_text(report,encoding="utf-8")

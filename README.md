@@ -5,9 +5,9 @@ smithing materials and rune farming. Written in Python with a standalone x64 EXE
 
 ![Character planner](docs/screenshots/character.png)
 
-## Run version 2.0.2
+## Run version 3.0.0
 
-- Without Python: run Auto-Elden-Ring-2.0.2-win-x64.exe from the Windows ZIP.
+- Without Python: run Auto-Elden-Ring-3.0.0-win-x64.exe from the Windows ZIP.
   Images, fonts, translations and cost tables are included. No installation,
   browser, game connection or online account is required.
 - From source: install Python 3.14 x64 and run START_AUTO_ELDEN_RING.bat.
@@ -16,7 +16,10 @@ smithing materials and rune farming. Written in Python with a standalone x64 EXE
   Dependency installation needs internet; using the application does not.
 
 English is the default language. Settings also offers French, Czech, German,
-Spanish and Japanese, with Calm, Elden Night and Slate themes.
+Spanish and Japanese. Four visual styles (Modern, Elden Ring, Windows XP
+nostalgia and Rainbow) each offer three separate color palettes. A reading
+mode uses bundled OpenDyslexic, larger text and a calm cream palette; disabling
+it restores the selected style. Optional local MP3/WAV playback uses Windows.
 
 ## Plan your build
 
@@ -26,17 +29,23 @@ Spanish and Japanese, with Calm, Elden Night and Slate themes.
 - Weapons: enter the first upgrade price, or recover it from a next-upgrade quote.
   Alternatively, select several illustrated catalogue cards. Each weapon has its
   own current upgrade, target and copy count. Exact catalogue tariffs take priority.
-- Materials: record owned stones and check off purchases. Purchases deduct runes
-  and add stock; completed upgrades deduct forge runes and consume required stock.
-  Surplus materials are preserved.
+- Materials: record owned stones and check off purchases. Purchased rows stay
+  visible with a green check. Held runes only calculate the farming deficit;
+  they never block or charge an acknowledgement.
+- Upgrades completed: confirm the real in-game outcome, update current weapon
+  upgrades to their targets, and reset all recorded stones and held runes to zero.
+  This deliberately resets surplus stock too; enter actual remaining stock again.
 - Farm: measure one minute or complete 60 + 60 + 180 seconds. Each result keeps
   its own buffs and notes. Weighted rates predict time to your selected objective.
 - Projects: save/open complete builds, keep saved attributes or update them, and
   confirm current runes and stones. Progress also saves locally.
+- Journal: create separate named characters/journeys with their own starting
+  class. Save optional dated checkpoints and inspect immutable attributes and
+  weapon upgrades on a chronological timeline.
 
 There is no shopping cart. The planner assumes the relevant miner's bell bearings
 are available. Ancient dragon stones have no purchase price or ordinary inventory
-count; obtain them separately and confirm availability. Totals include the final
+count; obtain them separately. Totals include the final
 blacksmith fee but exclude a fictitious dragon-stone purchase price.
 
 ![Weapon catalogue](docs/screenshots/catalogue.png)
@@ -67,21 +76,24 @@ and [changelog](CHANGELOG.md).
 Run BUILD_RELEASE.ps1 on Windows x64. The script tests calculations and real
 widgets, builds a PyInstaller executable, checks embedded resources and creates:
 
-- auto-elden-ring-2.0.2-source.zip: architecture-independent Python source.
-- auto-elden-ring-2.0.2-windows-x64.zip: standalone Windows x64 package.
-- Auto-Elden-Ring-2.0.2-win-x64.exe: executable for release downloads.
+- auto-elden-ring-3.0.0-source.zip: architecture-independent Python source.
+- auto-elden-ring-3.0.0-windows-x64.zip: standalone Windows x64 package.
+- Auto-Elden-Ring-3.0.0-win-x64.exe: executable for release downloads.
 - RELEASE_MANIFEST.json, SHA256SUMS.txt and executable verification reports.
 
 Each release lives in releases/version. Existing versions are never overwritten.
 The version in auto_elden_ring/__init__.py owns the source/EXE correspondence.
 Increment it before building another release. Version-1 projects use schema 1
-and require version 1; version-2 projects use schema 2.
+and require version 1. Version 3 writes schema 3 and imports schema-2 builds.
+Character libraries and checkpoints save atomically to
+%LOCALAPPDATA%/AutoEldenRing/profiles-v3.json. Exported build files contain
+one build state; back up the profile library to retain the complete timeline.
 
 ~~~powershell
 python -m unittest discover -s tests -v
 python main.py --self-test --report verification.json
 python main.py --ui-smoke --report verification-ui.json
-Get-FileHash .\Auto-Elden-Ring-2.0.2-win-x64.exe -Algorithm SHA256
+Get-FileHash .\Auto-Elden-Ring-3.0.0-win-x64.exe -Algorithm SHA256
 ~~~
 
 Upload the project and artifacts to your own GitHub repository. No publishing
@@ -95,3 +107,14 @@ transactions; ui.py renders the desktop; i18n.py holds interface translations;
 storage.py validates and saves projects. assets contains bundled media and name
 tables, tests verifies workflows, and scripts builds releases and maintains assets.
 Source comments and documentation are in English.
+
+## Stability and performance
+
+The app keeps native Windows movement, resize and close handling, with a
+colored caption where Windows supports it. Settings recolor existing controls
+and pages are cached. The catalogue draws only visible cards, uses a bounded
+64-image cache and ships compact WebP icons. There are no animated theme loops.
+See [measured results and limits](docs/VERIFICATION.md).
+
+![Elden Ring style](docs/screenshots/style-elden.png)
+![Windows XP nostalgia](docs/screenshots/style-xp.png)
