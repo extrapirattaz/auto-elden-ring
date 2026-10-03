@@ -112,7 +112,7 @@ gold|Gold Scarab · +20% runes|Scarabée d’or · +20 % de runes|Zlatý skarabe
 silver|Silver Scarab · +0% runes|Scarabée d’argent · +0 % de runes|Stříbrný skarabeus · +0 % run|Silberskarabäus · +0 % Runen|Escarabajo plateado · +0 % de runas|銀のスカラベ・ルーン+0％
 gold_foot|Gold-Pickled Fowl Foot · +30%|Patte de volaille en saumure dorée · +30 %|Zlatá nakládaná ptačí nožka · +30 %|Goldener Federtierfuß · +30 %|Pata de ave macerada en oro · +30 %|鳥脚の黄金漬け・+30％
 silver_foot|Silver-Pickled Fowl Foot · +0% runes|Patte de volaille en saumure argentée · +0 % de runes|Stříbrná nakládaná ptačí nožka · +0 % run|Silberner Federtierfuß · +0 % Runen|Pata de ave macerada en plata · +0 % de runas|鳥脚の白銀漬け・ルーン+0％
-gold_horn|Golden Horn Tender · +40%|Corne en saumure dorée · +40 %|Zlatá nakládaná rohovina · +40 %|Goldene Hornzartheit · +40 %|Cuerno macerado en oro · +40 %|角の黄金漬け・+40％
+gold_horn|Golden Horn Tender · +40%|Corne en saumure dorée · +40 %|Zlatá nakládaná rohovina · +40 %|Goldenes Horn · +40 % Runen|Cuerno macerado en oro · +40 %|角の黄金漬け・+40％
 silver_horn|Silver Horn Tender · +0% runes|Corne en saumure argentée · +0 % de runes|Stříbrná nakládaná rohovina · +0 % run|Silberne Hornzartheit · +0 % Runen|Cuerno macerado en plata · +0 % de runas|角の白銀漬け・ルーン+0％
 notes|Method and other effects (optional)|Méthode et autres effets (facultatif)|Postup a další účinky (nepovinné)|Methode und weitere Effekte (optional)|Método y otros efectos (opcional)|方法・その他の効果（任意）
 estimate|Estimate farming time|Estimer le temps de farm|Odhadnout potřebný čas|Farmzeit schätzen|Estimar tiempo de farmeo|必要な時間を見積もる

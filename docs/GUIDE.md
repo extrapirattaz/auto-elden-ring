@@ -1,4 +1,4 @@
-# User guide — 2.0.0
+# User guide — 2.0.1
 
 ## Character
 

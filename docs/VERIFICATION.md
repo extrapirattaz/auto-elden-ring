@@ -1,4 +1,4 @@
-# Verification — 2.0.0
+# Verification — 2.0.1
 
 The builder runs 34 tests covering exact levels, all catalogue passages,
 inverse profiles, shared inventory, atomic persistence, purchase/upgrade

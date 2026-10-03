@@ -667,6 +667,8 @@ class App(ctk.CTk):
         if self.deadline is not None:
             elapsed=max(1,math.ceil(time.monotonic()-self.timer_started))
             self.data["farm"]["seconds"]=min(elapsed,self.timer_duration)
+            if self.page=="farm":
+                self.farm_vars["seconds"].set(str(self.data["farm"]["seconds"]))
             self.deadline=None
             self.full_index=None
             self.awaiting_result=True

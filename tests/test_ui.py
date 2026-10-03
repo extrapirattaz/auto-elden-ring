@@ -90,6 +90,11 @@ class Interface(unittest.TestCase):
         self.assertIsNone(a.full_index)
         a.reset_timer()
         self.assertEqual(a.timer_label.cget("text"),"01:00")
+        a.start_timer()
+        a.timer_started=time.monotonic()-17
+        a.stop_timer()
+        self.assertIn(a.data["farm"]["seconds"],(17,18))
+        self.assertEqual(int(a.farm_vars["seconds"].get()),a.data["farm"]["seconds"])
 
 
 if __name__=="__main__":

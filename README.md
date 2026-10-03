@@ -5,9 +5,9 @@ smithing materials and rune farming. Written in Python with a standalone x64 EXE
 
 ![Character planner](docs/screenshots/character.png)
 
-## Run version 2.0.0
+## Run version 2.0.1
 
-- Without Python: run Auto-Elden-Ring-2.0.0-win-x64.exe from the Windows ZIP.
+- Without Python: run Auto-Elden-Ring-2.0.1-win-x64.exe from the Windows ZIP.
   Images, fonts, translations and cost tables are included. No installation,
   browser, game connection or online account is required.
 - From source: install Python 3.14 x64 and run START_AUTO_ELDEN_RING.bat.
@@ -67,9 +67,9 @@ and [changelog](CHANGELOG.md).
 Run BUILD_RELEASE.ps1 on Windows x64. The script tests calculations and real
 widgets, builds a PyInstaller executable, checks embedded resources and creates:
 
-- auto-elden-ring-2.0.0-source.zip: architecture-independent Python source.
-- auto-elden-ring-2.0.0-windows-x64.zip: standalone Windows x64 package.
-- Auto-Elden-Ring-2.0.0-win-x64.exe: executable for release downloads.
+- auto-elden-ring-2.0.1-source.zip: architecture-independent Python source.
+- auto-elden-ring-2.0.1-windows-x64.zip: standalone Windows x64 package.
+- Auto-Elden-Ring-2.0.1-win-x64.exe: executable for release downloads.
 - RELEASE_MANIFEST.json, SHA256SUMS.txt and executable verification reports.
 
 Each release lives in releases/version. Existing versions are never overwritten.
@@ -81,7 +81,7 @@ and require version 1; version-2 projects use schema 2.
 python -m unittest discover -s tests -v
 python main.py --self-test --report verification.json
 python main.py --ui-smoke --report verification-ui.json
-Get-FileHash .\Auto-Elden-Ring-2.0.0-win-x64.exe -Algorithm SHA256
+Get-FileHash .\Auto-Elden-Ring-2.0.1-win-x64.exe -Algorithm SHA256
 ~~~
 
 Upload the project and artifacts to your own GitHub repository. No publishing

@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.1 — 2026-10-03
+
+- Preserved elapsed duration in the entry field when an ordinary farming test
+  is stopped early, so recording cannot restore the previous 60-second value.
+- Improved the German golden-horn label.
+
 ## 2.0.0 — 2026-10-03
 
 - Rebuilt the desktop around five calm, rounded screens and three themes.
