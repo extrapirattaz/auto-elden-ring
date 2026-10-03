@@ -1,4 +1,5 @@
-# Python 3.14 x64 used for the Windows release. No third-party runtime modules.
+# Python 3.14 x64 used for the Windows release.
+-r requirements.txt
 altgraph==0.17.5
 packaging==26.3
 pefile==2024.8.26

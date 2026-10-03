@@ -3,9 +3,9 @@ $ErrorActionPreference = "Stop"
 Set-Location -LiteralPath $PSScriptRoot
 if (-not (Test-Path -LiteralPath ".venv\Scripts\python.exe")) {
     & $Python -m venv .venv
-    if ($LASTEXITCODE -ne 0) { throw "Creation de l'environnement Python impossible." }
+    if ($LASTEXITCODE -ne 0) { throw "Cannot create the Python environment." }
 }
 & .\.venv\Scripts\python.exe -m pip install -r requirements-build.txt
-if ($LASTEXITCODE -ne 0) { throw "Installation des dependances impossible." }
+if ($LASTEXITCODE -ne 0) { throw "Cannot install build dependencies." }
 & .\.venv\Scripts\python.exe scripts\build_release.py
-if ($LASTEXITCODE -ne 0) { throw "Construction ou verification de la release impossible." }
+if ($LASTEXITCODE -ne 0) { throw "Release build or verification failed." }

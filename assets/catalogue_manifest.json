@@ -1,0 +1,2468 @@
+{
+  "repositories": {
+    "oisis/EldenRing-SaveForge": "ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5",
+    "elden-ring-data/msg": "4bbba478e478e9018d0293e0b18cd8cf706199e9",
+    "ividyon/Impalers-Archive": "23fdb0e125ed27266b1fd82446c17d687ffcd15a"
+  },
+  "images": {
+    "Dagger": {
+      "file": "assets/catalogue/1000000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/dagger.png",
+      "sha256": "a542ae7e8697cb0947468838e000ded24496d11d760607e5a5de1fe1c5fdd018"
+    },
+    "Black Knife": {
+      "file": "assets/catalogue/1010000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/black_knife.png",
+      "sha256": "a656b078b5c6428fec242302d7a7395b6dd37066310395b8f5f6084e5537503e"
+    },
+    "Parrying Dagger": {
+      "file": "assets/catalogue/1020000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/parrying_dagger.png",
+      "sha256": "7ec3804eae3376e7e79e589585844893190e000173fca41b472b5dc02b7c54a5"
+    },
+    "Misricorde": {
+      "file": "assets/catalogue/1030000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/misericorde.png",
+      "sha256": "344ec49168fed7219e388f12f99647f9eac62135e2611602c500d30e47a7eb72"
+    },
+    "Reduvia": {
+      "file": "assets/catalogue/1040000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/reduvia.png",
+      "sha256": "cbfdeac1efdb5ffe8a14673cd026fa59c74424ca87d67fb359a3856d70770a02"
+    },
+    "Crystal Knife": {
+      "file": "assets/catalogue/1050000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/crystal_knife.png",
+      "sha256": "1fd31b6fe9cbdbca0e4222ca2c1a55fff77176793aff6b8f4901322fe80d1a2e"
+    },
+    "Celebrant's Sickle": {
+      "file": "assets/catalogue/1060000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/celebrants_sickle.png",
+      "sha256": "5f1e4cc8119fb62fd91c0d154d38f7f9d3e7a18b6ecf861eb52a7f6770588cd3"
+    },
+    "Glintstone Kris": {
+      "file": "assets/catalogue/1070000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/glintstone_kris.png",
+      "sha256": "69ebf75b7cd897f2c70dec968ab14c7c5765dfbb145d89d6bf5488a7f72c7d0b"
+    },
+    "Scorpion's Stinger": {
+      "file": "assets/catalogue/1080000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/scorpions_stinger.png",
+      "sha256": "27afb07d53b00a8af088f18977d1d7b0bb83d1706e1b65ca42711b3d125230a7"
+    },
+    "Great Knife": {
+      "file": "assets/catalogue/1090000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/great_knife.png",
+      "sha256": "4a7c5e8f264fd1a5eaeeca0eb6f9340e5fe7c637bc994b5113043211b52b90f5"
+    },
+    "Wakizashi": {
+      "file": "assets/catalogue/1100000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/wakizashi.png",
+      "sha256": "5e78bab4d0dd00b12a812eaf9b46e40fe1e530c3498bdd14ec946501b638042d"
+    },
+    "Cinquedea": {
+      "file": "assets/catalogue/1110000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/cinquedea.png",
+      "sha256": "7f71e2faf14db58dbeebaf25c4ded71ad586f0880d23b95d73d80fd531cc93cf"
+    },
+    "Ivory Sickle": {
+      "file": "assets/catalogue/1130000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/ivory_sickle.png",
+      "sha256": "d52107a2d8083d8ef25ea9d68f8b0d1c392dbcaab6dcbd6fe31abeeb1ff62713"
+    },
+    "Bloodstained Dagger": {
+      "file": "assets/catalogue/1140000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/bloodstained_dagger.png",
+      "sha256": "de23cc4b67a2d0d44f60eee89d8e57cbec01bbec2b11839a121316b12447e52a"
+    },
+    "Erdsteel Dagger": {
+      "file": "assets/catalogue/1150000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/erdsteel_dagger.png",
+      "sha256": "35423b31c8cc75d71084b164d220217e9f4137b42dec61799cea5dd1b237efcb"
+    },
+    "Blade of Calling": {
+      "file": "assets/catalogue/1160000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/blade_of_calling.png",
+      "sha256": "0d6a77104ce544725b5ad552e9fca9ff16aa7b650a53547d22ed33b47b61fc09"
+    },
+    "Main-gauche": {
+      "file": "assets/catalogue/1500000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/main_gauche.png",
+      "sha256": "e5925c4306b5bb56b94ef3659029987bcd6628bff1aecc004c15efbe3503a208"
+    },
+    "Fire Knight's Shortsword": {
+      "file": "assets/catalogue/1510000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/fire_knights_shortsword.png",
+      "sha256": "b6ede993fd3b41f013a8824735ddb3e33f2998f5a90e4bbff006f193540b676f"
+    },
+    "Longsword": {
+      "file": "assets/catalogue/2000000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/longsword.png",
+      "sha256": "0676ed3010f35b5885b38f0544519c03fff0643b67ceee7da20ddf2f9b907ffc"
+    },
+    "Short Sword": {
+      "file": "assets/catalogue/2010000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/short_sword.png",
+      "sha256": "3fe7d97cd3bcfb8a330358d8c1bff97a569952f6f9a61dd1ee3bf5c59d744db4"
+    },
+    "Broadsword": {
+      "file": "assets/catalogue/2020000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/broadsword.png",
+      "sha256": "d4ba90259b9740b495127f2478e5c146d903f04f4b98542609e7316fa7b3e949"
+    },
+    "Lordsworn's Straight Sword": {
+      "file": "assets/catalogue/2040000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/lordsworns_straight_sword.png",
+      "sha256": "6c387cdcbeb807027495b095671591d3990d8831f1aa943b15d9f9d2c347d261"
+    },
+    "Weathered Straight Sword": {
+      "file": "assets/catalogue/2050000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/weathered_straight_sword.png",
+      "sha256": "71a9b592e21505050a90bc0b7856affefd7ca749aeff4808e01e81184a0b7523"
+    },
+    "Ornamental Straight Sword": {
+      "file": "assets/catalogue/2060000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/ornamental_straight_sword.png",
+      "sha256": "33af16e68141eb0b1b4e1ec87b8fe080238aa77e244a5f636ffecffd5f8c4831"
+    },
+    "Golden Epitaph": {
+      "file": "assets/catalogue/2070000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/golden_epitaph.png",
+      "sha256": "6245ca3e34e0a36c99ec34a99ed029fbf2d268bc638b5c72d0f4d52117bbeab3"
+    },
+    "Coded Sword": {
+      "file": "assets/catalogue/2110000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/coded_sword.png",
+      "sha256": "3555bfd73cd9d74755b70ed5b4024e2fef4e0ffeb7e842ae9f5b5bfdd9b21900"
+    },
+    "Sword of Night and Flame": {
+      "file": "assets/catalogue/2140000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/sword_of_night_and_flame.png",
+      "sha256": "875f01180f3f8bf235d2cd9273312b8095132519abf3c5cca1e520afbbc47158"
+    },
+    "Crystal Sword": {
+      "file": "assets/catalogue/2150000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/crystal_sword.png",
+      "sha256": "ccbf42daff302679a6efbaf3c4f65a949ece0d2e343aa391b3a41e176efd5455"
+    },
+    "Carian Knight's Sword": {
+      "file": "assets/catalogue/2180000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/carian_knights_sword.png",
+      "sha256": "56df35646b19e2ed8ed6f11db4657f4af372e2d234bed9b9988efbd425503474"
+    },
+    "Sword of St. Trina": {
+      "file": "assets/catalogue/2190000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/sword_of_st_trina.png",
+      "sha256": "f243a397402f72dcd9ce07f24e289e87a2513f63daf5b79296d9de7672c4580f"
+    },
+    "Miquellan Knight's Sword": {
+      "file": "assets/catalogue/2200000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/miquellan_knights_sword.png",
+      "sha256": "5d955a0402f52ac1c31d7b9ca041c979492b88c4539b32a1b4bab3e46e550af0"
+    },
+    "Cane Sword": {
+      "file": "assets/catalogue/2210000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/cane_sword.png",
+      "sha256": "7ce2db273b80352ad554304b8e06fecb79bd7cb556a9c07dffbfed3bfc7461c9"
+    },
+    "Regalia of Eochaid": {
+      "file": "assets/catalogue/2220000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/regalia_of_eochaid.png",
+      "sha256": "127bb4c133b1ec4e8d2157fef430e715404ea44e6d28c0fb7dce992e8b666f76"
+    },
+    "Noble's Slender Sword": {
+      "file": "assets/catalogue/2230000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/nobles_slender_sword.png",
+      "sha256": "92bc508d365dd8480ce2ea29aaca1a0e22ecee2380fd2847b06ceae587aa2606"
+    },
+    "Warhawk's Talon": {
+      "file": "assets/catalogue/2240000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/warhawks_talon.png",
+      "sha256": "d99422ca3ecf5c243b025c89a7318804e3a9c602a3cd9a71fc2f96af5677a314"
+    },
+    "Lazuli Glintstone Sword": {
+      "file": "assets/catalogue/2250000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/lazuli_glintstone_sword.png",
+      "sha256": "8c5b7b0329f300fa20cb5077f52a535eb72685813677b11b2dd00f8c3862165e"
+    },
+    "Rotten Crystal Sword": {
+      "file": "assets/catalogue/2260000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/rotten_crystal_sword.png",
+      "sha256": "e68584372c94bd89d12f853fd570cfc740b4841a87f0e616e5ce91fb5d0bb4e4"
+    },
+    "Velvet Sword of St. Trina": {
+      "file": "assets/catalogue/2510000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/velvet_sword_of_st_trina.png",
+      "sha256": "4393d426af551db26e252dc25ce4bc1645507be1568760e2aaec9974d48f500c"
+    },
+    "Stone-Sheathed Sword": {
+      "file": "assets/catalogue/2540000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/stone_sheathed_sword.png",
+      "sha256": "826bdb9f7afce657ceb422955e3b40806470895f3fb41616d7120c4602670e00"
+    },
+    "Sword of Light": {
+      "file": "assets/catalogue/2550000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/sword_of_light.png",
+      "sha256": "e846d9dabafe207ceacdc9ec4b702d3d77cb3065b0e00ce314b25ae2bb88acaa"
+    },
+    "Sword of Darkness": {
+      "file": "assets/catalogue/2560000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/sword_of_darkness.png",
+      "sha256": "a1f79e735dca334715c03dd0c88263d81574944fee1b955e7fa850b6580831c9"
+    },
+    "Nox Flowing Sword": {
+      "file": "assets/catalogue/2080000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/nox_flowing_sword.png",
+      "sha256": "029a55a4cbb98e77d260f813cb7da38187232c1f3ffb0d18a2e48f5da015e72b"
+    },
+    "Falchion": {
+      "file": "assets/catalogue/7000000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/falchion.png",
+      "sha256": "f2ba7d969986ae4a68b9770ba53ae1e033d94ba8c9aefa0c5d53fed4b009937f"
+    },
+    "Beastman's Curved Sword": {
+      "file": "assets/catalogue/7010000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/beastmans_curved_sword.png",
+      "sha256": "491e82e61800e42c099b226c6df470448228f09da3162904bae65d7ad989b294"
+    },
+    "Shotel": {
+      "file": "assets/catalogue/7020000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/shotel.png",
+      "sha256": "5ce8b2924d60c19a25033affbcb106e61b3872018ffafc57b21a1a928fa6b522"
+    },
+    "Shamshir": {
+      "file": "assets/catalogue/7030000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/shamshir.png",
+      "sha256": "67886a178fc2cbe86255e185f5481fe947130a73aed9c624586c40993210182e"
+    },
+    "Bandit's Curved Sword": {
+      "file": "assets/catalogue/7040000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/bandits_curved_sword.png",
+      "sha256": "73937373f7d8477e6c79d155d7333a4f3f47f53d39c087683b7a6f31b2bda303"
+    },
+    "Magma Blade": {
+      "file": "assets/catalogue/7050000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/magma_blade.png",
+      "sha256": "927cec87340f7b156673b0b9c30d72e8e8d3c92f507e1002a506b7e4f666097f"
+    },
+    "Flowing Curved Sword": {
+      "file": "assets/catalogue/7060000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/flowing_curved_sword.png",
+      "sha256": "efc017138a21e7c91259ec92bc2bb66d6cc6350d8845ddb927d14eb67ede36d5"
+    },
+    "Wing of Astel": {
+      "file": "assets/catalogue/7070000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/wing_of_astel.png",
+      "sha256": "e39f0f6a4eeb11672796544ac74e7401d484504c778d7e45711f0e7c6d839e1b"
+    },
+    "Scavenger's Curved Sword": {
+      "file": "assets/catalogue/7080000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/scavengers_curved_sword.png",
+      "sha256": "7816215af30ba8d10890e4efac7353515e1acf6f6f64037c0fb1d9e2cfe22eb8"
+    },
+    "Eclipse Shotel": {
+      "file": "assets/catalogue/7100000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/eclipse_shotel.png",
+      "sha256": "12c9b1319dcd0786b96e17ec49b4c73ebb687d8337992ebfce5b77f0b8c85e10"
+    },
+    "Serpent-God's Curved Sword": {
+      "file": "assets/catalogue/7110000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/serpent_gods_curved_sword.png",
+      "sha256": "9d29a3dc89207818dc2c8517c3162ec70384f94bc0527e8e32e85c5adf156caa"
+    },
+    "Mantis Blade": {
+      "file": "assets/catalogue/7120000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/mantis_blade.png",
+      "sha256": "df4de8f1b6fea90c52cdee9b1d4592ecbdf17ef1a2dcd7ce46b309703677e358"
+    },
+    "Scimitar": {
+      "file": "assets/catalogue/7140000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/scimitar.png",
+      "sha256": "83223df90e912ea067596e97522f30938dde09db03c4cac0bf7a39528f61ee19"
+    },
+    "Grossmesser": {
+      "file": "assets/catalogue/7150000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/grossmesser.png",
+      "sha256": "b71368af711acb5f2324a4a85e92f28fc28a19aa84408d6df2bcca6a978f1819"
+    },
+    "Spirit Sword": {
+      "file": "assets/catalogue/7500000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/spirit_sword.png",
+      "sha256": "be71b248bd697ce2d86831bd97cba8738bfaee781c0b6128317f47c330987a52"
+    },
+    "Falx": {
+      "file": "assets/catalogue/7510000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/falx.png",
+      "sha256": "fd38d844c0976b80d20d1381644d6798322986a67b5f8f1f3e436ebd7357d3b1"
+    },
+    "Dancing Blade of Ranah": {
+      "file": "assets/catalogue/7520000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/dancing_blade_of_ranah.png",
+      "sha256": "2154476246941f8312c4c1283b1e34515bc69c739723f2e4596abf42825ba094"
+    },
+    "Horned Warrior's Sword": {
+      "file": "assets/catalogue/7530000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/horned_warriors_sword.png",
+      "sha256": "0c19e459e9e8d6c57ac53d42404841144fc3c2735497a0b6bb0b43f8f8b5b19f"
+    },
+    "Inseparable Sword": {
+      "file": "assets/catalogue/2090000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/inseparable_sword.png",
+      "sha256": "f9caf8b0ce9a48f9f8faaeb91fce2682026e16bd41a27352178dfd8e4fdd0082"
+    },
+    "Bastard Sword": {
+      "file": "assets/catalogue/3000000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/bastard_sword.png",
+      "sha256": "82efa7e217f7a04b03c1923ec70c6b8e189d67da2a67c102c6dc8af9848b5bc0"
+    },
+    "Forked Greatsword": {
+      "file": "assets/catalogue/3010000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/forked_greatsword.png",
+      "sha256": "1c54025d142cd89fb72e708e6f1fa4a3019c4030121b7c39e693c7ae962c8e3f"
+    },
+    "Iron Greatsword": {
+      "file": "assets/catalogue/3020000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/iron_greatsword.png",
+      "sha256": "accf90ffaf8744794567013d2267bf186e1f7a817b30b03776e4748525209a7b"
+    },
+    "Lordsworn's Greatsword": {
+      "file": "assets/catalogue/3030000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/lordsworns_greatsword.png",
+      "sha256": "47d97f040a318cc47ea751047f913df6ea20146b3bc3dda89baf78332d862203"
+    },
+    "Knight's Greatsword": {
+      "file": "assets/catalogue/3040000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/knights_greatsword.png",
+      "sha256": "753280cd835b8e9a5e9cad1e73f84ce125939852e124e04ba9e3d11e4471c46b"
+    },
+    "Flamberge": {
+      "file": "assets/catalogue/3050000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/flamberge.png",
+      "sha256": "c1e34f5e2a8e0a4663bd933a88862d8d0ab3f76e731c8ef0897d955f91e3eef5"
+    },
+    "Ordovis's Greatsword": {
+      "file": "assets/catalogue/3060000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/ordoviss_greatsword.png",
+      "sha256": "97aa347074d5e575d619dd638aae361e9c99d065b138c6a1cad500d43587ccf1"
+    },
+    "Alabaster Lord's Sword": {
+      "file": "assets/catalogue/3070000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/alabaster_lords_sword.png",
+      "sha256": "2b9b4dcf59264ccb5defe6d0094ba3039f63c2039a6ea79d0ef2720d4096d326"
+    },
+    "Banished Knight's Greatsword": {
+      "file": "assets/catalogue/3080000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/banished_knights_greatsword.png",
+      "sha256": "9b87a0c05720ebb56ebe6870b09ac8078ef0cc9512c1986907190addc9224b0a"
+    },
+    "Dark Moon Greatsword": {
+      "file": "assets/catalogue/3090000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/dark_moon_greatsword.png",
+      "sha256": "016daf82a5f3a75a849ba0fb08a49bab034f02902382d960e85fa7d9742c9b1c"
+    },
+    "Sacred Relic Sword": {
+      "file": "assets/catalogue/3100000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/sacred_relic_sword.png",
+      "sha256": "d1c00004b9ca7a6a94b7f54132cfd752b082c0d1149dd8010a6ee7c2d8473214"
+    },
+    "Helphen's Steeple": {
+      "file": "assets/catalogue/3130000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/helphens_steeple.png",
+      "sha256": "43745e8394c038149717f44d990e5b48cc927145bd4e0d5a3af6112106bc7105"
+    },
+    "Blasphemous Blade": {
+      "file": "assets/catalogue/3140000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/blasphemous_blade.png",
+      "sha256": "b8e3c4766b5783b306972aa7a8ce79f084171425bab618fe10fc8ca3c48f7f6a"
+    },
+    "Marais Executioner's Sword": {
+      "file": "assets/catalogue/3150000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/marais_executioners_sword.png",
+      "sha256": "a54bff1eeacd2d243abef3e34f74d808e86b4344a2a80d39159365f1f910e2da"
+    },
+    "Sword of Milos": {
+      "file": "assets/catalogue/3160000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/sword_of_milos.png",
+      "sha256": "958ed0ead270c01c29b57fb202a74a65d677fdfc9932924a91feb80c076491d6"
+    },
+    "Golden Order Greatsword": {
+      "file": "assets/catalogue/3170000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/golden_order_greatsword.png",
+      "sha256": "832869216eb3079dac3cb88dd390469167b0addefebd7aa695c8f61e29ed121a"
+    },
+    "Claymore": {
+      "file": "assets/catalogue/3180000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/claymore.png",
+      "sha256": "2fad12b109616b8de3e58e3de542aa55251ce05b36e2022a32b91956d9ea2321"
+    },
+    "Gargoyle's Greatsword": {
+      "file": "assets/catalogue/3190000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/gargoyles_greatsword.png",
+      "sha256": "5365477b9bc26cead0eb70f01479ab608b82a2755eb83a2433f26586ec6e7bad"
+    },
+    "Death's Poker": {
+      "file": "assets/catalogue/3200000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/deaths_poker.png",
+      "sha256": "cd02d55f1190a39fda8b9295ab7ab5e7e0a9c93da2987e0c8ed310c7876ba8b0"
+    },
+    "Gargoyle's Blackblade": {
+      "file": "assets/catalogue/3210000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/gargoyles_blackblade.png",
+      "sha256": "98d657832c0f3d5d38fb4dc10110e4bc185b8ac64ab476fb57a72f388b505066"
+    },
+    "Greatsword of Damnation": {
+      "file": "assets/catalogue/3510000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/greatsword_of_damnation.png",
+      "sha256": "0ca77ebc7cabbdaa717164cd94f4ccaab42d3f8c2b0159c7f9e6aae27590c39f"
+    },
+    "Lizard Greatsword": {
+      "file": "assets/catalogue/3520000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/lizard_greatsword.png",
+      "sha256": "51a13799f125a126908806af170bd07c0f07552d44fccc9ddc74f4d07ef58419"
+    },
+    "Greatsword of Solitude": {
+      "file": "assets/catalogue/3550000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/greatsword_of_solitude.png",
+      "sha256": "f428b3110ec69b03ec8607ff888c0c8e10eff8d4ac795a856ccd241a64284134"
+    },
+    "Leontiel's Greatsword": {
+      "file": "assets/catalogue/3560000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/leontiels_greatsword.png",
+      "sha256": "8dddd1e3f1a6fd16e581123d7ff13bb772f01dd58359903e6542bdde9f85cbb1"
+    },
+    "Star-Lined Sword": {
+      "file": "assets/catalogue/2520000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/star_lined_sword.png",
+      "sha256": "3a108b8a64d37f4e86560f6c90e97990bb8e54863648547cef09eb9f2fdaa951"
+    },
+    "Uchigatana": {
+      "file": "assets/catalogue/9000000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/uchigatana.png",
+      "sha256": "b36f9a74400a85e9ca24e795250cf7460f4fcea52011edfc93021c53d584c53b"
+    },
+    "Nagakiba": {
+      "file": "assets/catalogue/9010000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/nagakiba.png",
+      "sha256": "c45ae2ea89ffa78b4f134b2be4a6fa138eeb7207e2a196a129714283a97d0fa0"
+    },
+    "Hand of Malenia": {
+      "file": "assets/catalogue/9020000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/hand_of_malenia.png",
+      "sha256": "197eae4380ad4a805a88263f9113e23b2bc9445f385d3e5abb89cb77928c3994"
+    },
+    "Meteoric Ore Blade": {
+      "file": "assets/catalogue/9030000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/meteoric_ore_blade.png",
+      "sha256": "6113efe715d317808524f24bfc81f144d15379ef74dc43275fd5a942c732f513"
+    },
+    "Rivers of Blood": {
+      "file": "assets/catalogue/9040000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/rivers_of_blood.png",
+      "sha256": "81d01fd0f18efdfbd986d833720a6127afd88ae9f05e20555c211db81e8c574a"
+    },
+    "Moonveil": {
+      "file": "assets/catalogue/9060000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/moonveil.png",
+      "sha256": "6e1535556fdc63208f7b69fb4879cc72dc75ca016329e752439fda9b2fd8435a"
+    },
+    "Dragonscale Blade": {
+      "file": "assets/catalogue/9070000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/dragonscale_blade.png",
+      "sha256": "14cb638dcf746e3e97f6af09d50abb0580ff67dc8398bed24f67c802717253c6"
+    },
+    "Serpentbone Blade": {
+      "file": "assets/catalogue/9080000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/serpentbone_blade.png",
+      "sha256": "8059144db0dc14fa4fe1e2cba98d0136b412179924b6c1aa8dfda7bc381b579c"
+    },
+    "Sword of Night": {
+      "file": "assets/catalogue/9500000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/sword_of_night.png",
+      "sha256": "da2933779d9cbc9f1c7a611eaf7d08312c72da3e13467dd28d4295bd5136db92"
+    },
+    "Carian Sorcery Sword": {
+      "file": "assets/catalogue/2530000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/carian_sorcery_sword.png",
+      "sha256": "8cf324718da819d398a388c07586005572636f8a8f1560b50185c8a0aeef7761"
+    },
+    "Estoc": {
+      "file": "assets/catalogue/5000000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/estoc.png",
+      "sha256": "7e8e3b08ac273ce165fa70951ae8610a4c6d3df9ce2c356241b8e6d43fdccbe6"
+    },
+    "Cleanrot Knight's Sword": {
+      "file": "assets/catalogue/5010000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/cleanrot_knights_sword.png",
+      "sha256": "2a724c1a2c2a064f2475cec5282bc5a37f0555ff7d22a88ffaf7a6b71549ce67"
+    },
+    "Rapier": {
+      "file": "assets/catalogue/5020000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/rapier.png",
+      "sha256": "f47ea81297b455473202c284a7b3fdb96d9ba7e13676affa3efbaf258f354ee6"
+    },
+    "Rogier's Rapier": {
+      "file": "assets/catalogue/5030000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/rogiers_rapier.png",
+      "sha256": "48b656ca7f5ef08246736f4ba3e3eeeea80bc4912c1d9092469e9935fe4762f5"
+    },
+    "Antspur Rapier": {
+      "file": "assets/catalogue/5040000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/antspur_rapier.png",
+      "sha256": "0b4ae5a56e95c985661628cefe83bec1dd196e5efd619b4f9a17335e3125652b"
+    },
+    "Frozen Needle": {
+      "file": "assets/catalogue/5050000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/frozen_needle.png",
+      "sha256": "e33afaf7768161e4612b0509a6929c3fce549c54c507ddf623f31197c3829a4d"
+    },
+    "Noble's Estoc": {
+      "file": "assets/catalogue/5060000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/nobles_estoc.png",
+      "sha256": "00263e677349d96f26f5a38a78d56322aee7c7d0dce452c83b7d1326ac14927c"
+    },
+    "Sword Lance": {
+      "file": "assets/catalogue/3500000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/sword_lance.png",
+      "sha256": "2d01792b34bf281bfb4e9fc910db30643742b934b4fd22d9255eb165f0828757"
+    },
+    "Bloody Helice": {
+      "file": "assets/catalogue/6000000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/bloody_helice.png",
+      "sha256": "ab4b8e587dad2729d1a201659b59977753670d8ec9d18dae8009b8019eb5ec34"
+    },
+    "Godskin Stitcher": {
+      "file": "assets/catalogue/6010000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/godskin_stitcher.png",
+      "sha256": "b51eabc2d5ca4f4c41a5d5e619786becfa9c575b2c9e9409c3bea3ecb53016dc"
+    },
+    "Great Épée": {
+      "file": "assets/catalogue/6020000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/great_epee.png",
+      "sha256": "8c017c1c5707f7cc5d28fa94ef4663a7417098cc19c0f34154c3a682676c4a92"
+    },
+    "Dragon King's Cragblade": {
+      "file": "assets/catalogue/6040000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/dragon_kings_cragblade.png",
+      "sha256": "ce0561706b5eb6f59c14da260691b483720aae7efc8eff3778e819c195bd212d"
+    },
+    "Queelign's Greatsword": {
+      "file": "assets/catalogue/6500000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/queeligns_greatsword.png",
+      "sha256": "7e5227ff7738a4e5a7fbcae3fd4dcd51743886f463850039c7b2dbf18056843f"
+    },
+    "Greatsword": {
+      "file": "assets/catalogue/4000000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/greatsword.png",
+      "sha256": "35a45e133924c55a8a9cb587001aa0e772175473a2d64138ea284c99d703d63f"
+    },
+    "Watchdog's Greatsword": {
+      "file": "assets/catalogue/4010000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/watchdogs_greatsword.png",
+      "sha256": "5969391706a7a4b55b753f579ba39603a7e7a2008e8ec3b622a7813ec0210bcc"
+    },
+    "Maliketh's Black Blade": {
+      "file": "assets/catalogue/4020000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/malikeths_black_blade.png",
+      "sha256": "2251cd83e39aa2dfd1355e64980af2fee094aaa99c98b6990c947e81aa517b6c"
+    },
+    "Troll's Golden Sword": {
+      "file": "assets/catalogue/4030000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/trolls_golden_sword.png",
+      "sha256": "190d69480dfddf42bc8e4cd0a97cdaa975000a037cdac01fefe6cfe6b14b0c22"
+    },
+    "Zweihander": {
+      "file": "assets/catalogue/4040000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/zweihander.png",
+      "sha256": "a5bd78cbe63d8b6c2c3bdcfdd63260655ca835ec6636e9df960d1332fffa67d2"
+    },
+    "Starscourge Greatsword": {
+      "file": "assets/catalogue/4050000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/starscourge_greatsword.png",
+      "sha256": "d3962fc88f18549fccfa7cb1ad55f2c5abeaa71aa4c5bab6916bb7bc0f26651e"
+    },
+    "Royal Greatsword": {
+      "file": "assets/catalogue/4060000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/royal_greatsword.png",
+      "sha256": "e3610d0dc867be6ee4bd299e121f4106899cf078c6dd1249f74e668344e718f4"
+    },
+    "Godslayer's Greatsword": {
+      "file": "assets/catalogue/4070000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/godslayers_greatsword.png",
+      "sha256": "7f8a45be64b1fb52e74d79957ce75d55615a29b32eee67db8cec6479822e7ca1"
+    },
+    "Ruins Greatsword": {
+      "file": "assets/catalogue/4080000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/ruins_greatsword.png",
+      "sha256": "883f4362de69293ea0fa9c3777bda62a8a3940ef8a0b66712caffdc268d4682d"
+    },
+    "Grafted Blade Greatsword": {
+      "file": "assets/catalogue/4100000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/grafted_blade_greatsword.png",
+      "sha256": "ce874b3126d3b7202fda7f4adf0b12ab892fed3ee65ed5f67d10644b743b3bb6"
+    },
+    "Troll Knight's Sword": {
+      "file": "assets/catalogue/4110000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/troll_knights_sword.png",
+      "sha256": "482e9e0a65ffe63cb04550e7ceb83f7127f7e935137c8b798c8788d2d0cfb69c"
+    },
+    "Ancient Meteoric Ore Greatsword": {
+      "file": "assets/catalogue/4500000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/ancient_meteoric_ore_greatsword.png",
+      "sha256": "7767336624d2c218503ddd74e51f04b5f40e1663aa8a99dbdcdf469cdbbfcaba"
+    },
+    "Fire Knight's Greatsword": {
+      "file": "assets/catalogue/4520000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/fire_knights_greatsword.png",
+      "sha256": "be5e1c06e33fdd1162a4407036d286e6e8da58ca5cf13e89881bddf1a12b71a8"
+    },
+    "Greatsword of Radahn (Lord)": {
+      "file": "assets/catalogue/4530000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/greatsword_of_radahn_lord.png",
+      "sha256": "2745bc79cd4eeedc27548b1f206787c4bb5ecc093ff36edcbcb871cd9be04e37"
+    },
+    "Moonrithyll's Knight Sword": {
+      "file": "assets/catalogue/4540000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/moonrithylls_knight_sword.png",
+      "sha256": "943100419ac675be5bedb82a6649cc454a2c1be60e81fd3187cd06a40262c582"
+    },
+    "Greatsword of Radahn (Light)": {
+      "file": "assets/catalogue/4550000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/greatsword_of_radahn_light.png",
+      "sha256": "35a45e133924c55a8a9cb587001aa0e772175473a2d64138ea284c99d703d63f"
+    },
+    "Onyx Lord's Greatsword": {
+      "file": "assets/catalogue/8010000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/onyx_lords_greatsword.png",
+      "sha256": "81fbc6f001871bb656e6e1e9e567deb3bd4d81db90ecf6e25a91f9e46f8f92b1"
+    },
+    "Dismounter": {
+      "file": "assets/catalogue/8020000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/dismounter.png",
+      "sha256": "4be43a07dce122e94a8c18f0ed05f29411f7423e2d3db9285dca0b1b88ac01b2"
+    },
+    "Bloodhound's Fang": {
+      "file": "assets/catalogue/8030000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/bloodhounds_fang.png",
+      "sha256": "91d384d20aa365a0ccc49b07a7c6a2e02f8e26b2d1cc376cfbf7887f4a15570d"
+    },
+    "Magma Wyrm's Scalesword": {
+      "file": "assets/catalogue/8040000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/magma_wyrms_scalesword.png",
+      "sha256": "16ac6df8e3e14a40d10abb4b365b658efaec92cd0887860c06f673db05a9337c"
+    },
+    "Zamor Curved Sword": {
+      "file": "assets/catalogue/8050000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/zamor_curved_sword.png",
+      "sha256": "d0f55a03dcb5757dc82893c036ca5e6fe902416276dfebf6de9224af3f21479d"
+    },
+    "Omen Cleaver": {
+      "file": "assets/catalogue/8060000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/omen_cleaver.png",
+      "sha256": "95b8772e09d5540a41e09dd96afa580de0d50ef3ac8b6e1d856e7733011271ab"
+    },
+    "Monk's Flameblade": {
+      "file": "assets/catalogue/8070000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/monks_flameblade.png",
+      "sha256": "f95286e1c04d24a13fec336cd032cd89d6d1c5f7cfde326a00d2c7a264ed6b76"
+    },
+    "Beastman's Cleaver": {
+      "file": "assets/catalogue/8080000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/beastmans_cleaver.png",
+      "sha256": "a44eace1b992b5ba96b0bd673d5c3c6d2548088b9891be5ab0c67434ee41c727"
+    },
+    "Morgott's Cursed Sword": {
+      "file": "assets/catalogue/8100000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/morgotts_cursed_sword.png",
+      "sha256": "400e4e33f750393aac9e27cef71ccc54ee1d777d6facb112f15816cf21304b30"
+    },
+    "Freyja's Greatsword": {
+      "file": "assets/catalogue/8510000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/freyjas_greatsword.png",
+      "sha256": "4534f33b7b35f4ad38624905ae0527225e0bb10ae6e7b7c74320bb39b3b75808"
+    },
+    "Horned Warrior's Greatsword": {
+      "file": "assets/catalogue/8520000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/horned_warriors_greatsword.png",
+      "sha256": "b22df4c1cf7e234f67af332628f249928014f7b0e565f638772ba7e99b9b3f5b"
+    },
+    "Hefty Scimitar": {
+      "file": "assets/catalogue/8530000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/hefty_scimitar.png",
+      "sha256": "103a99026016a39f01c5ef34604c6d18dd4fc49dfebc31bc8593350c01e783b8"
+    },
+    "Putrescence Cleaver": {
+      "file": "assets/catalogue/8500000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/putrescence_cleaver.png",
+      "sha256": "afc55ee2b975c8cb30bacc7b252b1b560c224fd4e4ad0c93cbbc8b1c7bc81c44"
+    },
+    "Greataxe": {
+      "file": "assets/catalogue/15000000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/greataxe.png",
+      "sha256": "3b2589ca37548d3b559212f4de5bb4e7d46afe07d74a5115efe1e6c1c5d5e7bd"
+    },
+    "Great Omenkiller Cleaver": {
+      "file": "assets/catalogue/15020000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/great_omenkiller_cleaver.png",
+      "sha256": "e94aba91b821b5110b4d72f060e93289226468d675068e4a9e4cedcf059523aa"
+    },
+    "Crescent Moon Axe": {
+      "file": "assets/catalogue/15030000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/crescent_moon_axe.png",
+      "sha256": "20565e96301996cc26db8cc681963d7c67d889bf27609bc2c3be1054417c6acb"
+    },
+    "Axe of Godrick": {
+      "file": "assets/catalogue/15040000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/axe_of_godrick.png",
+      "sha256": "0488d072d91365328ac909feca3d8a0daa58f86d123f3fe6a0274ac9d3b383e5"
+    },
+    "Longhaft Axe": {
+      "file": "assets/catalogue/15050000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/longhaft_axe.png",
+      "sha256": "acb36cc1f8bd9af1184f0f7fcefee2fd94c008b4fcdbb165d3b643cdda423501"
+    },
+    "Rusted Anchor": {
+      "file": "assets/catalogue/15060000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/rusted_anchor.png",
+      "sha256": "65b9b550d2ec1ba980ca499a460f78e72b10558a24ba6d639e27e9697ef40f87"
+    },
+    "Executioner's Greataxe": {
+      "file": "assets/catalogue/15080000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/executioners_greataxe.png",
+      "sha256": "4db5eb87670abcc5aae55a0515d1f891f12b7d586edbba4ab817dec66cd84463"
+    },
+    "Winged Greathorn": {
+      "file": "assets/catalogue/15110000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/winged_greathorn.png",
+      "sha256": "a66e6c8b40e6582900c17cb8fb797a627efb546d50bef9ca293167f1d6a9b073"
+    },
+    "Butchering Knife": {
+      "file": "assets/catalogue/15120000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/butchering_knife.png",
+      "sha256": "bd2632e92df2b6061c3fdddd9547911d1c1d2c9b0aacef4e38bb8cafca7b73d2"
+    },
+    "Gargoyle's Great Axe": {
+      "file": "assets/catalogue/15130000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/gargoyles_great_axe.png",
+      "sha256": "cdbf22d44da3e2e79d185474a60b516e8d398707ccc953138778fabc80f0d86f"
+    },
+    "Gargoyle's Black Axe": {
+      "file": "assets/catalogue/15140000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/gargoyles_black_axe.png",
+      "sha256": "64bc6a0b8b6606442b1e4739fb0f07f8124cf4c4767878a3025abe35b30aefe1"
+    },
+    "Death Knight's Longhaft Axe": {
+      "file": "assets/catalogue/15500000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/death_knights_longhaft_axe.png",
+      "sha256": "a83dd54ec64a98730d03d8716b9a982302e5fc17784be1651f797eda2fa8f140"
+    },
+    "Bonny Butchering Knife": {
+      "file": "assets/catalogue/15510000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/bonny_butchering_knife.png",
+      "sha256": "bd2632e92df2b6061c3fdddd9547911d1c1d2c9b0aacef4e38bb8cafca7b73d2"
+    },
+    "Twinblade": {
+      "file": "assets/catalogue/10000000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/twinblade.png",
+      "sha256": "9afe954a90cd5fe0b8211bca5660a1fb7f4c1d6df1c26506575ad2bffa77f746"
+    },
+    "Godskin Peeler": {
+      "file": "assets/catalogue/10010000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/godskin_peeler.png",
+      "sha256": "24ae85c918115c7c52c791f26a660c09d46eb76347cb306ab1fbb65dddbdb7de"
+    },
+    "Twinned Knight Swords": {
+      "file": "assets/catalogue/10030000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/twinned_knight_swords.png",
+      "sha256": "c991f52f02e5f122254724c43ce9ed77d5a77ef5aa7016cc058d0926641dd9bc"
+    },
+    "Eleonora's Poleblade": {
+      "file": "assets/catalogue/10050000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/eleonoras_poleblade.png",
+      "sha256": "85f4df9d1ca4eb777bf5d98957185a36d9a1c97f650fac29e761e4d510bcbada"
+    },
+    "Gargoyle's Twinblade": {
+      "file": "assets/catalogue/10080000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/gargoyles_twinblade.png",
+      "sha256": "d6d916fc44c2f8867caa7525327692353db16da45d9d1b4c4da6d017c10e91e7"
+    },
+    "Gargoyle's Black Blades": {
+      "file": "assets/catalogue/10090000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/gargoyles_black_blades.png",
+      "sha256": "74358841cae8c54d742a8fcd841b9976fae013af65bfe89f4410b60f5aefa019"
+    },
+    "Euporia": {
+      "file": "assets/catalogue/10500000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/euporia.png",
+      "sha256": "764ca138ec01d1473017f81a14664e10cb70ec0cc39b3d15f258c75afa3f4b99"
+    },
+    "Black Steel Twinblade": {
+      "file": "assets/catalogue/10510000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/black_steel_twinblade.png",
+      "sha256": "31fd2b7162570cacb776a158d239429402f92f73d6389f42419eaa9e4edc0f05"
+    },
+    "Mace": {
+      "file": "assets/catalogue/11000000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/mace.png",
+      "sha256": "a2ba13150706ba267607c8595c4b7829a4400af0eda94ec7e81afcc938f42930"
+    },
+    "Club": {
+      "file": "assets/catalogue/11010000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/club.png",
+      "sha256": "bccf7ec10496460c1a181194af0d8fb2f76073739a6dffdf937344d57da5f803"
+    },
+    "Curved Club": {
+      "file": "assets/catalogue/11030000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/curved_club.png",
+      "sha256": "d8d8ac7e666fa875faaf584fa2e6262be014d057718891a5a67e34302d597ae1"
+    },
+    "Warpick": {
+      "file": "assets/catalogue/11040000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/warpick.png",
+      "sha256": "64a34e4a6d47ae4cbb5bc217cbd311a9af5d44911835d958028d47e619d99a05"
+    },
+    "Morning Star": {
+      "file": "assets/catalogue/11050000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/morning_star.png",
+      "sha256": "10f6169602caed1efad2cac2aac0cc4df918e324fee3e9d8edbe105032fa85dd"
+    },
+    "Varr's Bouquet": {
+      "file": "assets/catalogue/11060000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/varrs_bouquet.png",
+      "sha256": "0471b7b97e1b81f3dbc041fdd748cb9b961967e7f41b1f136ae15ed0b968fcc3"
+    },
+    "Spiked Club": {
+      "file": "assets/catalogue/11070000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/spiked_club.png",
+      "sha256": "c908c30a3c97690a5bd8a60241f86f1e55d604e7f8381a49df6cb915ea79e0d9"
+    },
+    "Hammer": {
+      "file": "assets/catalogue/11080000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/hammer.png",
+      "sha256": "da043f44962c5aca5a549b6bd2db3280f0e7c3c0ca7ca3ed741fa73c5fc51eef"
+    },
+    "Monk's Flamemace": {
+      "file": "assets/catalogue/11090000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/monks_flamemace.png",
+      "sha256": "3c2104b9f4fcd4738fd938a3e6cfd3021dc304881f16151e4a306617ab3d8789"
+    },
+    "Envoy's Horn": {
+      "file": "assets/catalogue/11100000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/envoys_horn.png",
+      "sha256": "44f272674724268502e1f759716990d71d1df72c91c2450ec6511db5ac78429c"
+    },
+    "Scepter of the All-Knowing": {
+      "file": "assets/catalogue/11110000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/scepter_of_the_all_knowing.png",
+      "sha256": "fd24ca457d816c9a56db39c6828af048306e3db0e5d9215260dd701b2fb0ecac"
+    },
+    "Nox Flowing Hammer": {
+      "file": "assets/catalogue/11120000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/nox_flowing_hammer.png",
+      "sha256": "9f91eee7d0ada04f24605d2b78dd969d680b435f448f94fc9587efeac4799e07"
+    },
+    "Ringed Finger": {
+      "file": "assets/catalogue/11130000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/ringed_finger.png",
+      "sha256": "3cbdf1cf2f22baead7a36f7cab29d503c21fb336e40350a406796b372094e3a4"
+    },
+    "Stone Club": {
+      "file": "assets/catalogue/11140000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/stone_club.png",
+      "sha256": "fa34c2b3bb19c3d458dc8ec0ade067adf0938661e318d758abb337a1f9eb0769"
+    },
+    "Marika's Hammer": {
+      "file": "assets/catalogue/11150000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/marikas_hammer.png",
+      "sha256": "8daf70cb953a6ec8703bfd7cea709dda1cd8c62a98dffb8e582537e5ac1104c9"
+    },
+    "Flowerstone Gavel": {
+      "file": "assets/catalogue/11500000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/flowerstone_gavel.png",
+      "sha256": "e48c1f3c93bc2085d0d66ef8082f44ae22a661e5f85423f350ae2eba64a5df75"
+    },
+    "Large Club": {
+      "file": "assets/catalogue/12000000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/large_club.png",
+      "sha256": "ecf4248944ab78aa891b824df29f774ffd6a9c84c26bf89358d352f8ff9519db"
+    },
+    "Greathorn Hammer": {
+      "file": "assets/catalogue/12010000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/greathorn_hammer.png",
+      "sha256": "6c8a57249d8579d08c594f854d20dd33856e4a0079205d88f738c114ffeeeca5"
+    },
+    "Battle Hammer": {
+      "file": "assets/catalogue/12020000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/battle_hammer.png",
+      "sha256": "03ab5a22a362aad7c5601684d3cffe145592543c8bf19e58e9be1e775490453a"
+    },
+    "Great Mace": {
+      "file": "assets/catalogue/12060000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/great_mace.png",
+      "sha256": "811ab4ce00112b8ad3a48dac1f1169d529b3ffe011599050622056acce11d2e9"
+    },
+    "Curved Great Club": {
+      "file": "assets/catalogue/12080000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/curved_great_club.png",
+      "sha256": "8553d520c05b77be197e5eb4d145945570a208e6a9dfd7e8449dc5e15cb3851f"
+    },
+    "Celebrant's Skull": {
+      "file": "assets/catalogue/12130000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/celebrants_skull.png",
+      "sha256": "4434c8abf70e9fbf81a55e10dd3d709cb21912a38e0c847f57c41095028606e4"
+    },
+    "Pickaxe": {
+      "file": "assets/catalogue/12140000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/pickaxe.png",
+      "sha256": "418f70b8afe1be6f696739242d480900db639faac9a4f5fd487081fd60827fe2"
+    },
+    "Beastclaw Greathammer": {
+      "file": "assets/catalogue/12150000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/beastclaw_greathammer.png",
+      "sha256": "7125e817ab630c2a8d55f03c357549355ca883114655bd297cfa9897f47e76c6"
+    },
+    "Envoy's Long Horn": {
+      "file": "assets/catalogue/12160000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/envoys_long_horn.png",
+      "sha256": "a9423ae09d83ddf322be5ac61d0bcebcf63947bbf9aec6baff9eb0d9b7404317"
+    },
+    "Cranial Vessel Candlestand": {
+      "file": "assets/catalogue/12170000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/cranial_vessel_candlestand.png",
+      "sha256": "694fc92a45379698f18a824d50b4f589bff1587c49a196e156383415353cf2f9"
+    },
+    "Great Stars": {
+      "file": "assets/catalogue/12180000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/great_stars.png",
+      "sha256": "2040e7e559a39e755a012222f7b1532c0abf57b7715ff7b28ec3355bf6da416b"
+    },
+    "Brick Hammer": {
+      "file": "assets/catalogue/12190000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/brick_hammer.png",
+      "sha256": "da456902258c52b42c7dbf45c87898f7136dc3d88d9b11a6a3a35f78864a8cb0"
+    },
+    "Devourer's Scepter": {
+      "file": "assets/catalogue/12200000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/devourers_scepter.png",
+      "sha256": "3282bdec1e845b964a3bbdf81fbcd1566215fd6e91aedf148086374a0624d6c6"
+    },
+    "Rotten Battle Hammer": {
+      "file": "assets/catalogue/12210000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/rotten_battle_hammer.png",
+      "sha256": "603610670997f776c58159e51d39677bdef4da7aabb18ae6ebf88fa4f0001c90"
+    },
+    "Smithscript Greathammer": {
+      "file": "assets/catalogue/12500000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/smithscript_greathammer.png",
+      "sha256": "b680885e11234507f81641a7710c3cd98eaa1861ab0c30a9d3765221b667c257"
+    },
+    "Black Steel Greathammer": {
+      "file": "assets/catalogue/12520000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/black_steel_greathammer.png",
+      "sha256": "91dc93660f4dcf01989bf51daba63469bc4a1f500abab82014fc86d33cbb7764"
+    },
+    "Anvil Hammer": {
+      "file": "assets/catalogue/12510000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/anvil_hammer.png",
+      "sha256": "6839f7ac41f60ed2effaae3c5ac542a97babfcc246e94e8675ab35dcf37e64ac"
+    },
+    "Bloodfiend's Arm": {
+      "file": "assets/catalogue/12530000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/bloodfiends_arm.png",
+      "sha256": "db099ce4b7a408d9c01d812c68d3194839ee62d1e81b3a48c1fa4e171e47855d"
+    },
+    "Prelate's Inferno Crozier": {
+      "file": "assets/catalogue/23000000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/prelates_inferno_crozier.png",
+      "sha256": "7cd7d688b306f1d7dbc329fded7c5615477ca476451fe7ba63cb344f629ecb01"
+    },
+    "Watchdog's Staff": {
+      "file": "assets/catalogue/23010000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/watchdogs_staff.png",
+      "sha256": "1fbf69ffbcf9d5780d044ee0e9857214add9712b126ae341c5d2451b3069e617"
+    },
+    "Great Club": {
+      "file": "assets/catalogue/23020000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/great_club.png",
+      "sha256": "f14941f2d730892005c69c701623e950208aa491c97501a4b3ba1be2c0184505"
+    },
+    "Envoy's Greathorn": {
+      "file": "assets/catalogue/23030000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/envoys_greathorn.png",
+      "sha256": "c213e7c867dc60ce0d0afc846a20d3db1e3e6ff14763074b333d51caad9ca46e"
+    },
+    "Duelist Greataxe": {
+      "file": "assets/catalogue/23040000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/duelist_greataxe.png",
+      "sha256": "c1acc3fca12a9bae411a28920a53ea8ccd4c5805b6995f5e67fa86bd54479e1b"
+    },
+    "Axe of Godfrey": {
+      "file": "assets/catalogue/23050000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/axe_of_godfrey.png",
+      "sha256": "34949fd1b4ca39d38aa301c1af90aa792008f7a66fec9db0625c47be2208c11c"
+    },
+    "Dragon Greatclaw": {
+      "file": "assets/catalogue/23060000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/dragon_greatclaw.png",
+      "sha256": "cf5698939631e5364dd345a61c6bdf9f8171bd9a317996d5bbc41d6ba3427e3e"
+    },
+    "Staff of the Avatar": {
+      "file": "assets/catalogue/23070000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/staff_of_the_avatar.png",
+      "sha256": "e56dc837116fc6a6bbcd48b8cf68c3ef9f9bfcc20a06be2edc975ac1c5710274"
+    },
+    "Fallingstar Beast Jaw": {
+      "file": "assets/catalogue/23080000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/fallingstar_beast_jaw.png",
+      "sha256": "bbeb14c2e91a030177333409b9d3803aa9b8c31fc0545c40e04480d46c0d2fc8"
+    },
+    "Ghiza's Wheel": {
+      "file": "assets/catalogue/23100000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/ghizas_wheel.png",
+      "sha256": "c6850f73f2a565a3d8562394408c2f9b8c4b45ef8613c23c9f219309f007c97f"
+    },
+    "Giant-Crusher": {
+      "file": "assets/catalogue/23110000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/giant_crusher.png",
+      "sha256": "7288ef32583c3cd0802deac073cceb1777e9d2dd6649dedc569b99db97c9122a"
+    },
+    "Golem's Halberd": {
+      "file": "assets/catalogue/23120000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/golems_halberd.png",
+      "sha256": "5030621f625f7676280b7ec1a545c1725b8162c4be65e95b1d89b57dcf507e11"
+    },
+    "Troll's Hammer": {
+      "file": "assets/catalogue/23130000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/trolls_hammer.png",
+      "sha256": "164d3e8da6f719935d3cbc6107bd891fc2cd45159381d8618a1cb7cd6767db7a"
+    },
+    "Rotten Staff": {
+      "file": "assets/catalogue/23140000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/rotten_staff.png",
+      "sha256": "72f556d7e20cc36ad4a63dee5b7fc8bfd30c9cb053c409cc67ac37f9381af7f6"
+    },
+    "Rotten Greataxe": {
+      "file": "assets/catalogue/23150000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/rotten_greataxe.png",
+      "sha256": "5703057f9fe0dd6eb9d606cacd295d09a377352094f8afb6d6e826df7511827e"
+    },
+    "Devonia's Hammer": {
+      "file": "assets/catalogue/23500000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/devonias_hammer.png",
+      "sha256": "7ef79bff843b2a6af6bc0eb914303e39b336c559b89d065caf2749e760513a3d"
+    },
+    "Shadow Sunflower Blossom": {
+      "file": "assets/catalogue/23510000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/shadow_sunflower_blossom.png",
+      "sha256": "e453b5a9e109c88a1a200f0ef376458b4727fff0d7258b6fde3a5e05c22f4ab0"
+    },
+    "Gazing Finger": {
+      "file": "assets/catalogue/23520000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/gazing_finger.png",
+      "sha256": "b3fca66a255981f3fdbcab5abd5662832b50c42f0867d7e85b2453d7c376ee2d"
+    },
+    "Nightrider Flail": {
+      "file": "assets/catalogue/13000000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/nightrider_flail.png",
+      "sha256": "3227b1a731582211caa11f8a549ac82490847e6025981801746a72b891b0aec2"
+    },
+    "Flail": {
+      "file": "assets/catalogue/13010000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/flail.png",
+      "sha256": "3a119c5866e1965be0fd1417c5d8620ebf2fa49f178eab56162d0ad9dec8c912"
+    },
+    "Family Heads": {
+      "file": "assets/catalogue/13020000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/family_heads.png",
+      "sha256": "217c0f4bda5ec4299f926706039cc9c118df8f5ffbef4888d0324fa908df1d08"
+    },
+    "Bastard's Stars": {
+      "file": "assets/catalogue/13030000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/bastards_stars.png",
+      "sha256": "33c8e5110715c191a8589373e4467f947a44145f661bdb744c1c335673d242f3"
+    },
+    "Chainlink Flail": {
+      "file": "assets/catalogue/13040000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/chainlink_flail.png",
+      "sha256": "21fd7d5bce518389eb88647a27f38f8fdfc2e8aceaafd8b456334f40e2a839a7"
+    },
+    "Serpent Flail": {
+      "file": "assets/catalogue/13500000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/serpent_flail.png",
+      "sha256": "46c2af8ce42a1e8e1b505f9bd03f4f3cdb0a7fe393ebb1169aaea931ad6a793e"
+    },
+    "Golden Order Flail": {
+      "file": "assets/catalogue/13510000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/golden_order_flail.png",
+      "sha256": "ea129f7efa3b8362dc9aed40244f144fd316a0c90bac48b6dbc9425a5c96d8de"
+    },
+    "Battle Axe": {
+      "file": "assets/catalogue/14000000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/battle_axe.png",
+      "sha256": "e9732449450ff7a6e607b606b57b7d7a223bfddff6860d6498749599bd010f81"
+    },
+    "Forked Hatchet": {
+      "file": "assets/catalogue/14010000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/forked_hatchet.png",
+      "sha256": "0ae73d5606ac81851e9c85ae2e0a4f3a64eb513bcc05da0fee832183b8c09177"
+    },
+    "Hand Axe": {
+      "file": "assets/catalogue/14020000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/hand_axe.png",
+      "sha256": "81e40179d848c94b68077de0b6c7008f4919d86e382581da25883b14dfe2d6bb"
+    },
+    "Jawbone Axe": {
+      "file": "assets/catalogue/14030000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/jawbone_axe.png",
+      "sha256": "1bb0721644e55ce49d24a4eb77e3d0de96aa00171f7a29f1a646d98bf95ea05c"
+    },
+    "Iron Cleaver": {
+      "file": "assets/catalogue/14040000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/iron_cleaver.png",
+      "sha256": "a2e5ce32783ef0fbddd432feab1b4c677a65df0891cec89d13d3a95a89676e88"
+    },
+    "Ripple Blade": {
+      "file": "assets/catalogue/14050000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/ripple_blade.png",
+      "sha256": "9b29d706e621be278cf7beed30653a3d4a48a39d9dd841336c3340b9c27f89cf"
+    },
+    "Celebrant's Cleaver": {
+      "file": "assets/catalogue/14060000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/celebrants_cleaver.png",
+      "sha256": "415c649c495b7285b11afe93e8ba765672ea10abf5ad3874d3069eb6f89bac5a"
+    },
+    "Icerind Hatchet": {
+      "file": "assets/catalogue/14080000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/icerind_hatchet.png",
+      "sha256": "c04d45393cd2cbf3f5e7c1581d709031c138253a50a11bc60ecaf481830a97e6"
+    },
+    "Highland Axe": {
+      "file": "assets/catalogue/14100000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/highland_axe.png",
+      "sha256": "20e21509a2fd4244f4d9c644451e35ed869dca12221bc89e5f0b3db8259eb330"
+    },
+    "Sacrificial Axe": {
+      "file": "assets/catalogue/14110000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/sacrificial_axe.png",
+      "sha256": "9b235b4d3ea0aec91e461aa433434ec1dba85465171aa04b36c0231dbdcb4321"
+    },
+    "Rosus' Axe": {
+      "file": "assets/catalogue/14120000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/rosus_axe.png",
+      "sha256": "3037b8e70d305a5b7a8f99973b53f64bfcdf76faf679b6d1ae94100dc948d40d"
+    },
+    "Stormhawk Axe": {
+      "file": "assets/catalogue/14140000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/stormhawk_axe.png",
+      "sha256": "9c953aaa256e9c4fc19c863856ea235701d4cc20f93763237e4805c4a8ec0951"
+    },
+    "Smithscript Axe": {
+      "file": "assets/catalogue/14500000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/smithscript_axe.png",
+      "sha256": "c2daffa260926fea0f76dff490531602d1cc52d54bbf7bbb3f7754a64104792c"
+    },
+    "Death Knight's Twin Axes": {
+      "file": "assets/catalogue/14510000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/death_knights_twin_axes.png",
+      "sha256": "cf8315ff4ef3cddfe21dee985b461067dc7080d5b315626ca439a575ad764596"
+    },
+    "Messmer Soldier's Axe": {
+      "file": "assets/catalogue/14520000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/messmer_soldiers_axe.png",
+      "sha256": "5bcd3e68d47feb569152dd17f562aeb459cccaea09ea9f0567280e417030e77a"
+    },
+    "Forked-Tongue Hatchet": {
+      "file": "assets/catalogue/14540000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/forked_tongue_hatchet.png",
+      "sha256": "ba3098e1079808d48eb276d7c1072837e4d7be17eb2b66db6eb222c0c8a34ee1"
+    },
+    "Warped Axe": {
+      "file": "assets/catalogue/15010000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/warped_axe.png",
+      "sha256": "f8e1c00202faecc123af195ba7505ada6c6c0b4d825178456b9bdad53784d315"
+    },
+    "Short Spear": {
+      "file": "assets/catalogue/16000000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/short_spear.png",
+      "sha256": "59ebf4ad318d6e4e66b6824b5e0cc3f032ebef23d2761babd8bf16d3738c6fd0"
+    },
+    "Spear": {
+      "file": "assets/catalogue/16010000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/spear.png",
+      "sha256": "c7e168e531c163de0f0899be16a3520e7653cca808c66e0cf63dc1ff7b3e377e"
+    },
+    "Crystal Spear": {
+      "file": "assets/catalogue/16020000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/crystal_spear.png",
+      "sha256": "7ebbf1500c809a337a530ebffc4d18c480fc2d1be5c64f132f03a8ea8b47c6bb"
+    },
+    "Clayman's Harpoon": {
+      "file": "assets/catalogue/16030000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/claymans_harpoon.png",
+      "sha256": "533fb75c93c14a8a013beccf82c1a47e00836222d3f3e83bde90997a034c5f60"
+    },
+    "Cleanrot Spear": {
+      "file": "assets/catalogue/16040000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/cleanrot_spear.png",
+      "sha256": "797fc5165be1bd510f1d726442d70afdedcb71d111e895c4a75c076ad16def0f"
+    },
+    "Partisan": {
+      "file": "assets/catalogue/16050000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/partisan.png",
+      "sha256": "07958680b7ae96e80135ef752f6e74a60896fba57875c81a829afcd3a4f98149"
+    },
+    "Celebrant's Rib-Rake": {
+      "file": "assets/catalogue/16060000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/celebrants_rib_rake.png",
+      "sha256": "8a9aa2ba575267ba3510f41a1131a1866ff89b58f0a2b4e8caad2eae7dcbd5a6"
+    },
+    "Pike": {
+      "file": "assets/catalogue/16070000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/pike.png",
+      "sha256": "52a467c5ae3d820b382fcbd06b32d39a0ab99c4a76265422d21f0c3a146a229c"
+    },
+    "Torchpole": {
+      "file": "assets/catalogue/16080000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/torchpole.png",
+      "sha256": "d05187e2f53d9b2930f49b46e19d995c60f72450b18a2c9f30df13548ca844e6"
+    },
+    "Bolt of Gransax": {
+      "file": "assets/catalogue/16090000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/bolt_of_gransax.png",
+      "sha256": "6ea114c996f6d6cfc8334ad4677a69e8f3f442d87bc8b65875663ff26a5aa72f"
+    },
+    "Cross-Naginata": {
+      "file": "assets/catalogue/16110000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/cross_naginata.png",
+      "sha256": "712ac320363424cebd5ebfadd4c18d297a4b7e96b23e1d532f28433948566b7a"
+    },
+    "Death Ritual Spear": {
+      "file": "assets/catalogue/16120000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/death_ritual_spear.png",
+      "sha256": "3a4db655caa7ada1aa1fb8881163812fb5fcf925b07769d61287f96c712928fe"
+    },
+    "Inquisitor's Girandole": {
+      "file": "assets/catalogue/16130000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/inquisitors_girandole.png",
+      "sha256": "c53181e33465b5305c2058c331e35d19f2b861e5c7d29a00473dea97a06ed7a0"
+    },
+    "Spiked Spear": {
+      "file": "assets/catalogue/16140000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/spiked_spear.png",
+      "sha256": "2c6000e9ceba74c1dd7b509d3b1a903d400d948a3ab5feca9dca30f20747effd"
+    },
+    "Iron Spear": {
+      "file": "assets/catalogue/16150000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/iron_spear.png",
+      "sha256": "aa90238aa7026cc8083557a6a9fc8c37f281ad4e7be629c33dc963312d6ada00"
+    },
+    "Rotten Crystal Spear": {
+      "file": "assets/catalogue/16160000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/rotten_crystal_spear.png",
+      "sha256": "cc784c79fdbf24b34cae5f5464f619a1e1b83870b3e828e4219aaf3b34256b52"
+    },
+    "Smithscript Spear": {
+      "file": "assets/catalogue/16500000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/smithscript_spear.png",
+      "sha256": "cb45fe55bd29f9d5c6f2ce490b7d44c9373f3ce70b42d104a2a6075fd02cd55e"
+    },
+    "Swift Spear": {
+      "file": "assets/catalogue/16520000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/swift_spear.png",
+      "sha256": "5127b3d2462268e58be46102b11214b1abbccd5c3938a48c69f8e75de1637b81"
+    },
+    "Bloodfiend's Fork": {
+      "file": "assets/catalogue/16540000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/bloodfiends_fork.png",
+      "sha256": "2d6ac2f6adc79997415062c867408c36e029ef5342da47eee0749be06e80e866"
+    },
+    "Bloodfiend's Sacred Spear": {
+      "file": "assets/catalogue/16550000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/bloodfiend_s_sacred_spear.png",
+      "sha256": "56f28c88401a60bf41bbd317b6b2cdc218bfa956ff15c62d7d39a616fe36375d"
+    },
+    "Mohgwyn's Sacred Spear": {
+      "file": "assets/catalogue/17010000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/mohgwyns_sacred_spear.png",
+      "sha256": "ec106b4651ed6527f7a4829eaa4e8e023ed154a20b006c459cdcbda24e38cca0"
+    },
+    "Siluria's Tree": {
+      "file": "assets/catalogue/17020000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/silurias_tree.png",
+      "sha256": "6dd82ee0405180943b146e2e11a6ef05104e45f3831a4246857965e4c8bac12d"
+    },
+    "Serpent-Hunter": {
+      "file": "assets/catalogue/17030000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/serpent_hunter.png",
+      "sha256": "29da89f45ed49372e373eda131bf1e7b7a3ec5c410c9e1efab813b734986e655"
+    },
+    "Vyke's War Spear": {
+      "file": "assets/catalogue/17050000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/vykes_war_spear.png",
+      "sha256": "22f002e2bdcbe629bc8b06e841715026992ef130dbe6e9fab0fd1a446e4a352e"
+    },
+    "Lance": {
+      "file": "assets/catalogue/17060000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/lance.png",
+      "sha256": "04da1ab2466eb77ba5bbd64087d726a2e65a76d289513df872b6ecf26550addd"
+    },
+    "Treespear": {
+      "file": "assets/catalogue/17070000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/treespear.png",
+      "sha256": "8c24d6cf5008c8b23046849f5d3913877c64d65950b97b16f37da89a0ef2a47e"
+    },
+    "Spear of the Impaler": {
+      "file": "assets/catalogue/17500000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/spear_of_the_impaler.png",
+      "sha256": "14169d41f239944458338d4a0d32d4d721b007ff3b4901e707ae8114f112d216"
+    },
+    "Messmer Soldier's Spear": {
+      "file": "assets/catalogue/17510000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/messmer_soldiers_spear.png",
+      "sha256": "3af1d845ae0250a5b87c4b1d1b1b4d492cefe70a67a44dd7caa0f60e6bdd1b97"
+    },
+    "Barbed Staff-Spear": {
+      "file": "assets/catalogue/17520000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/barbed_staff_spear.png",
+      "sha256": "5b09cb7582d67198675814835f2d9767a52e523e332ab678835f7cb4e34d948c"
+    },
+    "Halberd": {
+      "file": "assets/catalogue/18000000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/halberd.png",
+      "sha256": "7d1fb53716c7474ede85952a0789847da9c551bf516df73c57ab5d36880e40cf"
+    },
+    "Pest's Glaive": {
+      "file": "assets/catalogue/18010000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/pests_glaive.png",
+      "sha256": "8a4ae629cd63e163046d81c9681c89f423a5a33fc9d780f1bcf831e690bd991f"
+    },
+    "Lucerne": {
+      "file": "assets/catalogue/18020000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/lucerne.png",
+      "sha256": "13de0e68c610ac1c9b158ddc033663cc889ae7629b7832018c004fd37f49fe90"
+    },
+    "Banished Knight's Halberd": {
+      "file": "assets/catalogue/18030000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/banished_knights_halberd.png",
+      "sha256": "1095c2b231d4fecb95d76242d3639ee1fbfa5dcd1fe2c1834dd96c012a7c1dcc"
+    },
+    "Commander's Standard": {
+      "file": "assets/catalogue/18040000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/commanders_standard.png",
+      "sha256": "108ba4e961b02b44a0458dbce0b5631fecd4921765ec2a7de3035b16521782cd"
+    },
+    "Nightrider Glaive": {
+      "file": "assets/catalogue/18050000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/nightrider_glaive.png",
+      "sha256": "dec6ac2d08fe2ce678b6eae66dea0809a27d0b0eb9e5305305308f513fd43fd6"
+    },
+    "Ripple Crescent Halberd": {
+      "file": "assets/catalogue/18060000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/ripple_crescent_halberd.png",
+      "sha256": "c09541d139b75005f53f797a0b73a308318053e895714dd8ecd542a1ff44819c"
+    },
+    "Vulgar Militia Saw": {
+      "file": "assets/catalogue/18070000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/vulgar_militia_saw.png",
+      "sha256": "4a3f4ccdd96c6eff005175425ffed5f5b7d39b748dbed0ea387cb88de3f63c19"
+    },
+    "Golden Halberd": {
+      "file": "assets/catalogue/18080000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/golden_halberd.png",
+      "sha256": "4951cbc112fbc74d86ee54543c73b8bfa887a973a517a89d6a888e4c14fb2de8"
+    },
+    "Glaive": {
+      "file": "assets/catalogue/18090000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/glaive.png",
+      "sha256": "6b2c82b190c6adf770e575f350669b23f266b0d710446cee3f3ccb03ca6f27da"
+    },
+    "Loretta's War Sickle": {
+      "file": "assets/catalogue/18100000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/lorettas_war_sickle.png",
+      "sha256": "80dc1c7285e0c5a5653d614f3e7b37c2f96ae548d26be089aa2bb00bfd6415bf"
+    },
+    "Guardian's Swordspear": {
+      "file": "assets/catalogue/18110000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/guardians_swordspear.png",
+      "sha256": "9b202e2bbeeebf9b58207c33c510ab91b7781bda1ffb34d194cb70c657b6ede8"
+    },
+    "Vulgar Militia Shotel": {
+      "file": "assets/catalogue/18130000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/vulgar_militia_shotel.png",
+      "sha256": "60961d4db7debaf404c4b62f5ddb793890a3855c3ee2f8d1bb65888cdd6f75af"
+    },
+    "Dragon Halberd": {
+      "file": "assets/catalogue/18140000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/dragon_halberd.png",
+      "sha256": "8dbee4afdd07c9244ff5ffad470257d5f6e628d1cab37a8acdfdfa411dda19f1"
+    },
+    "Gargoyle's Halberd": {
+      "file": "assets/catalogue/18150000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/gargoyles_halberd.png",
+      "sha256": "7540d49b1455dbc3de2e5a4ebb2e08a551bf66618b0d19862e8358cbfc423fb5"
+    },
+    "Gargoyle's Black Halberd": {
+      "file": "assets/catalogue/18160000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/gargoyles_black_halberd.png",
+      "sha256": "e9ba9e52371b5a1aa9fbccea3567eb63282bb261a540dcbb836ecfefafdc2d08"
+    },
+    "Spirit Glaive": {
+      "file": "assets/catalogue/18500000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/spirit_glaive.png",
+      "sha256": "46d03ed3a238104f9c2a897159451b5c3298faa3e33118ebdec9e8fc62b18ae1"
+    },
+    "Poleblade of the Bud": {
+      "file": "assets/catalogue/18510000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/poleblade_of_the_bud.png",
+      "sha256": "b9d54c9c6f35a20cc8e085f0d88a3731b8109fef32180141d02ad81921bd16e7"
+    },
+    "Scythe": {
+      "file": "assets/catalogue/19000000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/scythe.png",
+      "sha256": "e8ceff3633521599a08f6ffa7f71cfd3a32707c5d47a154b8549972361570fb2"
+    },
+    "Grave Scythe": {
+      "file": "assets/catalogue/19010000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/grave_scythe.png",
+      "sha256": "6d615d898da32c9b16228ef20e889dd393a4b0c4d63d5bfc7021d208ea3cb6d3"
+    },
+    "Halo Scythe": {
+      "file": "assets/catalogue/19020000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/halo_scythe.png",
+      "sha256": "6b148af990b27d7f5939c29facbe6f8e9f2a8812b54f54bdcb99e2681963f9e1"
+    },
+    "Winged Scythe": {
+      "file": "assets/catalogue/19060000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/winged_scythe.png",
+      "sha256": "ef450bb4e05f5c1370474e5505d1fd40fa91cf5c382a5680b79b960fcddf5617"
+    },
+    "Obsidian Lamina": {
+      "file": "assets/catalogue/19500000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/obsidian_lamina.png",
+      "sha256": "05d7bfee317301d22086c43fe504bfab93b2dc06c4174fd42f7a360e74dbbd0f"
+    },
+    "Whip": {
+      "file": "assets/catalogue/20000000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/whip.png",
+      "sha256": "cb19a859c4c2b080e2f1eab3d3e3907a8aa996f8012f39b16c3be14aa76735d6"
+    },
+    "Thorned Whip": {
+      "file": "assets/catalogue/20020000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/thorned_whip.png",
+      "sha256": "2d0b9ed67ecdf54b54a37744008733f57a9a041e84b342f0cdaaeb95d84af4d4"
+    },
+    "Magma Whip Candlestick": {
+      "file": "assets/catalogue/20030000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/magma_whip_candlestick.png",
+      "sha256": "dbb3801eea3d289851a690acb3dd9993f9afbce89f6cd48ad9e689bae8689636"
+    },
+    "Hoslow's Petal Whip": {
+      "file": "assets/catalogue/20050000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/hoslows_petal_whip.png",
+      "sha256": "b1d396a15e12ae3c955dff10d706a9534bd691f70b3433fb5a5a16df306239b2"
+    },
+    "Giant's Red Braid": {
+      "file": "assets/catalogue/20060000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/giants_red_braid.png",
+      "sha256": "795e75f206b39ebbdd7171bb4eb154f760137d5574eb224a6ca7d92967c72478"
+    },
+    "Urumi": {
+      "file": "assets/catalogue/20070000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/urumi.png",
+      "sha256": "d21268962951418b0eb5572de66f2be6d5e4b93b9cef01bb84d25701fb5bd858"
+    },
+    "Tooth Whip": {
+      "file": "assets/catalogue/20500000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/tooth_whip.png",
+      "sha256": "15895c2ffc6e80de1749ef7921d96364a2565e0794fa882efaf3293af91eea5c"
+    },
+    "Caestus": {
+      "file": "assets/catalogue/21000000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/caestus.png",
+      "sha256": "e2ea2d60d16b47bebcd34bf64bffc7e246a381ecf3bdf739a4e8eec6e7a63330"
+    },
+    "Spiked Caestus": {
+      "file": "assets/catalogue/21010000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/spiked_caestus.png",
+      "sha256": "58949469dbcb41115e749f7a2e6045373bac70cca689abd4d577803a272c2598"
+    },
+    "Grafted Dragon": {
+      "file": "assets/catalogue/21060000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/grafted_dragon.png",
+      "sha256": "b74ca8221620f8184bdb952140ba76b12ee31db3387a70825bcedbdf262b50a9"
+    },
+    "Iron Ball": {
+      "file": "assets/catalogue/21070000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/iron_ball.png",
+      "sha256": "c56d0a1a163d6c08170dbba6c3117f3138ee93c211883d2291f89ad83969dba7"
+    },
+    "Star Fist": {
+      "file": "assets/catalogue/21080000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/star_fist.png",
+      "sha256": "3d532e967f39923a5a082a224edf25a610d3c8276ccab867da206c3a83a39d74"
+    },
+    "Katar": {
+      "file": "assets/catalogue/21100000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/katar.png",
+      "sha256": "1b8af65a818a24be524935ec925e0bd4e84ab61427140ac14459b422c7f8278c"
+    },
+    "Clinging Bone": {
+      "file": "assets/catalogue/21110000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/clinging_bone.png",
+      "sha256": "a97380b12862a55a148a98a530d6dda9bbb9b12c3c70f244f0850f4b13735c21"
+    },
+    "Veteran's Prosthesis": {
+      "file": "assets/catalogue/21120000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/veterans_prosthesis.png",
+      "sha256": "363f6bcd5bf9eb2ace7bb5a55ef2e4ecb436fd38096d3040b75742db012726c2"
+    },
+    "Cipher Pata": {
+      "file": "assets/catalogue/21130000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/cipher_pata.png",
+      "sha256": "1dcc7dd95e79c7651b8cdbaa878197db79875942b80407ccfd7dd10ad8099785"
+    },
+    "Thiollier's Hidden Needle": {
+      "file": "assets/catalogue/21500000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/thiolliers_hidden_needle.png",
+      "sha256": "46c9c2c21fc5984bef5d029b103bfcfea5a80871f7ceacdb715dd7e83595031f"
+    },
+    "Pata": {
+      "file": "assets/catalogue/21510000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/pata.png",
+      "sha256": "ea13ec191cd2f5da55da43bc59cae1785bc18f5f77bed82327527c2f0b7afae8"
+    },
+    "Poisoned Hand": {
+      "file": "assets/catalogue/21520000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/poisoned_hand.png",
+      "sha256": "e45234c2ada62ce5003c437906f8a6ca6387946d0e2786928d0aa65ca56ee041"
+    },
+    "Madding Hand": {
+      "file": "assets/catalogue/21530000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/madding_hand.png",
+      "sha256": "a3b8ffc438f4c36804e770cdd08827b6688c5b68ec8846eaa5f0ccb13ebe5572"
+    },
+    "Golem Fist": {
+      "file": "assets/catalogue/21540000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/golem_fist.png",
+      "sha256": "f4df0dde14c1d4ba1b57e098ef188172a384ff609a0bc9f01ec90f9d05c36c93"
+    },
+    "Shield of Night": {
+      "file": "assets/catalogue/21550000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/shield_of_night.png",
+      "sha256": "043b2e8b4061866ef0c8e702453cb5f1cb376997f048e24483ad9e6d6edca1c6"
+    },
+    "Buckler": {
+      "file": "assets/catalogue/30000000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/buckler.png",
+      "sha256": "1db96f58f684088539f4be1b2f8fcb7e7235f81a24a10e020fea97b61de11db0"
+    },
+    "Perfumer's Shield": {
+      "file": "assets/catalogue/30010000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/perfumers_shield.png",
+      "sha256": "be60b7cc09659e8b317dd413bda8798f761b38c1aa33bec064cb42810edaf693"
+    },
+    "Man-Serpent's Shield": {
+      "file": "assets/catalogue/30020000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/man_serpents_shield.png",
+      "sha256": "04c2539aebf9759ff320a248079f804a6d5ffd4025d65effe88498c6afea7f1a"
+    },
+    "Rickety Shield": {
+      "file": "assets/catalogue/30030000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/rickety_shield.png",
+      "sha256": "8fee0d652c2211baa7d70e4c5104485c3721a205e039b24116e593a574ac1050"
+    },
+    "Pillory Shield": {
+      "file": "assets/catalogue/30040000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/pillory_shield.png",
+      "sha256": "c10421d557b92fe41b1f9f7d55b3ff709330bb1a4caf2d34c73bfbd7229950f5"
+    },
+    "Red Thorn Roundshield": {
+      "file": "assets/catalogue/30070000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/red_thorn_roundshield.png",
+      "sha256": "6c833fd96fa43b974a64daceadde4f2ad9f8830fe04784d482bdbedf2f195687"
+    },
+    "Scripture Wooden Shield": {
+      "file": "assets/catalogue/30080000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/scripture_wooden_shield.png",
+      "sha256": "ec253bd9f1fc389f20758fe571f15d16caba7fe3fb56a0a9e9058c1fe088380e"
+    },
+    "Riveted Wooden Shield": {
+      "file": "assets/catalogue/30090000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/riveted_wooden_shield.png",
+      "sha256": "4d4e12e707c92ff1d9a00d76d93fc3668447135fa93895ecce9dfa562e42d5e2"
+    },
+    "Blue-White Wooden Shield": {
+      "file": "assets/catalogue/30100000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/blue_white_wooden_shield.png",
+      "sha256": "b1be13080573edca47e38ad19488abb3caf5b4503d39566c7cca7ddff5f0f3a2"
+    },
+    "Rift Shield": {
+      "file": "assets/catalogue/30110000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/rift_shield.png",
+      "sha256": "761f9d581e6e1d4bcdc089a40b0737de5124139f49fc19fd94cf6422f8e8f332"
+    },
+    "Iron Roundshield": {
+      "file": "assets/catalogue/30120000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/iron_roundshield.png",
+      "sha256": "d8a06f2d310de9fc8c35e733cd1d4d1d83d658154e15a9973b17330b39c83862"
+    },
+    "Gilded Iron Shield": {
+      "file": "assets/catalogue/30130000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/gilded_iron_shield.png",
+      "sha256": "76fc82694c5156bd8414c0568d5f49c8ad9e9d94cf31bff0158a3b8bb1ace89f"
+    },
+    "Ice Crest Shield": {
+      "file": "assets/catalogue/30140000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/ice_crest_shield.png",
+      "sha256": "6afe7d6fa88bc000734627a85e8211fe128bdcf71ba2b5d9ec9a3518a45f691e"
+    },
+    "Smoldering Shield": {
+      "file": "assets/catalogue/30150000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/smoldering_shield.png",
+      "sha256": "a88a286bda58e8199e3a6f542eb50d0c22761015f60a67c8eb5f64f9c1877b48"
+    },
+    "Spiralhorn Shield": {
+      "file": "assets/catalogue/30190000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/spiralhorn_shield.png",
+      "sha256": "2b0f6013d3269bce9df8ac6881fbb6f323fa262608adf67eaf260cabca7972c9"
+    },
+    "Coil Shield": {
+      "file": "assets/catalogue/30200000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/coil_shield.png",
+      "sha256": "8b877048c1f49995b1423e6fac010ecb0de74e7b228e364a5204900574fcb8f3"
+    },
+    "Smithscript Shield": {
+      "file": "assets/catalogue/30510000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/smithscript_shield.png",
+      "sha256": "fb87e45f77a944d8027de9ee71482d8f05e86efb9aa7986c74e97fb6729be99e"
+    },
+    "Shield of the Guilty": {
+      "file": "assets/catalogue/31170000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/shield_of_the_guilty.png",
+      "sha256": "73856b5bd56a46fb36cf15cf84d5753df8308769759ef62a117a0a4b2c7dcadb"
+    },
+    "Hookclaws": {
+      "file": "assets/catalogue/22000000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/hookclaws.png",
+      "sha256": "2a45569b73a75f8a5c1e66aee492bb8a826ede32be866699d8bc30bafff8e64e"
+    },
+    "Venomous Fang": {
+      "file": "assets/catalogue/22010000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/venomous_fang.png",
+      "sha256": "b0350f8248489d8334a3c3a2e73184bb3ce037b608a68986045889a9976abf55"
+    },
+    "Bloodhound Claws": {
+      "file": "assets/catalogue/22020000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/bloodhound_claws.png",
+      "sha256": "77817f7aeff003c93596f8955f46794797a2d407e0499d8bc69e3b782524daf2"
+    },
+    "Raptor Talons": {
+      "file": "assets/catalogue/22030000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/raptor_talons.png",
+      "sha256": "67e0b38365361350204125aa3158abc7b405107747d9cb0de0eee3cafd142174"
+    },
+    "Claws of Night": {
+      "file": "assets/catalogue/22500000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/claws_of_night.png",
+      "sha256": "ea43b26bc99f66d3161387c589e261ea29e9455bc19942f7c471d0edf7c4fa79"
+    },
+    "Torch": {
+      "file": "assets/catalogue/24000000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/torch.png",
+      "sha256": "0f1d8e85b59c5aab1376470e0700ad06493f1273f0e39f999b32f38e90df9bf9"
+    },
+    "Steel-Wire Torch": {
+      "file": "assets/catalogue/24020000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/steel_wire_torch.png",
+      "sha256": "d16be4c17049e3021832bdd9ab802320b8a326dde52cccd298665b2524c23b44"
+    },
+    "St. Trina's Torch": {
+      "file": "assets/catalogue/24040000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/st_trinas_torch.png",
+      "sha256": "cee60a715f46583a9097e330e20f2bbd7b09ce244db9d7e14318b094c6795da9"
+    },
+    "Ghostflame Torch": {
+      "file": "assets/catalogue/24050000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/ghostflame_torch.png",
+      "sha256": "db0bd73c742f4de98eaa9b5727074ab56ad7e1f8a07233c6434ed7735ce21677"
+    },
+    "Beast-Repellent Torch": {
+      "file": "assets/catalogue/24060000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/beast_repellent_torch.png",
+      "sha256": "63a62e3f050ad9a44d567767d5976c6bee796d7b1cf3e47076138cf7daea7d22"
+    },
+    "Sentry's Torch": {
+      "file": "assets/catalogue/24070000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/sentrys_torch.png",
+      "sha256": "58f888f9ffd5198f400f5ef9aae1037aa2ad75cc13a71d04b1ecf0dab08cc974"
+    },
+    "Nanaya's Torch": {
+      "file": "assets/catalogue/24500000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/nanayas_torch.png",
+      "sha256": "43f32ccd7a58d0ac65b04dba1ba14533d25b5e304e2086ddb1e75a29317e3db4"
+    },
+    "Lamenting Visage": {
+      "file": "assets/catalogue/24510000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/lamenting_visage.png",
+      "sha256": "a28e34011f0446c62baeed2f0b1fd41a2562c23fda65eb1f5b780e3767c2e6f6"
+    },
+    "Beastman's Jar-Shield": {
+      "file": "assets/catalogue/30060000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/beastmans_jar_shield.png",
+      "sha256": "5e57f3af0e8ba90cedf2a9436e180809ef401bfc889bcee0fa85e18df2cf5a23"
+    },
+    "Kite Shield": {
+      "file": "assets/catalogue/31000000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/kite_shield.png",
+      "sha256": "e8c80c71a87fa6638f715dc89678e8408412393a08625cca30377821ec097dab"
+    },
+    "Marred Leather Shield": {
+      "file": "assets/catalogue/31010000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/marred_leather_shield.png",
+      "sha256": "27d1b22b7fbc284e7353e064322ddb69a313b01fde2c3bda9d00a5359a210f9b"
+    },
+    "Marred Wooden Shield": {
+      "file": "assets/catalogue/31020000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/marred_wooden_shield.png",
+      "sha256": "d4f2c7a90acf846be1c61f68302975cdc69fadea3210d99a3b52a2c9430a1bcf"
+    },
+    "Banished Knight's Shield": {
+      "file": "assets/catalogue/31030000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/banished_knights_shield.png",
+      "sha256": "21c35b4750c5fb7bc8b862edeb3ca3c068fbcd20f98c5a884ecfe4b03ec2a3fa"
+    },
+    "Albinauric Shield": {
+      "file": "assets/catalogue/31040000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/albinauric_shield.png",
+      "sha256": "07eee547c1cdeb2e28cf88189c878cc6988f8ef9a810b41816edd5e88ba30770"
+    },
+    "Sun Realm Shield": {
+      "file": "assets/catalogue/31050000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/sun_realm_shield.png",
+      "sha256": "071ace35807bf053d08d4a0457eeecf42e1ebe67ab551277a8035e7385df8226"
+    },
+    "Silver Mirrorshield": {
+      "file": "assets/catalogue/31060000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/silver_mirrorshield.png",
+      "sha256": "e7cf716637f17ce1dce2027066d1c3fdb4025397eba06ac1cfbd22668127aa3c"
+    },
+    "Round Shield": {
+      "file": "assets/catalogue/31070000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/round_shield.png",
+      "sha256": "785cb6788e5cf1d1df304dbd63f293f1ae8e20470750c85ac4e9b43122dc2cae"
+    },
+    "Scorpion Kite Shield": {
+      "file": "assets/catalogue/31080000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/scorpion_kite_shield.png",
+      "sha256": "176d35734b24bce40534cfd138c7f5832a5a4399b4a584738e99804e881b0bd8"
+    },
+    "Twinbird Kite Shield": {
+      "file": "assets/catalogue/31090000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/twinbird_kite_shield.png",
+      "sha256": "fb229a487dbb0a20b7c816487b4d4b4a1104cbdd365e8acadb05bd12cd465be3"
+    },
+    "Blue-Gold Kite Shield": {
+      "file": "assets/catalogue/31100000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/blue_gold_kite_shield.png",
+      "sha256": "4181e8ab4abc43d52689cf6b0e2e1b309e9a7c64e6f6a53ded738cf8fef4f488"
+    },
+    "Brass Shield": {
+      "file": "assets/catalogue/31130000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/brass_shield.png",
+      "sha256": "1544c1ca99d76db6e287910272f49a14d905747eb40021fe6596c333230c4c46"
+    },
+    "Great Turtle Shell": {
+      "file": "assets/catalogue/31140000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/great_turtle_shell.png",
+      "sha256": "5022f74f5c1a4454314ad7f35e86ae8812b3a463418bbfac6a7c8f2b0d660d29"
+    },
+    "Carian Knight's Shield": {
+      "file": "assets/catalogue/31190000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/carian_knights_shield.png",
+      "sha256": "e3c690569cfe6393affc7e55725be6118c27a4ec406ceed24e9e40bbe5e14b4c"
+    },
+    "Large Leather Shield": {
+      "file": "assets/catalogue/31230000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/large_leather_shield.png",
+      "sha256": "f6e675d24bc3e17453d1e9ae3224ab34e1712ff52d145ba5c66e6fcc91def946"
+    },
+    "Horse Crest Wooden Shield": {
+      "file": "assets/catalogue/31240000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/horse_crest_wooden_shield.png",
+      "sha256": "494ff82e18c2891e954d4f1657e421d3173e9d88608a97a023089a49e46a6a35"
+    },
+    "Candletree Wooden Shield": {
+      "file": "assets/catalogue/31250000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/candletree_wooden_shield.png",
+      "sha256": "8d7fce997982f48a08448f7554e51885aeff37418a604b468838c4c97710cfec"
+    },
+    "Flame Crest Wooden Shield": {
+      "file": "assets/catalogue/31260000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/flame_crest_wooden_shield.png",
+      "sha256": "701529b353081134b2458f65fee2fe7bc845ca8c290ed5dab1a5ee5963ee2e2c"
+    },
+    "Hawk Crest Wooden Shield": {
+      "file": "assets/catalogue/31270000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/hawk_crest_wooden_shield.png",
+      "sha256": "028237dd10e2662f7838da1cd093eec944f96a45170217224c45c285920ab7ac"
+    },
+    "Beast Crest Heater Shield": {
+      "file": "assets/catalogue/31280000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/beast_crest_heater_shield.png",
+      "sha256": "de1c1f38975fedb13b444e0780433ac558ad67ce6a6e25c057f99ffbad7f8f64"
+    },
+    "Red Crest Heater Shield": {
+      "file": "assets/catalogue/31290000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/red_crest_heater_shield.png",
+      "sha256": "cf1936e33a3c2d0c2d5ec5b57fd188a523229f7377e370c0db526f50f80ff7d7"
+    },
+    "Blue Crest Heater Shield": {
+      "file": "assets/catalogue/31300000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/blue_crest_heater_shield.png",
+      "sha256": "72fd950fb24d3746a5f4a8570be1e9e6fd522d046c932b796a762c90a4b3a7ce"
+    },
+    "Eclipse Crest Heater Shield": {
+      "file": "assets/catalogue/31310000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/eclipse_crest_heater_shield.png",
+      "sha256": "a6e379a60c9b4b64a3c93a9e35cddd3c60389d9c8efcb1099adc1060872afba3"
+    },
+    "Inverted Hawk Heater Shield": {
+      "file": "assets/catalogue/31320000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/inverted_hawk_heater_shield.png",
+      "sha256": "94f5fa45d7c3a8653f30943fcb372a3bafe1b3363205d2d554c926cb6014c5d9"
+    },
+    "Heater Shield": {
+      "file": "assets/catalogue/31330000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/heater_shield.png",
+      "sha256": "713f17d2a7a9a85eb2629816187294e182edf7a1307592004487ed909bad86f0"
+    },
+    "Black Leather Shield": {
+      "file": "assets/catalogue/31340000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/black_leather_shield.png",
+      "sha256": "3f98d66aea7ead3cb612622734e3fdc48122cd276c6c75eb6651ec97672830c3"
+    },
+    "Messmer Soldier Shield": {
+      "file": "assets/catalogue/31500000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/messmer_soldier_shield.png",
+      "sha256": "c82591ace11b07673003ed3a15868e24625f21a127cd6405c7537b81ae16443f"
+    },
+    "Wolf Crest Shield": {
+      "file": "assets/catalogue/31510000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/wolf_crest_shield.png",
+      "sha256": "de1c1f38975fedb13b444e0780433ac558ad67ce6a6e25c057f99ffbad7f8f64"
+    },
+    "Serpent Crest Shield": {
+      "file": "assets/catalogue/31520000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/serpent_crest_shield.png",
+      "sha256": "de1c1f38975fedb13b444e0780433ac558ad67ce6a6e25c057f99ffbad7f8f64"
+    },
+    "Golden Lion Shield": {
+      "file": "assets/catalogue/31530000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/golden_lion_shield.png",
+      "sha256": "d7ea7d6a24ef7e9e6335e6a9681b84ce819920f7370a43803b255b8986e9c56f"
+    },
+    "Silver Grooved Shield": {
+      "file": "assets/catalogue/31540000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/silver_grooved_shield.png",
+      "sha256": "66c34b90c1be9d45712e2fe8c976ce32a725052e543f619ec575f06796e87e68"
+    },
+    "Dragon Towershield": {
+      "file": "assets/catalogue/32000000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/dragon_towershield.png",
+      "sha256": "8ecdc6f304426ec7c5707d9193bf728d5c13a22bd72356941408d009e69d7333"
+    },
+    "Distinguished Greatshield": {
+      "file": "assets/catalogue/32020000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/distinguished_greatshield.png",
+      "sha256": "3bf7dc83d9b80cf838d4cdf34f04b73a06e6d27e60bb719cdd19af7b32e98fb2"
+    },
+    "Crucible Hornshield": {
+      "file": "assets/catalogue/32030000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/crucible_hornshield.png",
+      "sha256": "3cdca690bfb8fb71bb03f90bbe351e9b0eefb2d98036937cfbe8cbe2ee4980e0"
+    },
+    "Dragonclaw Shield": {
+      "file": "assets/catalogue/32040000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/dragonclaw_shield.png",
+      "sha256": "129ef297048206e2005945a1c4d420fb12f41092885052a61609cd93499b62e5"
+    },
+    "Briar Greatshield": {
+      "file": "assets/catalogue/32050000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/briar_greatshield.png",
+      "sha256": "90e0ad9cce00633a6e68e4488bd7e8035377ef3a3c7564c02222aec7bf9dd4c9"
+    },
+    "Erdtree Greatshield": {
+      "file": "assets/catalogue/32080000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/erdtree_greatshield.png",
+      "sha256": "d37f2ee62d7f7b9ec1454453d8d7225f76ddaabcf8cf5ca32d780336532237e7"
+    },
+    "Golden Beast Crest Shield": {
+      "file": "assets/catalogue/32090000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/golden_lion_shield.png",
+      "sha256": "d7ea7d6a24ef7e9e6335e6a9681b84ce819920f7370a43803b255b8986e9c56f"
+    },
+    "Jellyfish Shield": {
+      "file": "assets/catalogue/32120000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/jellyfish_shield.png",
+      "sha256": "dccf44bdfe36526d9cc5ca3b2a2f3a58287bd85bef26d17c0b3e755b33f4f062"
+    },
+    "Fingerprint Stone Shield": {
+      "file": "assets/catalogue/32130000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/fingerprint_stone_shield.png",
+      "sha256": "96e40ece62d08236d290f5ad1c68bbf55f90cdc698e45b49aedbfa780abd3bc7"
+    },
+    "Icon Shield": {
+      "file": "assets/catalogue/32140000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/icon_shield.png",
+      "sha256": "115a4890a36d5302fada8ed195144e3151f52a641c0e5cda042844dd03c33db3"
+    },
+    "One-Eyed Shield": {
+      "file": "assets/catalogue/32150000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/one_eyed_shield.png",
+      "sha256": "8f2e1ea174c1b05d80ca9ca67f5d69e6066a7fd7d025b523c792b1216726a422"
+    },
+    "Visage Shield": {
+      "file": "assets/catalogue/32160000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/visage_shield.png",
+      "sha256": "201f4af9a9e2d93a02139c766c58f7c6a518fe92062bd37bdc588ebdc2507600"
+    },
+    "Spiked Palisade Shield": {
+      "file": "assets/catalogue/32170000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/spiked_palisade_shield.png",
+      "sha256": "4c59de7b467159c58347e9770e29941168a700d4089ce2778106329e26ba7b1a"
+    },
+    "Manor Towershield": {
+      "file": "assets/catalogue/32190000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/manor_towershield.png",
+      "sha256": "9f319fc90dce96ad3482dbee4db29ce040f16848247412dcb944d07794062c9f"
+    },
+    "Crossed-Tree Towershield": {
+      "file": "assets/catalogue/32200000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/crossed_tree_towershield.png",
+      "sha256": "b794bb2bddf924cdc0ce87de99fb952087f4ed7defc76d3b80f05f86d68448d5"
+    },
+    "Inverted Hawk Towershield": {
+      "file": "assets/catalogue/32210000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/inverted_hawk_towershield.png",
+      "sha256": "f740901e50cef10c1e0176d8b948fd57c3025cb636f57972e7ad9fecd60c52fd"
+    },
+    "Ant's Skull Plate": {
+      "file": "assets/catalogue/32220000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/ants_skull_plate.png",
+      "sha256": "3c89c395892ec190480fde77daff00bf2fd8abc162f865c1b7abee6d559a2847"
+    },
+    "Redmane Greatshield": {
+      "file": "assets/catalogue/32230000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/redmane_greatshield.png",
+      "sha256": "9dd2b64932d5491d72605908a749e854a703ab719912a16422fe2e7a6d995d23"
+    },
+    "Eclipse Crest Greatshield": {
+      "file": "assets/catalogue/32240000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/eclipse_crest_greatshield.png",
+      "sha256": "7a58b2508a75ebf98a936c7d35ec4e7d62a737e3a97fc4b7062a29237aedcf42"
+    },
+    "Cuckoo Greatshield": {
+      "file": "assets/catalogue/32250000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/cuckoo_greatshield.png",
+      "sha256": "ec95c6742fe6c435bbea66338154e2fc78fcc32c20bf5bbca8e93f4271aa153f"
+    },
+    "Golden Greatshield": {
+      "file": "assets/catalogue/32260000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/golden_greatshield.png",
+      "sha256": "d5e1420a684310a664b1604279ebdb4d39bb94a1bc4249b7ff7e651a3e2d611e"
+    },
+    "Gilded Greatshield": {
+      "file": "assets/catalogue/32270000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/gilded_greatshield.png",
+      "sha256": "c7489870a31d1d0f149796a9acfe6b7080d23b28c7176ded0a50771a1d7ffcbe"
+    },
+    "Haligtree Crest Greatshield": {
+      "file": "assets/catalogue/32280000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/haligtree_crest_greatshield.png",
+      "sha256": "140a5ef6fd9de6851a697d58c7cafd473863d5aa39c5cfdeaa71e65432567971"
+    },
+    "Wooden Greatshield": {
+      "file": "assets/catalogue/32290000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/wooden_greatshield.png",
+      "sha256": "e6dc262d1b633654244487e02fc24abc4b7723ab322b70c890da9f812040525c"
+    },
+    "Lordsworn's Shield": {
+      "file": "assets/catalogue/32300000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/lordsworns_shield.png",
+      "sha256": "bd4ae98dbcc0b1b0b4414e9e6a1290741a7cf2f058f4dbd19c0b1aacf2bb6f1f"
+    },
+    "Black Steel Greatshield": {
+      "file": "assets/catalogue/32500000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/black_steel_greatshield.png",
+      "sha256": "37af48795c62647100d5c384719b288182e360607a130340ded207b4adf7d9fa"
+    },
+    "Verdigris Greatshield": {
+      "file": "assets/catalogue/32520000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/verdigris_greatshield.png",
+      "sha256": "25335e2cd6dbd70cdedc9664ead8776454bac8012681366c6aeeedf0eed0e0d6"
+    },
+    "Glintstone Staff": {
+      "file": "assets/catalogue/33000000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/glintstone_staff.png",
+      "sha256": "3fbf780e757f64e6cbd8b2263309ceeef6b9e1cd6803bd2e3c0a246c4a7640d7"
+    },
+    "Crystal Staff": {
+      "file": "assets/catalogue/33040000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/crystal_staff.png",
+      "sha256": "48dc2cae696d84c72094f2d68ef4c0568bd0201569e0dd0c3f87d9263472b22d"
+    },
+    "Gelmir Glintstone Staff": {
+      "file": "assets/catalogue/33050000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/gelmir_glintstone_staff.png",
+      "sha256": "bd9146cadb0f2591e589bea8cb77f2155b3ac7308625e86d04cfea66b598dac7"
+    },
+    "Demi-Human Queen's Staff": {
+      "file": "assets/catalogue/33060000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/demi_human_queens_staff.png",
+      "sha256": "265019b497831215a3ed347e6d9c48da42fb8e46971f1ff9dda6d1a9060b471e"
+    },
+    "Carian Regal Scepter": {
+      "file": "assets/catalogue/33090000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/carian_regal_scepter.png",
+      "sha256": "983fd6e529529e66ffb3cc38bdbea93b0102c5962b5fa88c069700f4d784c581"
+    },
+    "Digger's Staff": {
+      "file": "assets/catalogue/33120000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/diggers_staff.png",
+      "sha256": "5024e3f9e7978b8e0f3a8aacf4e56205e0fe18a103325dbb4459e710bba0c59a"
+    },
+    "Astrologer's Staff": {
+      "file": "assets/catalogue/33130000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/astrologers_staff.png",
+      "sha256": "d584a1a32c6d11244a17c530ca2757ccc0d274f24bbb56a67ea77cec87fb2ac2"
+    },
+    "Carian Glintblade Staff": {
+      "file": "assets/catalogue/33170000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/carian_glintblade_staff.png",
+      "sha256": "b4f5171b91d0464cf6b61f45bf9a7ec495e114517fb5fadf48b0c5bf90111814"
+    },
+    "Prince of Death's Staff": {
+      "file": "assets/catalogue/33180000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/prince_of_deaths_staff.png",
+      "sha256": "9466840e6b41f5f70ffa016468c63b8421d6c863b132c453f82469dc0fd926bf"
+    },
+    "Albinauric Staff": {
+      "file": "assets/catalogue/33190000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/albinauric_staff.png",
+      "sha256": "308cf168d5d2c31b5b1ecab94ed33ccf0971222f9e7df52b020b1406ba2fbed2"
+    },
+    "Academy Glintstone Staff": {
+      "file": "assets/catalogue/33200000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/academy_glintstone_staff.png",
+      "sha256": "086136c1c6007418b08a31871d04395f796dbcc58602dc1a8e82dc52c949f306"
+    },
+    "Carian Glintstone Staff": {
+      "file": "assets/catalogue/33210000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/carian_glintstone_staff.png",
+      "sha256": "41df7431456b7adb7f552b1badb5d062e899be21bdcb4b9ef5c111655943d951"
+    },
+    "Azur's Glintstone Staff": {
+      "file": "assets/catalogue/33230000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/azurs_glintstone_staff.png",
+      "sha256": "2b9c34528d7a3e3fc614af0803973133d627416f1ab2a12e5b1b926d4e4fc93e"
+    },
+    "Lusat's Glintstone Staff": {
+      "file": "assets/catalogue/33240000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/lusats_glintstone_staff.png",
+      "sha256": "3be21121f49f26d5c5cbde65fd36ae3ca36502ad54b9a3f80c2010ea2a91eb3b"
+    },
+    "Meteorite Staff": {
+      "file": "assets/catalogue/33250000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/meteorite_staff.png",
+      "sha256": "b2136016ac085fc013551ef05929a38d862d9ae9014313c4e748341bfe942c96"
+    },
+    "Staff of the Guilty": {
+      "file": "assets/catalogue/33260000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/staff_of_the_guilty.png",
+      "sha256": "45be39566f12e34a0095e6c7841a14d7b5b445137e12a65b616eda1997a970c5"
+    },
+    "Rotten Crystal Staff": {
+      "file": "assets/catalogue/33270000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/rotten_crystal_staff.png",
+      "sha256": "e9f776d962173d60d220c78de018d4fdc97d4c1247acc640ea2c2769d352e13d"
+    },
+    "Staff of Loss": {
+      "file": "assets/catalogue/33280000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/staff_of_loss.png",
+      "sha256": "e8626dabe0e6178d7c00528c03460c542e92b5fc1662a7c08791b279bfa46e2b"
+    },
+    "Staff of the Great Beyond": {
+      "file": "assets/catalogue/33510000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/staff_of_the_great_beyond.png",
+      "sha256": "fb9779506f14881e2e2e7a44bbaa67a72f0567bfe00abb9af4c9880052da20ad"
+    },
+    "Maternal Staff": {
+      "file": "assets/catalogue/33520000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/maternal_staff.png",
+      "sha256": "ef42a85734c85dac0ae292cf8b7b7918f7a2f878d1565992ff5198a4bf84e08e"
+    },
+    "Finger Seal": {
+      "file": "assets/catalogue/34000000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/finger_seal.png",
+      "sha256": "cbeba4b042b7189817c22c1f75af6b0a536339e169d3309060449986e41c2c61"
+    },
+    "Godslayer's Seal": {
+      "file": "assets/catalogue/34010000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/godslayers_seal.png",
+      "sha256": "8b139ba85127820db7f60a2db75d62ac11e75ef8afa9c1c2209759b8801eace2"
+    },
+    "Giant's Seal": {
+      "file": "assets/catalogue/34020000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/giants_seal.png",
+      "sha256": "94e164fa4868b21f5d6dd4cce9f1e3f0684b679b2477c6f2d4a59b93034a78d0"
+    },
+    "Gravel Stone Seal": {
+      "file": "assets/catalogue/34030000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/gravel_stone_seal.png",
+      "sha256": "e199b8d8d66f5ff32bf4cab6944a899bad24dd1ec672838dbc6abe8554281a28"
+    },
+    "Clawmark Seal": {
+      "file": "assets/catalogue/34040000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/clawmark_seal.png",
+      "sha256": "af045e26a2e39e136954146e31eb402e6b718cb7c43545f9bc1599df45b5e9dd"
+    },
+    "Golden Order Seal": {
+      "file": "assets/catalogue/34060000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/golden_order_seal.png",
+      "sha256": "5dbd29375e0722847e9b7e7d9775565fe96001b1b4f7039ac6f07e04d0026185"
+    },
+    "Erdtree Seal": {
+      "file": "assets/catalogue/34070000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/erdtree_seal.png",
+      "sha256": "9beefe3fea80cbc581b7956ff3e9101a201e96a5402011471325cb3455e7135b"
+    },
+    "Dragon Communion Seal": {
+      "file": "assets/catalogue/34080000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/dragon_communion_seal.png",
+      "sha256": "4dcf01d907a6389699a5b9ab9b6ff19effcde63c18c4b38f6440523d14f96e23"
+    },
+    "Frenzied Flame Seal": {
+      "file": "assets/catalogue/34090000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/frenzied_flame_seal.png",
+      "sha256": "a80624c086600198c5cb3a605aba3292c55dd978a20c84130cc9e01341d4c576"
+    },
+    "Dryleaf Seal": {
+      "file": "assets/catalogue/34500000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/dryleaf_seal.png",
+      "sha256": "69626ea1ed51d49937fc0ee59c16994abf9f8080f8488bebcc06505f87e3d5ea"
+    },
+    "Fire Knight's Seal": {
+      "file": "assets/catalogue/34510000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/fire_knight_s_seal.png",
+      "sha256": "b45164d9b9d2bced7df9eec58667c2806a0cbaeeb63a7940366c4ed1649f17e4"
+    },
+    "Spiraltree Seal": {
+      "file": "assets/catalogue/34520000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/spiraltree_seal.png",
+      "sha256": "5841eb9310ab4188efff8a2ea8ff489f01a8731247ae9accd7713bdd7df7b99e"
+    },
+    "Shortbow": {
+      "file": "assets/catalogue/40000000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/shortbow.png",
+      "sha256": "d48120acc2736438375fcad7667904eac0de692bf0f63f50895a94f1ee660af5"
+    },
+    "Misbegotten Shortbow": {
+      "file": "assets/catalogue/40010000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/misbegotten_shortbow.png",
+      "sha256": "4557d18e88c045a0459bca65fea399d450c7458803bf729667433231af1de54d"
+    },
+    "Red Branch Shortbow": {
+      "file": "assets/catalogue/40020000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/red_branch_shortbow.png",
+      "sha256": "6fda38fb5debddfcfd73c0721c3666bdcc662b215992b00b45ce7ce852d2623b"
+    },
+    "Harp Bow": {
+      "file": "assets/catalogue/40030000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/harp_bow.png",
+      "sha256": "d353e020b3da67d5f469818dfd190f91b234c0dcf3513b15daeba1dff6a8c166"
+    },
+    "Composite Bow": {
+      "file": "assets/catalogue/40050000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/composite_bow.png",
+      "sha256": "1c7b837ecc05ff870053b7d76bdd424b59848bb4ad2ca7f438fa6a9031b97265"
+    },
+    "Bone Bow": {
+      "file": "assets/catalogue/40500000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/bone_bow.png",
+      "sha256": "e75298ee0578cbcf387df3b714fea6daf319bf81b9dc5f44b5785f216b134ee5"
+    },
+    "Longbow": {
+      "file": "assets/catalogue/41000000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/longbow.png",
+      "sha256": "c79cf949d2cdf984cb921e2e29a9fc8fad79f71f9edc13f1783871bbb15be89c"
+    },
+    "Albinauric Bow": {
+      "file": "assets/catalogue/41010000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/albinauric_bow.png",
+      "sha256": "77dd275e196c45756b09d071bd165182d6604bdaf1f2454abaedb0a265e52f49"
+    },
+    "Horn Bow": {
+      "file": "assets/catalogue/41020000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/horn_bow.png",
+      "sha256": "95f09b5d2a680587d2e57350215d71e2aa2d81c0fe6f1223094daad5b885eccf"
+    },
+    "Erdtree Bow": {
+      "file": "assets/catalogue/41030000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/erdtree_bow.png",
+      "sha256": "da5a37c87cf36fcb878d3194312e53fc8308c03d1700b8b572df352f3572f3c0"
+    },
+    "Serpent Bow": {
+      "file": "assets/catalogue/41040000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/serpent_bow.png",
+      "sha256": "285dcfd28568acff49204c52fac13151fc8d8cfc7b9736f2fdfcfb0e40381eb0"
+    },
+    "Pulley Bow": {
+      "file": "assets/catalogue/41060000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/pulley_bow.png",
+      "sha256": "a1eb849a009e7a39798c70a7e6d5feb98c858b6e77452f4a04cb193b892dd55d"
+    },
+    "Black Bow": {
+      "file": "assets/catalogue/41070000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/black_bow.png",
+      "sha256": "add008f77e7aeabed399ecdf362aa3749abee885524c6b8168c6bc9d9947a1ca"
+    },
+    "Ansbach's Longbow": {
+      "file": "assets/catalogue/41510000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/ansbachs_longbow.png",
+      "sha256": "96128998e0b0f5ef044137fa9ac439283a0f0cc432b669ba1d2ce293f7d84199"
+    },
+    "Lion Greatbow": {
+      "file": "assets/catalogue/42000000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/lion_greatbow.png",
+      "sha256": "d8bfafd14293cd36ab82ec282d523212c1716a1fb1b681503a12dcedaabcd038"
+    },
+    "Golem Greatbow": {
+      "file": "assets/catalogue/42010000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/golem_greatbow.png",
+      "sha256": "4673a5be3ba5dac1af69a4f7cbd94d387525acc88d54b3a99b5d140e8b9b3fd6"
+    },
+    "Erdtree Greatbow": {
+      "file": "assets/catalogue/42030000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/erdtree_greatbow.png",
+      "sha256": "3b09a01503a6059dee3ca63eab216da102c5f34a39b72253917b7715891b9920"
+    },
+    "Greatbow": {
+      "file": "assets/catalogue/42040000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/greatbow.png",
+      "sha256": "472e91d7f92201db2f1a5d211c35445f6d232b942f60c946d16eccfe03c513d3"
+    },
+    "Igon's Greatbow": {
+      "file": "assets/catalogue/42500000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/igons_greatbow.png",
+      "sha256": "de02383abf04c726aed42bbd85362cdb7520dd2c43cad4672a11373082dd6af5"
+    },
+    "Soldier's Crossbow": {
+      "file": "assets/catalogue/43000000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/soldiers_crossbow.png",
+      "sha256": "d485a2eeb4c17ef267e104fdd9e522724f23c3b8d859120e8cd93655acc57284"
+    },
+    "Light Crossbow": {
+      "file": "assets/catalogue/43020000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/light_crossbow.png",
+      "sha256": "b400793d6b7cb3c83b761f8200d5e584f784b6d294c4267f42e5b087cef6a9c9"
+    },
+    "Heavy Crossbow": {
+      "file": "assets/catalogue/43030000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/heavy_crossbow.png",
+      "sha256": "62a93f2e8175183d94a8cf04eda9208ef8267b301b5ad45efad277e1fccdb4b6"
+    },
+    "Pulley Crossbow": {
+      "file": "assets/catalogue/43050000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/pulley_crossbow.png",
+      "sha256": "581fb543f249849e2b03dc6a55c4ae9f49b3f7891c0c4c728c92841fd0358d7e"
+    },
+    "Full Moon Crossbow": {
+      "file": "assets/catalogue/43060000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/full_moon_crossbow.png",
+      "sha256": "2d67b3f2f495c56796e2f055319c0215156e2fb607440963ee8edaed00b75f4e"
+    },
+    "Arbalest": {
+      "file": "assets/catalogue/43080000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/arbalest.png",
+      "sha256": "c6501e9d7a0cb301bcf1f46bb6140334481e159c9e2b13592fcff52c53162dc8"
+    },
+    "Crepus's Black-Key Crossbow": {
+      "file": "assets/catalogue/43110000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/crepuss_black_key_crossbow.png",
+      "sha256": "454f87e61cf12510c44ccd636ff6967b8ec45ed6b80c6f27feba2f2b75b8e023"
+    },
+    "Repeating Crossbow": {
+      "file": "assets/catalogue/43500000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/repeating_crossbow.png",
+      "sha256": "d09a1190170d636674014993a224883cc080b0edd2b7fa2beecf50fd5da0c813"
+    },
+    "Spread Crossbow": {
+      "file": "assets/catalogue/43510000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/spread_crossbow.png",
+      "sha256": "f9b7701df43baff55f4f921f88f62d58311629499e4f46ae70ccee849164382a"
+    },
+    "Hand Ballista": {
+      "file": "assets/catalogue/44000000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/hand_ballista.png",
+      "sha256": "3b35c36e83a5c2eee797045002ed7ac103e671cfe9ac4ffe09dff663b94c6fe8"
+    },
+    "Jar Cannon": {
+      "file": "assets/catalogue/44010000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/jar_cannon.png",
+      "sha256": "69a072c0a02a3713cda23166eccb386f6ac836024542b7750bf1e02bd6cfd9ef"
+    },
+    "Rabbath's Cannon": {
+      "file": "assets/catalogue/44500000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/ranged_and_catalysts/rabbaths_cannon.png",
+      "sha256": "a45bed776833fdfd9a517d304a6004984e88ec3f2a7248a16d8df42ba93b42ab"
+    },
+    "Dryleaf Arts": {
+      "file": "assets/catalogue/60500000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/dryleaf_arts.png",
+      "sha256": "03894d96ffd05f66fa44cb42df15aca128126e67115154b8cd2b892b0968f822"
+    },
+    "Dane's Footwork": {
+      "file": "assets/catalogue/60510000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/danes_footwork.png",
+      "sha256": "f5971c963c86b148f26ef262b296a4c0a5917828f3df794265f73940f8c25adc"
+    },
+    "Firespark Perfume Bottle": {
+      "file": "assets/catalogue/61500000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/firespark_perfume_bottle.png",
+      "sha256": "d14b1ebe4b16cc981e409c5461a5948d883bc23a2ed7060f89a8074d6a0699cd"
+    },
+    "Chilling Perfume Bottle": {
+      "file": "assets/catalogue/61510000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/chilling_perfume_bottle.png",
+      "sha256": "cb9cb72d1b81500285f04c9341c38798059ade865df1f8b45373a2abddecae15"
+    },
+    "Frenzyflame Perfume Bottle": {
+      "file": "assets/catalogue/61520000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/frenzyflame_perfume_bottle.png",
+      "sha256": "6800804afc89d860705b719b52ada3ab98c02d9e85a8d3f831660e08bf07b1ea"
+    },
+    "Lightning Perfume Bottle": {
+      "file": "assets/catalogue/61530000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/lightning_perfume_bottle.png",
+      "sha256": "3d9cc134ef67aeb73c78f2264fe19d145fcd29cfb7c9358777090b1e2c38040d"
+    },
+    "Deadly Poison Perfume Bottle": {
+      "file": "assets/catalogue/61540000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/deadly_poison_perfume_bottle.png",
+      "sha256": "a15ab8e6003b3da99eb92f5b185a2125186661f4dd8ede2b5b2a8fe084f93a8c"
+    },
+    "Dueling Shield": {
+      "file": "assets/catalogue/62500000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/dueling_shield.png",
+      "sha256": "bfc6f2cc43c37fc354c10722a5f44798336017df2fa020d763f80852ff3dd51d"
+    },
+    "Carian Thrusting Shield": {
+      "file": "assets/catalogue/62510000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/carian_thrusting_shield.png",
+      "sha256": "5d28b39b00beeed7484d77885f35f09fa850bc81be717ac0fa3779dc18123107"
+    },
+    "Ritual Thrusting Shield": {
+      "file": "assets/catalogue/62520000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/shields/ritual_thrusting_shield.png",
+      "sha256": "72a3d55a7a1eee4ae66cc2f62e45fa8f92f03b1f3d9c5d845cf90b199afe11e4"
+    },
+    "Smithscript Dagger": {
+      "file": "assets/catalogue/63500000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/smithscript_dagger.png",
+      "sha256": "ec9896e4a4956f4bc509f2138e94db7da4308f4fa1fea2f943d546b8fcaeeccb"
+    },
+    "Backhand Blade": {
+      "file": "assets/catalogue/64500000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/backhand_blade.png",
+      "sha256": "6e033d8d3944605d318bb90993dc6a49afc114b0bfd32e341b59adae0bea7ab5"
+    },
+    "Smithscript Cirque": {
+      "file": "assets/catalogue/64510000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/smithscript_cirque.png",
+      "sha256": "1c2fdca7d302a51b0fc981a79b1de102ea3e86f95bec0c5002b2ff4dd33b49aa"
+    },
+    "Curseblade's Cirque": {
+      "file": "assets/catalogue/64520000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/curseblades_cirque.png",
+      "sha256": "675a3413c2065a5e5e268c1ff8228c973984fa1e2c5c8798b1f2348de2d8a5fe"
+    },
+    "Reverse-Bladed Sword": {
+      "file": "assets/catalogue/64530000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/reverse_bladed_sword.png",
+      "sha256": "5bd8ffd2592a6c83db699f2a56df270f3dffa93a38053f8d0058ebb9aa8c7ca1"
+    },
+    "Great Katana": {
+      "file": "assets/catalogue/66500000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/great_katana.png",
+      "sha256": "543651b7dd931bf104c36857215bc362d16cbaf0a6d695d369a1e3361fa7f5e6"
+    },
+    "Dragon-Hunter's Great Katana": {
+      "file": "assets/catalogue/66510000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/dragon_hunters_great_katana.png",
+      "sha256": "6fece0886f4d066dfaac25a204e4352c364e6f4f76d6cadf234f87c190cd4745"
+    },
+    "Rakshasa's Great Katana": {
+      "file": "assets/catalogue/66520000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/rakshasas_great_katana.png",
+      "sha256": "3264e79a4a94e25ec8fe546352420b6ba44a4e9dbb3098aa4560d309942ebf49"
+    },
+    "Reed Great Katana": {
+      "file": "assets/catalogue/66530000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/reed_great_katana.png",
+      "sha256": "48d211041ffba1fdeecbcee8609a09b36027f24aea653ff8368f1baa59d9ddcb"
+    },
+    "Milady": {
+      "file": "assets/catalogue/67500000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/milady.png",
+      "sha256": "58cff56d33bd92bc2b430cb86230413512ddafafe659258b35d3417f6997d73b"
+    },
+    "Leda's Sword": {
+      "file": "assets/catalogue/67510000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/ledas_sword.png",
+      "sha256": "5aa4c453b99532ec4df50a3cee7ed54e728b56c734edf1edae411c06e211e759"
+    },
+    "Rellana's Twin Blades": {
+      "file": "assets/catalogue/67520000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/rellanas_twin_blades.png",
+      "sha256": "f0c13e71bc9687b38e0e621c795f847bedb2214b7597abc1f234950602f490e9"
+    },
+    "Idus Sword": {
+      "file": "assets/catalogue/67530000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/idus_sword.png",
+      "sha256": "8c36d7c4d46035828afb780e223f785ba1bcc27af47a94dccf3e5e83ff9265a1"
+    },
+    "Beast Claw": {
+      "file": "assets/catalogue/68500000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/beast_claw.png",
+      "sha256": "4354d8a60b476abe7977851f7ad00745dd2f43c8b136793059a11c91183ee42c"
+    },
+    "Red Bear's Claw": {
+      "file": "assets/catalogue/68510000.png",
+      "source": "https://raw.githubusercontent.com/oisis/EldenRing-SaveForge/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5/frontend/public/items/melee_armaments/red_bears_claw.png",
+      "sha256": "959cf5187969adbee4cdae838cf5d614459d1ba961f3b776de9912a23b7d2e70"
+    }
+  },
+  "names": {
+    "en": {
+      "source": "https://raw.githubusercontent.com/elden-ring-data/msg/4bbba478e478e9018d0293e0b18cd8cf706199e9/engus/item.msgbnd.dcx.json",
+      "official_base_count": 377,
+      "base_and_dlc_count": 479
+    },
+    "fr": {
+      "source": "https://raw.githubusercontent.com/elden-ring-data/msg/4bbba478e478e9018d0293e0b18cd8cf706199e9/frafr/item.msgbnd.dcx.json",
+      "official_base_count": 377
+    },
+    "de": {
+      "source": "https://raw.githubusercontent.com/elden-ring-data/msg/4bbba478e478e9018d0293e0b18cd8cf706199e9/deude/item.msgbnd.dcx.json",
+      "official_base_count": 377
+    },
+    "es": {
+      "source": "https://raw.githubusercontent.com/elden-ring-data/msg/4bbba478e478e9018d0293e0b18cd8cf706199e9/spaes/item.msgbnd.dcx.json",
+      "official_base_count": 377
+    },
+    "ja": {
+      "source": "https://raw.githubusercontent.com/elden-ring-data/msg/4bbba478e478e9018d0293e0b18cd8cf706199e9/jpnjp/item.msgbnd.dcx.json",
+      "official_base_count": 377,
+      "base_and_dlc_count": 479
+    }
+  }
+}

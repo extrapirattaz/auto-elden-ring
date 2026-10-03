@@ -1,1245 +1,807 @@
-"""Native, offline Tk interface. Calculations remain independently testable."""
-
-import csv
-from functools import wraps
+"""Calm, offline desktop interface backed by explicit planner transactions."""
+from copy import deepcopy
+import ctypes
 import math
+import os
+from pathlib import Path
 import time
 import tkinter as tk
-from tkinter import ttk, messagebox, filedialog
-
+from tkinter import filedialog, messagebox
+import customtkinter as ctk
+from PIL import Image
 from classes_data import CLASS_DATA, ATTRIBUTES
 from . import __version__
-from .core import (
-    Database,
-    integer,
-    stats_level,
-    level_plan,
-    generic_weapon,
-    inverse_base,
-    shopping_plan,
-    affordable_weapon,
-    farm_estimate,
-    duration_label,
-    STONE_PRICES,
-    stone_label,
-    resource_path,
-)
+from .core import Database, STONE_PRICES, integer, resource_path
+from .planner import Planner, default_state, validate_state, TALISMANS, CONSUMABLES
+from .i18n import Translator, LANGUAGE_NAMES
 from .storage import save_project, load_project
 
-LABELS = dict(
-    zip(
-        ATTRIBUTES,
-        (
-            "Vigueur",
-            "Esprit",
-            "Endurance",
-            "Force",
-            "Dextérité",
-            "Intelligence",
-            "Foi",
-            "Ésotérisme",
-        ),
-    )
-)
-CLASSES_FR = dict(
-    zip(
-        CLASS_DATA,
-        (
-            "Vagabond",
-            "Guerrier",
-            "Héros",
-            "Bandit",
-            "Astrologue",
-            "Prophète",
-            "Samouraï",
-            "Prisonnier",
-            "Confesseur",
-            "Indigent",
-        ),
-    )
-)
-ENUMS = {
-    "custom_kind": ("Normale", "Sombre"),
-    "dlc_filter": ("Tout", "Jeu de base", "DLC"),
-    "farm_goal": (
-        "Projet complet",
-        "Niveaux visés",
-        "Panier armes / achats",
-        "Niveau maximum 713",
-        "Objectif libre",
-    ),
-    "farm_talisman": ("Aucun", "Scarabée d'or", "Scarabée d'argent", "Autre"),
-    "farm_consumable": (
-        "Aucun",
-        "Patte de volaille dorée en saumure",
-        "Patte de volaille argentée en saumure",
-        "Corne dorée",
-        "Autre",
-    ),
+PALETTES = {
+    "calm": ("#F2F3EF", "#FFFFFF", "#E7EBE3", "#263A32", "#68756D", "#526E5D"),
+    "elden": ("#161B19", "#202824", "#303C33", "#EEE9D8", "#A7B1A4", "#A18B55"),
+    "slate": ("#171D29", "#222B3B", "#344158", "#EDF1F8", "#A5B1C6", "#536F9C"),
 }
 
 
-def fmt(number):
-    return f"{number:,}".replace(",", " ")
+def fmt(value):
+    return f"{value:,.0f}".replace(",", " ")
 
 
-def guarded(method):
-    @wraps(method)
-    def wrapper(self, *args, **kwargs):
-        try:
-            return method(self, *args, **kwargs)
-        except (ValueError, KeyError, OSError, TypeError) as exc:
-            messagebox.showerror("Vérifier les valeurs", str(exc), parent=self)
-
-    return wrapper
-
-
-class App(tk.Tk):
-    def __init__(self, db=None):
+class App(ctk.CTk):
+    def __init__(self, db=None, persist=True, state=None):
         super().__init__()
         self.db = db or Database()
-        self.title(f"Auto Elden Ring • {__version__}")
-        self.geometry("1200x850")
-        self.minsize(1060, 760)
-        self.configure(background="#101719")
-        icon = resource_path("assets/app.ico")
-        if icon.exists():
+        self.persist = persist
+        self.session = Path(os.environ.get("LOCALAPPDATA", str(Path.home()))) / "AutoEldenRing" / "session-v2.json"
+        self.startup_error = None
+        if state is None and persist and self.session.exists():
             try:
-                self.iconbitmap(str(icon))
-            except tk.TclError:
-                pass
-        self.fields, self.inventory, self.prices = {}, {}, {}
-        self.items, self.extras = [], []
+                state = load_project(self.session, self.db)
+            except (OSError, ValueError) as exc:
+                self.startup_error = str(exc)
+        self.planner = Planner(self.db, state)
+        self.page = "character"
         self.deadline = self.timer_job = self.timer_started = None
-        self.last_plan = None
-        self.style_ui()
-        header = ttk.Frame(self, padding=(24, 18))
-        header.pack(fill="x")
-        ttk.Label(header, text="AUTO ELDEN RING", style="Title.TLabel").pack(side="left")
-        ttk.Label(
-            header,
-            text=f"PLANIFIER · AMÉLIORER · FARMER   /   v{__version__}",
-            style="Muted.TLabel",
-        ).pack(side="left", padx=24)
-        ttk.Button(header, text="Enregistrer…", command=self.save).pack(side="right")
-        ttk.Button(header, text="Ouvrir…", command=self.load).pack(side="right", padx=8)
-        ttk.Label(
-            self,
-            text="Hors ligne  •  Forge et pierres séparées  •  Données : "
-            + self.db.metadata["regulation_version"],
-            style="Muted.TLabel",
-            padding=(24, 6),
-        ).pack(side="bottom", fill="x")
-        self.tabs = ttk.Notebook(self)
-        self.tabs.pack(fill="both", expand=True, padx=20, pady=(0, 12))
-        self.pages, self.canvases = {}, {}
-        for name in (
-            "Personnage",
-            "Catalogue & armes",
-            "Calcul inverse",
-            "Panier & pierres",
-            "Farm",
-            "Données & aide",
-        ):
-            holder = ttk.Frame(self.tabs)
-            canvas = tk.Canvas(holder, bg="#101719", highlightthickness=0, width=10, height=10)
-            scrollbar = ttk.Scrollbar(holder, command=canvas.yview)
-            scrollbar.pack(side="right", fill="y")
-            canvas.pack(side="left", fill="both", expand=True)
-            canvas.configure(yscrollcommand=scrollbar.set)
-            page = ttk.Frame(canvas, padding=18)
-            window = canvas.create_window(0, 0, window=page, anchor="nw")
-
-            def fit(_=None, c=canvas, p=page, w=window):
-                c.itemconfigure(
-                    w, width=c.winfo_width(), height=max(p.winfo_reqheight(), c.winfo_height())
-                )
-                c.configure(scrollregion=c.bbox("all"))
-
-            canvas.bind("<Configure>", fit)
-            page.bind("<Configure>", fit)
-            self.tabs.add(holder, text=f"  {name}  ")
-            self.pages[name] = page
-            self.canvases[name] = canvas
-        self.build_levels()
-        self.build_weapons()
-        self.build_inverse()
-        self.build_plan()
-        self.build_farm()
-        self.build_help()
-        self.reset_class()
-        self.refresh_catalogue()
-        self.update_plan()
-        self.recalc_job = None
-        for key in (
-            "level_current",
-            "level_target",
-            "level_origin",
-            "wallet",
-            "normal_bearings",
-            "somber_bearings",
-        ):
-            self.fields[key].trace_add("write", self.schedule_recalculation)
-        self.bind_all("<MouseWheel>", self.scroll_page, add="+")
-
-    def scroll_page(self, event):
-        if event.widget.winfo_class() not in ("Treeview", "Text", "TCombobox"):
-            name = list(self.pages)[self.tabs.index("current")]
-            self.canvases[name].yview_scroll(int(-event.delta / 120), "units")
-
-    def destroy(self):
-        for name in ("timer_job", "recalc_job"):
-            job = getattr(self, name, None)
-            if job:
-                self.after_cancel(job)
-                setattr(self, name, None)
-        super().destroy()
-
-    def schedule_recalculation(self, *_):
-        if self.recalc_job:
-            self.after_cancel(self.recalc_job)
-        self.recalc_job = self.after(250, self.recalculate)
-
-    def recalculate(self):
-        self.recalc_job = None
+        self.timer_duration = 60
+        self.full_index = None
+        self.awaiting_result = False
+        self.timer_buffs = ("none", "none")
+        self.images = {}
+        self.geometry("1280x860")
+        self.minsize(1080, 730)
+        self.title(f"Auto Elden Ring · {__version__}")
+        self.protocol("WM_DELETE_WINDOW", self.close)
         try:
-            self.compute_plan()
-            integer(self.fields["wallet"].get(), "Runes en poche")
-        except ValueError, KeyError:
-            self.plan_result.set(
-                "Saisie incomplète ou incohérente : vérifie les niveaux, le budget et les perles."
-            )
-            self.level_result.set("Saisie incomplète ou incohérente : vérifie les niveaux.")
+            self.iconbitmap(str(resource_path("assets/app.ico")))
+        except tk.TclError:
+            pass
+        self.build_shell()
+
+    @property
+    def data(self):
+        return self.planner.state
+
+    def t(self, key, **values):
+        return self.translator.t(key, **values)
+
+    def label(self, parent, text, size=14, muted=False, **kwargs):
+        return ctk.CTkLabel(parent, text=text, text_color=self.muted if muted else self.ink,
+                            font=ctk.CTkFont(family="Segoe UI", size=size), **kwargs)
+
+    def button(self, parent, key, command, secondary=False, **kwargs):
+        return ctk.CTkButton(parent, text=self.t(key), command=lambda: self.action(command),
+                            height=38, corner_radius=9, fg_color=self.soft if secondary else self.accent,
+                            hover_color=self.accent, text_color=self.ink if secondary else "#FFFFFF", **kwargs)
+
+    def card(self, parent):
+        return ctk.CTkFrame(parent, fg_color=self.paper, corner_radius=14)
+
+    def action(self, command):
+        try:
+            return command()
+        except (ValueError, KeyError, TypeError, OSError) as exc:
+            messagebox.showerror(self.t("error"), self.t("invalid") + "\n\n" + str(exc), parent=self)
+
+    def autosave(self):
+        if self.persist:
+            save_project(self.session, self.data, self.db)
+
+    def build_shell(self):
+        if getattr(self,"titlebar_job",None):
+            self.after_cancel(self.titlebar_job)
+        for child in self.winfo_children():
+            child.destroy()
+        self.translator = Translator(self.data["language"])
+        self.bg, self.paper, self.soft, self.ink, self.muted, self.accent = PALETTES[self.data["theme"]]
+        ctk.set_appearance_mode("light" if self.data["theme"] == "calm" else "dark")
+        self.configure(fg_color=self.bg)
+        self.grid_columnconfigure(1, weight=1)
+        self.grid_rowconfigure(0, weight=1)
+        sidebar = ctk.CTkFrame(self, width=220, fg_color=self.paper, corner_radius=0)
+        sidebar.grid(row=0, column=0, sticky="ns")
+        sidebar.grid_propagate(False)
+        self.label(sidebar, "AUTO\nELDEN RING", 24, justify="left").pack(anchor="w", padx=24, pady=(30, 8))
+        self.label(sidebar, self.t("tagline"), muted=True, wraplength=180, justify="left").pack(padx=24, anchor="w", pady=(0, 30))
+        self.nav={}
+        for key in ("character", "weapons", "stones", "farm", "settings"):
+            self.nav[key]=self.button(sidebar, key, lambda k=key: self.navigate(k), secondary=key != self.page, width=180)
+            self.nav[key].pack(pady=5, padx=20)
+        self.label(sidebar, f"v{__version__} · OFFLINE", 12, muted=True).pack(side="bottom", pady=24)
+        self.host = ctk.CTkFrame(self, fg_color=self.bg, corner_radius=0)
+        self.host.grid(row=0, column=1, sticky="nsew", padx=24, pady=20)
+        self.show(self.page)
+        self.titlebar_job=self.after(100, self.blend_titlebar)
+
+    def blend_titlebar(self):
+        if os.name != "nt":
             return
-        self.calculate_levels()
-        self.update_plan()
-
-    def style_ui(self):
-        s = ttk.Style(self)
-        s.theme_use("clam")
-        s.configure(".", font=("Segoe UI", 10), background="#101719", foreground="#edf0eb")
-        s.configure("TFrame", background="#101719")
-        s.configure("TLabel", background="#101719")
-        s.configure("Title.TLabel", font=("Segoe UI", 22, "bold"), foreground="#d6b86a")
-        s.configure("Heading.TLabel", font=("Segoe UI", 15, "bold"), foreground="#d6b86a")
-        s.configure("Muted.TLabel", foreground="#aab7b5")
-        s.configure("Result.TLabel", foreground="#e9ca7e", font=("Segoe UI", 11, "bold"))
-        s.configure("TLabelframe", background="#101719", bordercolor="#344342")
-        s.configure("TLabelframe.Label", foreground="#d6b86a", background="#101719")
-        s.configure("TButton", background="#283735", padding=(12, 7), borderwidth=0)
-        s.map("TButton", background=[("active", "#48625a")])
-        s.configure(
-            "TEntry",
-            fieldbackground="#21302f",
-            foreground="#ffffff",
-            insertcolor="#ffffff",
-            padding=5,
-        )
-        s.configure(
-            "TCombobox",
-            fieldbackground="#21302f",
-            background="#283735",
-            foreground="#ffffff",
-            padding=5,
-        )
-        s.map(
-            "TCombobox",
-            fieldbackground=[("readonly", "#21302f")],
-            foreground=[("readonly", "#ffffff")],
-        )
-        s.configure("TNotebook", background="#101719", borderwidth=0)
-        s.configure("TNotebook.Tab", background="#23312f", padding=(8, 10))
-        s.map(
-            "TNotebook.Tab",
-            background=[("selected", "#d6b86a")],
-            foreground=[("selected", "#101719")],
-        )
-        s.configure(
-            "Treeview", background="#172321", fieldbackground="#172321", rowheight=27, borderwidth=0
-        )
-        s.configure("Treeview.Heading", background="#2b3a36", padding=7)
-        s.map("Treeview", background=[("selected", "#5a543a")])
-        self.option_add("*TCombobox*Listbox.background", "#21302f")
-        self.option_add("*TCombobox*Listbox.foreground", "#ffffff")
-
-    def var(self, key, default=""):
-        self.fields[key] = tk.StringVar(self, str(default))
-        return self.fields[key]
-
-    def entry(self, parent, label, key, default, row, width=14):
-        ttk.Label(parent, text=label).grid(row=row, column=0, sticky="w", pady=5, padx=(0, 14))
-        ttk.Entry(parent, textvariable=self.var(key, default), width=width).grid(
-            row=row, column=1, sticky="w", pady=5
-        )
-
-    def combo(self, parent, label, key, default, choices, row, width=27):
-        ttk.Label(parent, text=label).grid(row=row, column=0, sticky="w", pady=5, padx=(0, 14))
-        box = ttk.Combobox(
-            parent,
-            textvariable=self.var(key, default),
-            values=choices,
-            state="readonly",
-            width=width,
-        )
-        box.grid(row=row, column=1, sticky="w", pady=5)
-        return box
-
-    def heading(self, page, title, text):
-        ttk.Label(page, text=title, style="Heading.TLabel").pack(anchor="w")
-        ttk.Label(page, text=text, style="Muted.TLabel", wraplength=1020).pack(
-            anchor="w", pady=(5, 12)
-        )
-
-    def tree(self, parent, columns, widths, height):
-        frame = ttk.Frame(parent)
-        frame.pack(fill="both", expand=True, pady=8)
-        tree = ttk.Treeview(frame, columns=columns, show="headings", height=height)
-        for column, width in zip(columns, widths):
-            tree.heading(column, text=column)
-            tree.column(column, width=width, minwidth=50, anchor="w")
-        tree.pack(side="left", fill="both", expand=True)
-        bar = ttk.Scrollbar(frame, command=tree.yview)
-        bar.pack(side="right", fill="y")
-        tree.configure(yscrollcommand=bar.set)
-        return tree
-
-    def class_name(self):
-        return next(k for k, v in CLASSES_FR.items() if v == self.fields["class"].get())
-
-    def build_levels(self):
-        p = self.pages["Personnage"]
-        self.heading(
-            p,
-            "Du premier niveau à ton build final",
-            "Saisis les attributs permanents, sans talisman, rune majeure ni bonus temporaire. Niveau maximal : 713.",
-        )
-        body = ttk.Frame(p)
-        body.pack(fill="x")
-        left = ttk.LabelFrame(body, text="Progression", padding=14)
-        left.pack(side="left", fill="y", padx=(0, 20))
-        box = self.combo(left, "Classe", "class", "Vagabond", list(CLASSES_FR.values()), 0)
-        box.bind("<<ComboboxSelected>>", lambda _: self.reset_class())
-        for row, (label, key, default) in enumerate(
-            (
-                ("Niveau actuel", "level_current", 9),
-                ("Niveau cible", "level_target", 150),
-                ("Début du suivi (niveau)", "level_origin", 9),
-                ("Budget / runes en poche", "wallet", 0),
-            ),
-            1,
-        ):
-            self.entry(left, label, key, default, row)
-        ttk.Button(left, text="Calculer les niveaux", command=self.calculate_levels).grid(
-            row=5, column=0, columnspan=2, sticky="ew", pady=10
-        )
-        ttk.Button(left, text="Niveau atteignable avec ce budget", command=self.level_budget).grid(
-            row=6, column=0, columnspan=2, sticky="ew"
-        )
-        right = ttk.LabelFrame(body, text="Attributs → niveau automatique", padding=14)
-        right.pack(side="left", fill="both", expand=True)
-        for col, text in enumerate(("Attribut", "Classe", "Actuel", "Cible")):
-            ttk.Label(right, text=text, style="Muted.TLabel").grid(
-                row=0, column=col, padx=10, pady=5
-            )
-        self.base_labels = {}
-        for row, attr in enumerate(ATTRIBUTES, 1):
-            ttk.Label(right, text=LABELS[attr]).grid(row=row, column=0, sticky="w", padx=10, pady=5)
-            label = ttk.Label(right)
-            label.grid(row=row, column=1, padx=10)
-            self.base_labels[attr] = label
-            for col, prefix in ((2, "stat_current_"), (3, "stat_target_")):
-                ttk.Entry(right, textvariable=self.var(prefix + attr, 10), width=7).grid(
-                    row=row, column=col, padx=10, pady=5
-                )
-        ttk.Button(right, text="Calculer depuis ces attributs", command=self.calculate_stats).grid(
-            row=9, column=0, columnspan=4, sticky="ew", pady=10
-        )
-        self.level_result = tk.StringVar(self)
-        ttk.Label(
-            p,
-            textvariable=self.level_result,
-            style="Result.TLabel",
-            justify="left",
-            wraplength=1020,
-        ).pack(anchor="w", pady=20)
-        ttk.Label(
-            p,
-            text="Le début du suivi peut être ton premier niveau enregistré, indépendamment du niveau initial de la classe.\nLes runes déjà dépensées sont les coûts théoriques des niveaux, sans achats ni pertes.",
-            style="Muted.TLabel",
-            wraplength=1020,
-        ).pack(anchor="w")
-
-    def reset_class(self):
-        info = CLASS_DATA[self.class_name()]
-        for attr in ATTRIBUTES:
-            self.base_labels[attr].configure(text=info["stats"][attr])
-            for prefix in ("stat_current_", "stat_target_"):
-                self.fields[prefix + attr].set(info["stats"][attr])
-        self.fields["level_current"].set(info["level"])
-        self.fields["level_origin"].set(info["level"])
         try:
-            target = max(info["level"], int(self.fields["level_target"].get()))
-        except ValueError:
-            target = info["level"]
-        self.fields["level_target"].set(target)
-        self.calculate_levels()
+            hwnd = ctypes.windll.user32.GetParent(self.winfo_id())
+            def color(hex_value):
+                r, g, b = bytes.fromhex(hex_value[1:])
+                return ctypes.c_int(r | (g << 8) | (b << 16))
+            for attribute, value in ((35, self.bg), (36, self.ink), (34, self.bg)):
+                packed = color(value)
+                ctypes.windll.dwmapi.DwmSetWindowAttribute(hwnd, attribute, ctypes.byref(packed), 4)
+        except (OSError, AttributeError):
+            pass
 
-    def level_values(self):
-        return level_plan(
-            self.db,
-            self.class_name(),
-            self.fields["level_current"].get(),
-            self.fields["level_target"].get(),
-            self.fields["level_origin"].get(),
-        )
+    def show(self, page):
+        self.page = page
+        for key,button in self.nav.items():
+            button.configure(fg_color=self.accent if key==page else self.soft,text_color="#FFFFFF" if key==page else self.ink)
+        for child in self.host.winfo_children():
+            child.destroy()
+        self.label(self.host, self.t(page + "_title"), 28).pack(anchor="w", pady=(0, 5))
+        hint = page + "_hint"
+        if hint in self.translator.text:
+            self.label(self.host, self.t(hint), muted=True, wraplength=920, justify="left").pack(anchor="w", pady=(0, 18))
+        self.body = ctk.CTkScrollableFrame(self.host, fg_color=self.bg, corner_radius=0,
+                     scrollbar_button_color=self.soft, scrollbar_button_hover_color=self.accent)
+        self.body.pack(fill="both", expand=True)
+        getattr(self, "build_" + page)()
 
-    @guarded
-    def calculate_levels(self):
-        plan = self.level_values()
-        self.level_result.set(
-            f"Niveau {plan['current']} → {plan['target']}   •   {plan['missing_levels']} niveaux restants\n"
-            f"À payer : {fmt(plan['remaining'])} runes\nDéjà dépensé depuis le début du suivi : {fmt(plan['spent_tracking'])} runes\n"
-            f"Depuis la classe de départ : {fmt(plan['spent_class'])} runes\nDu niveau actuel au niveau 713 : {fmt(plan['to_max'])} runes"
-        )
+    def navigate(self,page):
+        if self.page=="character":
+            self.calculate_character()
+        elif self.page=="weapons":
+            self.read_weapons()
+        elif self.page=="farm":
+            self.read_farm()
+        self.autosave()
+        self.show(page)
 
-    @guarded
-    def calculate_stats(self):
-        name = self.class_name()
-        current = stats_level(name, {a: self.fields["stat_current_" + a].get() for a in ATTRIBUTES})
-        target = stats_level(name, {a: self.fields["stat_target_" + a].get() for a in ATTRIBUTES})
-        if target < current:
-            raise ValueError(
-                "Les attributs cibles nécessitent une réattribution, sans niveau supérieur."
-            )
-        level_plan(self.db, name, current, target, self.fields["level_origin"].get())
-        decreased = [
-            LABELS[a]
-            for a in ATTRIBUTES
-            if int(self.fields["stat_target_" + a].get())
-            < int(self.fields["stat_current_" + a].get())
-        ]
-        self.fields["level_current"].set(current)
-        self.fields["level_target"].set(target)
-        self.calculate_levels()
-        if decreased:
-            self.level_result.set(
-                self.level_result.get()
-                + "\nRéattribution nécessaire : "
-                + ", ".join(decreased)
-                + " (larme larvaire non comprise)."
-            )
+    def entry(self, parent, key, value, row, command=None, width=160):
+        self.label(parent, self.t(key)).grid(row=row, column=0, sticky="w", padx=18, pady=9)
+        variable = tk.StringVar(value=str(value))
+        widget = ctk.CTkEntry(parent, textvariable=variable, width=width, height=34,
+                              fg_color=self.bg, text_color=self.ink, border_color=self.soft, corner_radius=8)
+        widget.grid(row=row, column=1, sticky="e", padx=18, pady=9)
+        if command:
+            widget.bind("<FocusOut>", lambda _: self.action(command))
+            widget.bind("<Return>", lambda _: self.action(command))
+        return variable
 
-    @guarded
-    def level_budget(self):
-        plan = self.level_values()
-        level, remainder = self.db.affordable_level(plan["current"], self.fields["wallet"].get())
-        self.level_result.set(
-            f"Budget disponible → niveau {level}, soit {level-plan['current']} niveaux gagnés.\nReste : {fmt(remainder)} runes."
-        )
+    def option(self, parent, key, identifiers, current, command, row):
+        self.label(parent, self.t(key)).grid(row=row, column=0, sticky="w", padx=18, pady=9)
+        labels = {self.t(k): k for k in identifiers}
+        option = ctk.CTkOptionMenu(parent, values=list(labels), command=lambda v: self.action(lambda: command(labels[v])),
+                                  fg_color=self.soft, button_color=self.accent, text_color=self.ink, width=240)
+        option.set(self.t(current))
+        option.grid(row=row, column=1, sticky="e", padx=18, pady=9)
+        return option
+
+    def wallet(self, parent, row=0):
+        variable = self.entry(parent, "runes_held", self.data["runes"], row)
+        def apply():
+            self.planner.set_wallet(variable.get())
+            self.autosave()
+            self.show(self.page)
+        # Read the wallet together with the page's other fields when calculating.
+        self.wallet_var = variable
+        return apply
+
+    def read_wallet(self):
+        if hasattr(self, "wallet_var") and self.page != "settings":
+            self.planner.set_wallet(self.wallet_var.get())
+
+    def metrics(self, parent, pairs):
+        row = ctk.CTkFrame(parent, fg_color="transparent")
+        row.pack(fill="x", pady=12)
+        for index, (title, value) in enumerate(pairs):
+            row.grid_columnconfigure(index, weight=1)
+            panel = self.card(row)
+            panel.grid(row=0, column=index, sticky="nsew", padx=(0, 10))
+            self.label(panel, title, 13, muted=True, wraplength=270).pack(anchor="w", padx=20, pady=(18, 5))
+            self.label(panel, value, 24).pack(anchor="w", padx=20, pady=(0, 18))
+        return row
+
+    def build_character(self):
+        top = self.card(self.body)
+        top.pack(fill="x", pady=(0, 12))
+        self.option(top, "starting_class", tuple(CLASS_DATA), self.data["class_name"], self.set_class, 0)
+        self.wallet(top, 1)
+        c = self.planner.character()
+        self.level_label = self.label(top, self.t("level_route", current=c["current"], target=c["target"], count=c["levels"]), 18)
+        self.level_label.grid(row=2, column=0, columnspan=2, sticky="w", padx=18, pady=14)
+        stats = self.card(self.body)
+        stats.pack(fill="x")
+        for col, key in enumerate(("attribute", "base", "now", "goal")):
+            self.label(stats, self.t(key), muted=True).grid(row=0, column=col, padx=20, pady=16, sticky="w")
+        self.stat_vars = {}
+        for row, attribute in enumerate(ATTRIBUTES, 1):
+            self.label(stats, self.t(attribute)).grid(row=row, column=0, sticky="w", padx=20, pady=6)
+            self.label(stats, str(CLASS_DATA[self.data["class_name"]]["stats"][attribute]), muted=True).grid(row=row, column=1)
+            for col, section in ((2, "stats_current"), (3, "stats_target")):
+                variable = tk.StringVar(value=self.data[section][attribute])
+                self.stat_vars[section, attribute] = variable
+                field = ctk.CTkEntry(stats, textvariable=variable, width=100, border_color=self.soft,
+                                     fg_color=self.bg, text_color=self.ink)
+                field.grid(row=row, column=col, padx=20, pady=6)
+                variable.trace_add("write", lambda *_: self.preview_levels())
+        self.button(self.body, "calculate_levels", self.calculate_character).pack(anchor="w", pady=16)
+        self.metrics(self.body, [(self.t("remaining_cost"), fmt(c["cost"])),
+                     (self.t("paid_since_class", base=CLASS_DATA[self.data["class_name"]]["level"]), fmt(c["spent"])),
+                     (self.t("to_maximum", current=c["current"]), fmt(c["maximum_cost"]))])
+        self.label(self.body, self.t("budget_route", current=c["current"], target=c["reachable"],
+                   count=c["reachable"]-c["current"], left=fmt(c["left"])), 16, wraplength=900).pack(anchor="w", pady=8)
+        if c["respec"]:
+            self.label(self.body, self.t("respec"), muted=True, wraplength=900).pack(anchor="w")
+
+    def preview_levels(self):
+        try:
+            clone = deepcopy(self.data)
+            for (section, attribute), variable in self.stat_vars.items():
+                clone[section][attribute] = integer(variable.get())
+            p = Planner(self.db, clone)
+            c = p.character()
+            self.data.update({k:clone[k] for k in ("stats_current", "stats_target")})
+            self.level_label.configure(text=self.t("level_route", current=c["current"], target=c["target"], count=c["levels"]))
+        except (ValueError, tk.TclError):
+            pass  # An incomplete number during typing is not a modal error.
+
+    def calculate_character(self):
+        for (section, attribute), variable in self.stat_vars.items():
+            integer(variable.get(), attribute, CLASS_DATA[self.data["class_name"]]["stats"][attribute], 99)
+        self.preview_levels()
+        self.read_wallet()
+        self.autosave()
+        self.show("character")
+
+    def set_class(self, name):
+        previous_base=CLASS_DATA[self.data["class_name"]]["stats"]
+        self.data["class_name"] = name
+        for section in ("stats_current", "stats_target"):
+            if self.data[section]==previous_base:
+                self.data[section]=deepcopy(CLASS_DATA[name]["stats"])
+            else:
+                for a in ATTRIBUTES:
+                    self.data[section][a] = max(self.data[section][a], CLASS_DATA[name]["stats"][a])
+        self.autosave()
+        self.show("character")
 
     def build_weapons(self):
-        p = self.pages["Catalogue & armes"]
-        self.heading(
-            p,
-            "Toutes tes armes, un seul plan",
-            f"{len(self.db.weapons)} entrées du fichier fourni, dont le DLC. Noms anglais. Sélection multiple avec Ctrl ou Maj.",
-        )
-        search = ttk.Frame(p)
-        search.pack(fill="x")
-        ttk.Label(search, text="Rechercher").pack(side="left")
-        ttk.Entry(search, textvariable=self.var("search"), width=32).pack(side="left", padx=10)
-        ttk.Combobox(
-            search,
-            textvariable=self.var("category", "Toutes"),
-            values=["Toutes"] + list(self.db.categories.values()),
-            state="readonly",
-            width=24,
-        ).pack(side="left")
-        ttk.Combobox(
-            search,
-            textvariable=self.var("dlc_filter", "Tout"),
-            values=ENUMS["dlc_filter"],
-            state="readonly",
-            width=16,
-        ).pack(side="left", padx=10)
-        for key in ("search", "category", "dlc_filter"):
-            self.fields[key].trace_add("write", lambda *_: self.refresh_catalogue())
-        self.catalogue = self.tree(
-            p,
-            ("Arme", "Catégorie", "Type", "Max", "Forge +1", "DLC"),
-            (320, 210, 90, 60, 100, 60),
-            10,
-        )
-        self.catalogue.bind("<<TreeviewSelect>>", self.weapon_selected)
-        options = ttk.Frame(p)
-        options.pack(fill="x")
-        for col, (key, label, default) in enumerate(
-            (
-                ("weapon_current", "Actuel +", 0),
-                ("weapon_target", "Cible +", 24),
-                ("weapon_quantity", "Exemplaires", 1),
-                ("weapon_budget", "Budget", 150000),
-            )
-        ):
-            ttk.Label(options, text=label).grid(row=0, column=col * 2, padx=(0, 8))
-            ttk.Entry(options, textvariable=self.var(key, default), width=9).grid(
-                row=0, column=col * 2 + 1, padx=(0, 16)
-            )
-        actions = ttk.Frame(p)
-        actions.pack(fill="x", pady=10)
-        for text, callback in (
-            ("Chiffrer la sélection", self.preview_weapons),
-            ("Ajouter la sélection au panier", self.add_weapons),
-            ("Amélioration atteignable (1 arme)", self.weapon_budget),
-        ):
-            ttk.Button(actions, text=text, command=callback).pack(side="left", padx=(0, 8))
-        self.weapon_result = tk.StringVar(self, "Choisis une ou plusieurs armes.")
-        ttk.Label(p, textvariable=self.weapon_result, style="Result.TLabel", wraplength=1020).pack(
-            anchor="w", pady=8
-        )
-        ttk.Label(
-            p,
-            text="Sélection mixte : la cible est plafonnée au maximum de chaque arme (ex. +25 → +10 sombre).\nLe coût de forge passé est calculé depuis +0 ; l'achat passé de pierres n'est pas connu.",
-            style="Muted.TLabel",
-        ).pack(anchor="w")
+        controls = self.card(self.body)
+        controls.pack(fill="x", pady=(0, 12))
+        modes = {self.t("manual_mode"):"manual", self.t("catalogue_mode"):"catalogue"}
+        segmented = ctk.CTkSegmentedButton(controls, values=list(modes), selected_color=self.accent,
+                         command=lambda v:self.action(lambda:self.switch_mode(modes[v])))
+        segmented.set(next(k for k,v in modes.items() if v == self.data["weapon_mode"]))
+        segmented.pack(anchor="w", padx=18, pady=16)
+        form = self.card(self.body)
+        form.pack(fill="x")
+        self.wallet(form)
+        self.manual_vars = {}
+        self.selected_vars = []
+        if self.data["weapon_mode"] == "manual":
+            m = self.data["manual"]
+            self.option(form, "weapon_type", ("normal", "somber"), m["kind"], self.switch_kind, 1)
+            price_key = "base_price" if m["input_mode"] == "base" else "next_price"
+            self.label(form, self.t(price_key, current=m["current"], next=m["current"]+1)).grid(row=2,column=0,padx=18,sticky="w")
+            price = tk.StringVar(value=m["base"] if m["input_mode"]=="base" else m["observed"])
+            ctk.CTkEntry(form,textvariable=price,width=160,fg_color=self.bg,text_color=self.ink,border_color=self.soft).grid(row=2,column=1,padx=18,pady=9)
+            self.manual_vars["base" if m["input_mode"]=="base" else "observed"] = price
+            self.button(form,"use_next" if m["input_mode"]=="base" else "use_base",self.toggle_inverse,True).grid(row=2,column=2,padx=10)
+            for row, (field,key) in enumerate((("current","current_upgrade"),("target","target_upgrade"),("quantity","copies")),3):
+                self.manual_vars[field] = self.entry(form,key,m[field],row)
+            self.label(self.body,self.t("standard_warning"),muted=True,wraplength=920,justify="left").pack(anchor="w",pady=12)
+        else:
+            self.button(form,"choose_weapons",self.catalogue).grid(row=1,column=0,padx=18,pady=14,sticky="w")
+            self.label(form,self.t("selected_count",count=len(self.data["selected"]))).grid(row=1,column=1,padx=18)
+            for item in self.data["selected"]:
+                row = self.card(self.body)
+                row.pack(fill="x",pady=5)
+                self.label(row,self.translator.weapon(item["name"]),16,wraplength=350).grid(row=0,column=0,padx=16,pady=12,sticky="w")
+                variables = {}
+                for col,(field,key) in enumerate((("current","current_upgrade"),("target","target_upgrade"),("quantity","copies")),1):
+                    box = ctk.CTkFrame(row,fg_color="transparent")
+                    box.grid(row=0,column=col,padx=12,pady=10)
+                    self.label(box,self.t(key),12,True).pack()
+                    variables[field] = tk.StringVar(value=item[field])
+                    ctk.CTkEntry(box,textvariable=variables[field],width=75,fg_color=self.bg,text_color=self.ink,border_color=self.soft).pack(pady=4)
+                self.selected_vars.append((item,variables))
+        actions = ctk.CTkFrame(self.body,fg_color="transparent")
+        actions.pack(fill="x",pady=16)
+        self.button(actions,"calculate_weapons",self.calculate_weapons).pack(side="left",padx=(0,10))
+        self.button(actions,"max_without_dragon",self.max_without_dragon,True).pack(side="left")
+        self.weapon_summary()
 
-    def refresh_catalogue(self):
-        if not hasattr(self, "catalogue"):
+    def read_weapons(self):
+        clone = deepcopy(self.data)
+        for key,var in self.manual_vars.items():
+            clone["manual"][key] = integer(var.get())
+        for old, variables in self.selected_vars:
+            item = next(i for i in clone["selected"] if i["name"] == old["name"])
+            item.update({key:integer(var.get()) for key,var in variables.items()})
+        validate_state(clone,self.db)
+        Planner(self.db,clone).weapons()
+        self.data.update(clone)
+        self.read_wallet()
+
+    def calculate_weapons(self):
+        self.read_weapons()
+        self.autosave()
+        self.show("weapons")
+
+    def switch_mode(self, mode):
+        self.read_weapons()
+        self.data["weapon_mode"] = mode
+        self.autosave()
+        self.show("weapons")
+
+    def switch_kind(self, kind):
+        m = self.data["manual"]
+        m.update(kind=kind,current=0,target=24 if kind=="normal" else 10,input_mode="base")
+        self.autosave()
+        self.show("weapons")
+
+    def toggle_inverse(self):
+        self.read_weapons()
+        m = self.data["manual"]
+        weapon = self.planner.manual_weapon()
+        if m["input_mode"] == "base":
+            if m["current"] >= weapon.maximum:
+                raise ValueError(self.t("inverse_error"))
+            m["observed"] = weapon.costs[m["current"]]
+            m["input_mode"] = "next"
+        else:
+            m["base"] = weapon.base
+            m["input_mode"] = "base"
+        self.autosave()
+        self.show("weapons")
+
+    def max_without_dragon(self):
+        self.read_weapons()
+        self.planner.without_dragon()
+        self.autosave()
+        self.show("weapons")
+
+    def weapon_summary(self):
+        plan = self.planner.weapons()
+        self.metrics(self.body,[(self.t("forge_cost"),fmt(plan["forge"])),(self.t("stone_cost"),fmt(plan["stones_cost"])),(self.t("total_cost"),fmt(plan["total"]))])
+        self.label(self.body,self.t("to_farm")+": "+fmt(plan["deficit"]),18).pack(anchor="w",pady=5)
+        if self.data["weapon_mode"]=="manual" and self.data["manual"]["input_mode"]=="next":
+            self.label(self.body,self.t("recovered_base",price=fmt(self.planner.manual_weapon().base))).pack(anchor="w")
+        affordable,left = self.planner.affordable_targets()
+        route = ", ".join(f'{self.t("manual_mode") if self.data["weapon_mode"]=="manual" else self.translator.weapon(i["weapon"].name)}: +{i["current"]} → +{i["target"]}' for i in affordable)
+        self.label(self.body,self.t("affordable_weapon",route=route,left=fmt(left)),muted=True,wraplength=920,justify="left").pack(anchor="w",pady=10)
+        if plan["dragon_needed"]:
+            self.label(self.body,self.t("dragon_notice"),muted=True,wraplength=920,justify="left").pack(anchor="w",pady=8)
+        self.button(self.body,"stone_calculator",self.inventory_popup,True).pack(anchor="w",pady=8)
+        self.button(self.body,"missing_stones",self.missing_popup,True).pack(anchor="w",pady=8)
+        self.button(self.body,"complete_upgrades",self.complete_upgrades,True).pack(anchor="w",pady=8)
+        self.label(self.body,self.t("tracked_gain",runes=fmt(self.planner.tracked_gain())),muted=True).pack(anchor="w",pady=8)
+
+    def popup(self,title,size="960x740"):
+        window = ctk.CTkToplevel(self)
+        window.title(title)
+        window.geometry(size)
+        window.configure(fg_color=self.bg)
+        window.transient(self)
+        window.after(100,window.lift)
+        return window
+
+    def catalogue(self):
+        if self.page=="weapons":
+            self.read_weapons()
+        window = self.popup(self.t("choose_weapons"),"1100x800")
+        self.label(window,self.t("catalogue_hint"),muted=True).pack(anchor="w",padx=24,pady=16)
+        self.label(window,self.t("search"),muted=True).pack(anchor="w",padx=24,pady=(0,5))
+        query = tk.StringVar()
+        ctk.CTkEntry(window,textvariable=query,placeholder_text=self.t("search"),width=600).pack(padx=24,anchor="w")
+        scroll = ctk.CTkScrollableFrame(window,fg_color=self.bg,scrollbar_button_color=self.soft)
+        scroll.pack(fill="both",expand=True,padx=18,pady=18)
+        tasks = []
+        job = [None]
+        def cancel_gallery(event):
+            if event.widget==window and job[0]:
+                try:
+                    window.after_cancel(job[0])
+                except tk.TclError:
+                    pass
+        window.bind("<Destroy>",cancel_gallery,add="+")
+        def fill():
+            if not window.winfo_exists():
+                return
+            for _ in range(min(16,len(tasks))):
+                group,name,index = tasks.pop(0)
+                weapon = self.db.weapons[name]
+                selected = any(i["name"]==name for i in self.data["selected"])
+                tile = ctk.CTkFrame(group,fg_color=self.soft if selected else self.paper,
+                                   width=185,height=200,corner_radius=12,border_width=2 if selected else 0,border_color=self.accent)
+                tile.grid(row=index//5,column=index%5,padx=6,pady=6,sticky="nsew")
+                tile.weapon_name=name
+                tile.grid_propagate(False)
+                self.label(tile,self.t("dlc")+": "+self.t("yes" if weapon.dlc else "no")+f"   +{weapon.maximum}",11,True).pack(pady=(10,0))
+                raw = self.db.raw["weapons_by_category"][weapon.category][name] if hasattr(self.db,"raw") else self.db.data["weapons_by_category"][weapon.category][name]
+                path = resource_path(f'assets/catalogue/{raw["id"]}.png')
+                if path.exists():
+                    if name not in self.images:
+                        with Image.open(path) as source:
+                            self.images[name] = ctk.CTkImage(source.copy(),size=(105,105))
+                    picture = self.label(tile,"")
+                    picture.configure(image=self.images[name])
+                    picture.pack()
+                self.label(tile,self.translator.weapon(name),13,wraplength=170).pack(padx=6,pady=4)
+                self.label(tile,self.t(weapon.kind),11,True).pack()
+                def toggle(_=None,n=name,panel=tile):
+                    self.planner.toggle_weapon(n)
+                    on = any(i["name"]==n for i in self.data["selected"])
+                    panel.configure(fg_color=self.soft if on else self.paper,border_width=2 if on else 0)
+                    self.autosave()
+                tile.bind("<Button-1>",toggle)
+                for child in tile.winfo_children():
+                    child.bind("<Button-1>",toggle)
+            if tasks:
+                job[0] = window.after(10,fill)
+        def render(*_):
+            if job[0]:
+                window.after_cancel(job[0])
+            tasks.clear()
+            for child in scroll.winfo_children():
+                child.destroy()
+            term = query.get().casefold()
+            categories = {}
+            for name,w in self.db.weapons.items():
+                if term in name.casefold() or term in self.translator.weapon(name).casefold():
+                    categories.setdefault(w.category,[]).append(name)
+            for category,names in categories.items():
+                self.label(scroll,self.t(category),22).pack(anchor="w",pady=(20,10))
+                group = ctk.CTkFrame(scroll,fg_color="transparent")
+                group.pack(fill="x")
+                for col in range(5):
+                    group.grid_columnconfigure(col,weight=1)
+                tasks.extend((group,n,index) for index,n in enumerate(names))
+            fill()
+        query.trace_add("write",render)
+        def done():
+            if job[0]:
+                window.after_cancel(job[0])
+            window.destroy()
+            self.data["weapon_mode"]="catalogue"
+            self.autosave()
+            self.show("weapons")
+        self.button(window,"done",done).pack(pady=(0,16))
+        window.protocol("WM_DELETE_WINDOW",done)
+        render()
+
+    def build_stones(self):
+        self.button(self.body,"stone_calculator",self.inventory_popup).pack(anchor="w",pady=8)
+        self.button(self.body,"missing_stones",self.missing_popup,True).pack(anchor="w",pady=8)
+        prices = self.card(self.body)
+        prices.pack(fill="x",pady=12)
+        for row,key in enumerate(k for k in STONE_PRICES if not k.endswith("dragon")):
+            self.label(prices,self.translator.stone(key)).grid(row=row,column=0,sticky="w",padx=20,pady=7)
+            value = self.label(prices,fmt(self.data["prices"].get(key,STONE_PRICES[key])),16)
+            value.grid(row=row,column=1,padx=30)
+            value.bind("<Double-Button-1>",lambda _,k=key:self.action(lambda:self.edit_price(k)))
+        for key in ("normal:dragon","somber:dragon"):
+            self.label(self.body,self.translator.stone(key)+"   ·   "+self.t("unit_price")+": ?   ·   "+self.t("required")+": ?   ·   "+self.t("owned")+": ?",muted=True,wraplength=950).pack(anchor="w",pady=10)
+        self.button(self.body,"restore_prices",self.restore_prices,True).pack(anchor="w",pady=14)
+
+    def restore_prices(self):
+        self.data["prices"]={}
+        self.autosave()
+        self.show("stones")
+
+    def edit_price(self,key):
+        if not messagebox.askyesno(self.t("unit_price"),self.t("confirm_price"),parent=self):
             return
-        selected = set(self.catalogue.selection())
-        self.catalogue.delete(*self.catalogue.get_children())
-        query, category, dlc = (self.fields[k].get() for k in ("search", "category", "dlc_filter"))
-        for name, w in sorted(self.db.weapons.items()):
-            cat = self.db.categories[w.category]
-            if query.casefold() not in name.casefold() or (
-                category != "Toutes" and category != cat
-            ):
-                continue
-            if (dlc == "DLC" and not w.dlc) or (dlc == "Jeu de base" and w.dlc):
-                continue
-            self.catalogue.insert(
-                "",
-                "end",
-                iid=name,
-                values=(
-                    name,
-                    cat,
-                    "Fixe" if not w.maximum else "Sombre" if w.kind == "somber" else "Normale",
-                    f"+{w.maximum}",
-                    "—" if w.base is None else fmt(w.base),
-                    "Oui" if w.dlc else "Non",
-                ),
-            )
-        self.catalogue.selection_set([n for n in selected if self.catalogue.exists(n)])
+        dialog = ctk.CTkInputDialog(text=self.translator.stone(key),title=self.t("unit_price"))
+        value = dialog.get_input()
+        if value is not None:
+            self.data["prices"][key]=integer(value)
+            self.autosave()
+            self.show("stones")
 
-    def weapon_selected(self, _=None):
-        selection = self.catalogue.selection()
-        if len(selection) == 1:
-            self.fields["weapon_target"].set(self.db.weapons[selection[0]].maximum)
+    def inventory_popup(self):
+        if self.page=="weapons":
+            self.read_weapons()
+        window = self.popup(self.t("stone_calculator"),"760x760")
+        self.label(window,self.t("stock_hint"),muted=True,wraplength=700,justify="left").pack(padx=20,pady=16)
+        scroll = ctk.CTkScrollableFrame(window,fg_color=self.bg)
+        scroll.pack(fill="both",expand=True,padx=20,pady=10)
+        variables = {key:self.entry(scroll,self.translator.stone(key),self.data["stock"].get(key,0),row)
+                     for row,key in enumerate(self.data["stock"])}
+        def none():
+            for var in variables.values():
+                var.set("0")
+        def apply():
+            stock = {key:integer(var.get()) for key,var in variables.items()}
+            self.data["stock"]=stock
+            self.autosave()
+            window.destroy()
+            self.show(self.page)
+            self.missing_popup()
+        actions = ctk.CTkFrame(window,fg_color="transparent")
+        actions.pack(pady=15)
+        self.button(actions,"no_stones",none,True).pack(side="left",padx=6)
+        self.button(actions,"apply_stock",apply).pack(side="left",padx=6)
 
-    def selected_items(self):
-        selection = self.catalogue.selection()
-        if not selection:
-            raise ValueError("Sélectionne au moins une arme.")
-        current = integer(self.fields["weapon_current"].get())
-        target = integer(self.fields["weapon_target"].get(), "Cible", current, 25)
-        quantity = integer(self.fields["weapon_quantity"].get(), "Exemplaires", 1, 999)
-        items = []
-        for name in selection:
-            w = self.db.weapons[name]
-            if current > w.maximum:
-                raise ValueError(f"{name} ne peut pas être à +{current}.")
-            items.append(
-                {
-                    "name": name,
-                    "custom": False,
-                    "current": current,
-                    "target": min(target, w.maximum),
-                    "quantity": quantity,
-                }
-            )
-        return items
+    def missing_popup(self):
+        if self.page=="weapons":
+            self.read_weapons()
+        window = self.popup(self.t("missing_stones"),"850x650")
+        scroll = ctk.CTkScrollableFrame(window,fg_color=self.bg)
+        scroll.pack(fill="both",expand=True,padx=20,pady=20)
+        def render():
+            for child in scroll.winfo_children():
+                child.destroy()
+            self.label(scroll,self.t("runes_held")+": "+fmt(self.data["runes"]),20).pack(anchor="w",pady=10)
+            rows = [r for r in self.planner.weapons()["stones"] if r["missing"] and not r["key"].endswith("dragon")]
+            if not rows:
+                self.label(scroll,self.t("ready")).pack(pady=20)
+            for row in rows:
+                panel=self.card(scroll)
+                panel.pack(fill="x",pady=5)
+                self.label(panel,f'{self.translator.stone(row["key"])}   ×{row["missing"]}   ·   {fmt(row["cost"])}').pack(side="left",padx=14,pady=14)
+                def buy(r=row):
+                    if messagebox.askyesno(self.t("bought"),self.t("confirm_purchase",quantity=r["missing"],cost=fmt(r["cost"])),parent=window):
+                        self.planner.purchase(r["key"])
+                        self.autosave()
+                        render()
+                        self.show(self.page)
+                self.button(panel,"bought",buy).pack(side="right",padx=14)
+        render()
 
-    def resolved(self, items=None):
-        result = []
-        for item in self.items if items is None else items:
-            w = (
-                generic_weapon(item["name"], item["kind"], item["base"])
-                if item.get("custom")
-                else self.db.weapons[item["name"]]
-            )
-            result.append({**item, "weapon": w})
-        return result
-
-    def options(self):
-        return {
-            "owned": self.inventory,
-            "prices": self.prices,
-            "normal_bearings": integer(
-                self.fields["normal_bearings"].get(), "Perles normales", 0, 4
-            ),
-            "somber_bearings": integer(
-                self.fields["somber_bearings"].get(), "Perles sombres", 0, 5
-            ),
-        }
-
-    @guarded
-    def preview_weapons(self):
-        result = shopping_plan(self.resolved(self.selected_items()), **self.options())
-        self.weapon_result.set(
-            f"Forge restante : {fmt(result['forge'])}  •  Pierres : {fmt(result['stones_cost'])}\nTotal chiffré : {fmt(result['total'])} runes  •  Forge passée : {fmt(result['past_forge'])}\n"
-            + (
-                "Approvisionnement chiffré."
-                if result["complete"]
-                else "Matériaux à obtenir / prix à renseigner : voir le panier."
-            )
-        )
-
-    @guarded
-    def add_weapons(self):
-        items = self.selected_items()
-        self.items.extend(items)
-        self.update_plan()
-        self.weapon_result.set(f"{len(items)} ligne(s) ajoutée(s) au panier.")
-
-    @guarded
-    def weapon_budget(self):
-        items = self.selected_items()
-        if len(items) != 1 or items[0]["quantity"] != 1:
-            raise ValueError("Sélectionne une arme et un exemplaire pour ce calcul.")
-        item = self.resolved(items)[0]
-        target, remainder = affordable_weapon(
-            item["weapon"], item["current"], self.fields["weapon_budget"].get(), **self.options()
-        )
-        self.weapon_result.set(
-            f"Amélioration atteignable avec les matériaux accessibles : +{target}\nReste : {fmt(remainder)} runes. Le stock et les prix des pierres de dragon conditionnent le dernier passage."
-        )
-
-    def build_inverse(self):
-        p = self.pages["Calcul inverse"]
-        self.heading(
-            p,
-            "Retrouver le coût de base",
-            "Entre un prix de forge observé entre deux améliorations. Exclue l'achat des pierres. Plusieurs armes peuvent partager le même prix.",
-        )
-        form = ttk.Frame(p)
-        form.pack(anchor="w")
-        self.combo(form, "Profil standard", "custom_kind", "Normale", ENUMS["custom_kind"], 0)
-        for row, (label, key, default) in enumerate(
-            (
-                ("Nom de ton arme", "custom_name", "Mon arme"),
-                ("Prix +0 → +1 (si connu)", "custom_base", 100),
-                ("Départ de l'observation +", "inverse_current", 4),
-                ("Arrivée de l'observation +", "inverse_target", 5),
-                ("Total de forge observé", "inverse_cost", 180),
-            ),
-            1,
-        ):
-            self.entry(form, label, key, default, row, 28 if key == "custom_name" else 14)
-        ttk.Button(
-            form, text="Retrouver la base et les armes compatibles", command=self.calculate_inverse
-        ).grid(row=6, column=0, columnspan=2, sticky="ew", pady=12)
-        self.entry(form, "Actuel + (plan personnalisé)", "custom_current", 0, 7)
-        self.entry(form, "Cible + (plan personnalisé)", "custom_target", 24, 8)
-        ttk.Button(
-            form, text="Ajouter l'arme personnalisée au panier", command=self.add_custom
-        ).grid(row=9, column=0, columnspan=2, sticky="ew", pady=12)
-        self.inverse_result = tk.StringVar(self)
-        ttk.Label(p, textvariable=self.inverse_result, style="Result.TLabel", wraplength=1020).pack(
-            anchor="w", pady=12
-        )
-        ttk.Label(
-            p,
-            text="Les profils standards sont des hypothèses pour une arme absente du catalogue. Certaines arbalètes et balistes suivent d'autres tarifs.\nPour une arme connue, sélectionne son nom dans le catalogue : chaque passage y suit le JSON fourni.",
-            style="Muted.TLabel",
-            wraplength=1020,
-        ).pack(anchor="w")
-
-    @guarded
-    def calculate_inverse(self):
-        kind = "normal" if self.fields["custom_kind"].get() == "Normale" else "somber"
-        maximum = 25 if kind == "normal" else 10
-        current = integer(self.fields["inverse_current"].get(), "Départ", 0, maximum - 1)
-        target = integer(self.fields["inverse_target"].get(), "Arrivée", current + 1, maximum)
-        cost = integer(self.fields["inverse_cost"].get(), "Prix observé", 1)
-        bases = inverse_base(kind, current, target, cost)
-        matches = [
-            w.name
-            for w in self.db.weapons.values()
-            if w.maximum == maximum and sum(w.costs[current:target]) == cost
-        ]
-        if len(bases) == 1:
-            self.fields["custom_base"].set(bases[0])
-        self.inverse_result.set(
-            "Base(s) compatibles avec le profil standard : "
-            + (", ".join(map(str, bases)) or "aucune")
-            + "\nArmes compatibles, sans identification certaine : "
-            + (", ".join(matches[:14]) or "aucune")
-            + (f" … et {len(matches)-14} autres" if len(matches) > 14 else "")
-        )
-
-    @guarded
-    def add_custom(self):
-        kind = "normal" if self.fields["custom_kind"].get() == "Normale" else "somber"
-        base = integer(self.fields["custom_base"].get(), "Base", 1)
-        name = self.fields["custom_name"].get().strip()
-        if name in self.db.weapons:
-            raise ValueError(
-                "Ce nom existe dans le catalogue : utilise ses tarifs exacts dans l'onglet Catalogue."
-            )
-        w = generic_weapon(name, kind, base)
-        current = integer(self.fields["custom_current"].get(), "Actuel", 0, w.maximum)
-        target = integer(self.fields["custom_target"].get(), "Cible", current, w.maximum)
-        self.items.append(
-            {
-                "name": w.name,
-                "custom": True,
-                "kind": kind,
-                "base": base,
-                "current": current,
-                "target": target,
-                "quantity": 1,
-            }
-        )
-        self.update_plan()
-        self.inverse_result.set("Arme personnalisée ajoutée avec un profil standard.")
-
-    def build_plan(self):
-        p = self.pages["Panier & pierres"]
-        self.heading(
-            p,
-            "Le coût de ton projet complet",
-            "Personnage + armes + achats libres. Le stock de pierres est partagé et déduit une seule fois pour tout le panier.",
-        )
-        settings = ttk.Frame(p)
-        settings.pack(fill="x")
-        self.combo(
-            settings,
-            "Perles normales obtenues (dans l'ordre)",
-            "normal_bearings",
-            4,
-            tuple(range(5)),
-            0,
-            5,
-        )
-        self.combo(
-            settings,
-            "Perles sombres obtenues (dans l'ordre)",
-            "somber_bearings",
-            5,
-            tuple(range(6)),
-            1,
-            5,
-        )
-        ttk.Button(settings, text="Actualiser le total", command=self.update_plan).grid(
-            row=0, column=2, rowspan=2, padx=18
-        )
-        ttk.Button(settings, text="Exporter le bilan CSV…", command=self.export_csv).grid(
-            row=0, column=3, rowspan=2
-        )
-        self.cart = self.tree(
-            p,
-            ("Objet / arme", "Actuel", "Cible", "Qté", "Forge / achat", "Forge passée"),
-            (350, 70, 70, 50, 130, 140),
-            4,
-        )
-        actions = ttk.Frame(p)
-        actions.pack(fill="x")
-        ttk.Button(actions, text="Retirer la sélection", command=self.remove_items).pack(
-            side="left"
-        )
-        ttk.Button(actions, text="Ajouter un achat libre…", command=self.extra_dialog).pack(
-            side="left", padx=8
-        )
-        self.stock = self.tree(
-            p,
-            ("Pierre", "Besoin", "Stock", "Manque", "Prix unitaire", "Runes", "Accès / statut"),
-            (265, 60, 60, 60, 100, 100, 240),
-            6,
-        )
-        self.stock.bind("<Double-1>", lambda _: self.edit_stock())
-        ttk.Button(
-            p, text="Modifier le stock / prix de la pierre sélectionnée…", command=self.edit_stock
-        ).pack(anchor="w")
-        self.plan_result = tk.StringVar(self)
-        ttk.Label(p, textvariable=self.plan_result, style="Result.TLabel", wraplength=1020).pack(
-            anchor="w", pady=12
-        )
-
-    def compute_plan(self):
-        level = self.level_values()
-        result = shopping_plan(self.resolved(), extras=self.extras, **self.options())
-        return {
-            **result,
-            "level_cost": level["remaining"],
-            "combined": level["remaining"] + result["total"],
-        }
-
-    @guarded
-    def update_plan(self):
-        if not hasattr(self, "cart"):
+    def complete_upgrades(self):
+        self.read_weapons()
+        if not messagebox.askyesno(self.t("complete_upgrades"),self.t("confirm_upgrade"),parent=self):
             return
-        result = self.compute_plan()
-        wallet = integer(self.fields["wallet"].get(), "Runes en poche")
-        self.last_plan = result
-        self.cart.delete(*self.cart.get_children())
-        for index, line in enumerate(result["lines"]):
-            suffix = " [profil standard]" if self.items[index].get("custom") else ""
-            self.cart.insert(
-                "",
-                "end",
-                iid=f"w{index}",
-                values=(
-                    line["name"] + suffix,
-                    f"+{line['current']}",
-                    f"+{line['target']}",
-                    line["quantity"],
-                    fmt(line["forge"]),
-                    fmt(line["past_forge"]),
-                ),
-            )
-        for index, extra in enumerate(self.extras):
-            self.cart.insert(
-                "",
-                "end",
-                iid=f"e{index}",
-                values=(
-                    extra["name"],
-                    "—",
-                    "—",
-                    extra["quantity"],
-                    fmt(extra["quantity"] * extra["unit"]),
-                    "Inconnu",
-                ),
-            )
-        self.refresh_inventory(result)
-        self.plan_result.set(
-            f"Niveaux : {fmt(result['level_cost'])}  •  Forge : {fmt(result['forge'])}  •  Pierres : {fmt(result['stones_cost'])}  •  Achats : {fmt(result['extras'])}\n"
-            f"Total chiffré : {fmt(result['combined'])} runes   /   À farmer après déduction des runes en poche : {fmt(max(0,result['combined']-wallet))}\n"
-            + (
-                "Approvisionnement chiffré avec tes paramètres."
-                if result["complete"]
-                else "BILAN INCOMPLET : pierres manquantes sans prix ou sans perle. Les coûts inconnus ne sont pas inclus."
-            )
-        )
-
-    def refresh_inventory(self, plan):
-        lookup = {s["key"]: s for s in plan["stones"]}
-        self.stock.delete(*self.stock.get_children())
-        for key, default in STONE_PRICES.items():
-            s = lookup.get(key)
-            unit = self.prices.get(key, default)
-            status = "Non requis"
-            if s:
-                status = (
-                    "Stock suffisant"
-                    if not s["missing"]
-                    else (
-                        "À obtenir / renseigner"
-                        if s["unresolved"]
-                        else "Prix manuel" if key in self.prices else "Perle débloquée"
-                    )
-                )
-            self.stock.insert(
-                "",
-                "end",
-                iid=key,
-                values=(
-                    stone_label(key),
-                    s["required"] if s else 0,
-                    self.inventory.get(key, 0),
-                    s["missing"] if s else 0,
-                    "?" if unit is None else fmt(unit),
-                    fmt(s["cost"]) if s else 0,
-                    status,
-                ),
-            )
-
-    @guarded
-    def remove_items(self):
-        selected = self.cart.selection()
-        for prefix, items in (("w", self.items), ("e", self.extras)):
-            for index in sorted(
-                (int(i[1:]) for i in selected if i.startswith(prefix)), reverse=True
-            ):
-                items.pop(index)
-        self.update_plan()
-
-    def dialog(self, title, fields, accept, note=""):
-        win = tk.Toplevel(self)
-        win.title(title)
-        win.configure(bg="#101719")
-        win.transient(self)
-        variables = []
-        for row, (label, default) in enumerate(fields):
-            ttk.Label(win, text=label).grid(row=row, column=0, padx=16, pady=9)
-            var = tk.StringVar(win, str(default))
-            ttk.Entry(win, textvariable=var, width=24).grid(row=row, column=1, padx=16)
-            variables.append(var)
-        if note:
-            ttk.Label(win, text=note, style="Muted.TLabel").grid(
-                row=len(fields), column=0, columnspan=2, padx=16, pady=12
-            )
-
-        @guarded
-        def apply(app):
-            accept([v.get() for v in variables])
-            app.update_plan()
-            win.destroy()
-
-        ttk.Button(win, text="Appliquer", command=lambda: apply(self)).grid(
-            row=len(fields) + 1, column=0, columnspan=2, pady=12
-        )
-
-    def extra_dialog(self):
-        def accept(values):
-            name, quantity, unit = values
-            if not name.strip():
-                raise ValueError("Nom requis.")
-            self.extras.append(
-                {
-                    "name": name.strip(),
-                    "quantity": integer(quantity, "Quantité", 1),
-                    "unit": integer(unit, "Prix"),
-                }
-            )
-
-        self.dialog(
-            "Achat libre",
-            (("Objet", "Consommable"), ("Quantité", 1), ("Prix unitaire en runes", 0)),
-            accept,
-        )
-
-    @guarded
-    def edit_stock(self):
-        selection = self.stock.selection()
-        if not selection:
-            raise ValueError("Sélectionne une pierre.")
-        key = selection[0]
-
-        def accept(values):
-            count = integer(values[0], "Stock")
-            price = integer(values[1], "Prix") if values[1].strip() else None
-            self.inventory[key] = count
-            if price is None:
-                self.prices.pop(key, None)
-            else:
-                self.prices[key] = price
-
-        self.dialog(
-            stone_label(key),
-            (
-                ("Stock déjà possédé", self.inventory.get(key, 0)),
-                ("Prix manuel (vide = défaut)", self.prices.get(key, "")),
-            ),
-            accept,
-            "Un prix manuel suppose une source accessible.\nLes pierres de dragon ont une disponibilité limitée.",
-        )
+        dragon = False
+        if self.planner.weapons()["dragon_needed"]:
+            dragon = messagebox.askyesno(self.t("normal_dragon"),self.t("confirm_dragon"),parent=self)
+            if not dragon:
+                return
+        self.planner.complete_upgrades(dragon)
+        self.autosave()
+        self.show("weapons")
 
     def build_farm(self):
-        p = self.pages["Farm"]
-        self.heading(
-            p,
-            "Une minute de mesure, ton temps de farm",
-            "Note tes runes avant et après : la différence suffit, sans devoir mourir. Inclus les trajets et retours à la grâce.",
-        )
-        body = ttk.Frame(p)
-        body.pack(fill="x")
-        form = ttk.Frame(body)
-        form.pack(side="left", anchor="n", padx=(0, 30))
-        for row, (label, key, default) in enumerate(
-            (
-                ("Runes récoltées pendant le test", "farm_runes", 50000),
-                ("Durée réellement mesurée (secondes)", "farm_seconds", 60),
-                ("Rendement soutenu (%)", "farm_efficiency", 100),
-            )
-        ):
-            self.entry(form, label, key, default, row)
-        self.combo(form, "Objectif", "farm_goal", "Projet complet", ENUMS["farm_goal"], 3)
-        self.entry(form, "Objectif libre (runes)", "farm_custom_goal", 100000, 4)
-        self.combo(form, "Talisman du test", "farm_talisman", "Aucun", ENUMS["farm_talisman"], 5)
-        self.combo(
-            form, "Consommable du test", "farm_consumable", "Aucun", ENUMS["farm_consumable"], 6, 35
-        )
-        self.entry(form, "Méthode / autres buffs (facultatif)", "farm_notes", "", 7, 35)
-        ttk.Button(form, text="Estimer le temps nécessaire", command=self.calculate_farm).grid(
-            row=8, column=0, columnspan=2, sticky="ew", pady=16
-        )
-        timer = ttk.LabelFrame(body, text="Chronomètre · test de 60 secondes", padding=24)
-        timer.pack(side="left", fill="both", expand=True, anchor="n")
-        self.timer_label = tk.StringVar(self, "01:00")
-        ttk.Label(timer, textvariable=self.timer_label, style="Title.TLabel").pack(pady=16)
-        ttk.Button(timer, text="Démarrer une minute", command=self.start_timer).pack(
-            fill="x", pady=5
-        )
-        ttk.Button(timer, text="Arrêter et garder la durée", command=self.stop_timer).pack(
-            fill="x", pady=5
-        )
-        ttk.Label(
-            timer,
-            text="Le chronomètre continue dans les autres onglets.\nSaisis les runes récoltées à la fin du test.\nL'application ne lit pas le jeu.",
-            style="Muted.TLabel",
-            wraplength=320,
-        ).pack(pady=18)
-        self.farm_result = tk.StringVar(self)
-        ttk.Label(p, textvariable=self.farm_result, style="Result.TLabel", wraplength=1020).pack(
-            anchor="w", pady=18
-        )
-        ttk.Label(
-            p,
-            text="Le gain mesuré inclut déjà tes buffs : ils ne sont pas appliqués une seconde fois. Les effets argentés augmentent la découverte d'objets, pas les runes.\nEstimation à méthode et buffs constants. Le rendement soutenu permet de tenir compte des pauses et interruptions.",
-            style="Muted.TLabel",
-            wraplength=1020,
-        ).pack(anchor="w")
+        timer = self.card(self.body)
+        timer.pack(fill="x",pady=(0,12))
+        self.timer_label=self.label(timer,"01:00",40)
+        self.timer_label.pack(pady=18)
+        buttons=ctk.CTkFrame(timer,fg_color="transparent")
+        buttons.pack(pady=(0,18))
+        for key,command in (("next_test" if self.full_index is not None else "start_minute",self.start_timer),("stop",self.stop_timer),("reset",self.reset_timer),("full_test",self.start_full_test)):
+            self.button(buttons,key,command,secondary=key!="start_minute").pack(side="left",padx=5)
+        self.test_label=self.label(timer,"",muted=True)
+        self.test_label.pack(pady=(0,12))
+        form=self.card(self.body)
+        form.pack(fill="x")
+        self.wallet(form)
+        f=self.data["farm"]
+        self.farm_vars={}
+        for row,(field,key) in enumerate((("runes","measured_runes"),("seconds","duration"),("efficiency","efficiency")),1):
+            self.farm_vars[field]=self.entry(form,key,f[field],row)
+        def set_buff(field,value):
+            self.read_farm()
+            f[field]=value
+            f["use_samples"]=False
+            self.autosave()
+            self.show("farm")
+        self.option(form,"talisman",tuple(TALISMANS),f["talisman"],lambda v:set_buff("talisman",v),4)
+        self.option(form,"consumable",tuple(CONSUMABLES),f["consumable"],lambda v:set_buff("consumable",v),5)
+        goals=("combined","character","weapons","maximum","free")
+        identifiers=tuple("goal_"+g for g in goals)
+        def set_goal(value):
+            self.read_farm()
+            f["goal"]=value.removeprefix("goal_")
+            self.autosave()
+            self.show("farm")
+        self.option(form,"goal",identifiers,"goal_"+f["goal"],set_goal,6)
+        if f["goal"]=="free":
+            self.farm_vars["free_goal"]=self.entry(form,"free_goal",f["free_goal"],7)
+        self.farm_vars["notes"]=self.entry(form,"notes",f["notes"],8,width=400)
+        actions=ctk.CTkFrame(self.body,fg_color="transparent")
+        actions.pack(fill="x",pady=16)
+        self.button(actions,"estimate",self.calculate_farm).pack(side="left",padx=(0,10))
+        self.button(actions,"record_result",self.record_result,True).pack(side="left")
+        if f["samples"] and f["use_samples"]:
+            self.label(self.body,self.t("sample_summary",count=len(f["samples"]),seconds=sum(s["seconds"] for s in f["samples"])),muted=True).pack(anchor="w")
+        if self.planner.farm_rates()["measured"]>0:
+            p=self.planner.farm_projection()
+            self.metrics(self.body,[(self.t("rate"),fmt(p["measured"])),(self.t("time_needed"),self.translator.duration(p["time"])),
+                                  (self.t("to_maximum",current=self.planner.character()["current"]),self.translator.duration(p["maximum_time"]))])
+            for key,field in (("without_buffs","baseline"),("with_scarab","gold_scarab"),("with_foot","gold_foot"),("with_both","scarab_foot"),("optimized","optimized")):
+                self.label(self.body,self.t(key)+": "+fmt(p[field]),16).pack(anchor="w",pady=5)
+            self.label(self.body,self.t("remaining_plan",runes=fmt(p["remaining"])),18).pack(anchor="w",pady=12)
+            if p["incomplete"]:
+                self.label(self.body,self.t("dragon_notice"),muted=True,wraplength=900).pack(anchor="w")
+        self.label(self.body,self.t("projection_note"),muted=True,wraplength=920,justify="left").pack(anchor="w",pady=12)
+        self.update_timer_display()
+
+    def read_farm(self):
+        clone=deepcopy(self.data)
+        for field,var in self.farm_vars.items():
+            clone["farm"][field]=var.get() if field=="notes" else integer(var.get())
+        validate_state(clone,self.db)
+        if any(clone["farm"][k]!=self.data["farm"][k] for k in ("runes","seconds")):
+            clone["farm"]["use_samples"]=False
+        # Preserve the dictionary reference used by option callbacks.
+        self.data["farm"].update(clone["farm"])
+        self.read_wallet()
+
+    def calculate_farm(self):
+        self.read_farm()
+        self.planner.farm_projection()
+        self.autosave()
+        self.show("farm")
+
+    def reset_timer(self):
+        self.stop_timer()
+        self.full_index=None
+        self.awaiting_result=False
+        self.timer_duration=60
+        self.data["farm"]["seconds"]=60
+        if self.page=="farm":
+            self.farm_vars["seconds"].set("60")
+            self.update_timer_display()
+
+    def start_full_test(self):
+        self.reset_timer()
+        self.data["farm"]["samples"]=[]
+        self.data["farm"]["use_samples"]=False
+        self.full_index=0
+        self.start_timer()
 
     def start_timer(self):
-        if self.timer_job:
-            self.after_cancel(self.timer_job)
-        self.timer_started = time.monotonic()
-        self.deadline = self.timer_started + 60
-        self.tick()
-
-    def tick(self):
-        remaining = max(0, math.ceil(self.deadline - time.monotonic()))
-        self.timer_label.set(f"{remaining//60:02d}:{remaining%60:02d}")
-        if remaining:
-            self.timer_job = self.after(100, self.tick)
-        else:
-            self.timer_job = self.deadline = None
-            self.fields["farm_seconds"].set(60)
-            self.timer_label.set("Test terminé")
-            self.bell()
+        if self.deadline is not None:
+            return
+        if self.awaiting_result:
+            raise ValueError(self.t("record_result"))
+        if self.page=="farm":
+            self.read_farm()
+        self.timer_duration=(60,60,180)[self.full_index] if self.full_index is not None else 60
+        self.data["farm"]["seconds"]=self.timer_duration
+        self.timer_buffs=(self.data["farm"]["talisman"],self.data["farm"]["consumable"])
+        self.timer_started=time.monotonic()
+        self.deadline=self.timer_started+self.timer_duration
+        self.tick_timer()
 
     def stop_timer(self):
-        if self.deadline is None:
-            return
         if self.timer_job:
             self.after_cancel(self.timer_job)
-        elapsed = min(60, max(1, round(time.monotonic() - self.timer_started)))
-        self.fields["farm_seconds"].set(elapsed)
-        self.timer_label.set(f"Arrêté : {elapsed} s")
-        self.deadline = self.timer_job = None
+            self.timer_job=None
+        if self.deadline is not None:
+            elapsed=max(1,math.ceil(time.monotonic()-self.timer_started))
+            self.data["farm"]["seconds"]=min(elapsed,self.timer_duration)
+            self.deadline=None
+            self.full_index=None
+            self.awaiting_result=True
+        self.update_timer_display()
 
-    @guarded
-    def calculate_farm(self):
-        result = self.compute_plan()
-        level = self.level_values()
-        goal = self.fields["farm_goal"].get()
-        goals = {
-            "Projet complet": result["combined"],
-            "Niveaux visés": level["remaining"],
-            "Panier armes / achats": result["total"],
-            "Niveau maximum 713": level["to_max"],
-        }
-        needed = (
-            integer(self.fields["farm_custom_goal"].get(), "Objectif")
-            if goal == "Objectif libre"
-            else goals[goal]
-        )
-        args = (self.fields["farm_runes"].get(), self.fields["farm_seconds"].get())
-        options = {
-            "wallet": self.fields["wallet"].get(),
-            "efficiency": self.fields["farm_efficiency"].get(),
-        }
-        estimate = farm_estimate(*args, needed, **options)
-        maximum = farm_estimate(*args, level["to_max"], **options)
-        self.farm_result.set(
-            f"Rendement : {fmt(round(estimate['runes_per_minute']))} runes/min\n{goal} : {fmt(estimate['remaining'])} runes à récolter → {duration_label(estimate['seconds'])}\n"
-            f"Du niveau actuel au niveau 713 : {duration_label(maximum['seconds'])}"
-            + (
-                "\nSous-total connu seulement : des matériaux restent à chiffrer/obtenir."
-                if not result["complete"] and goal in ("Projet complet", "Panier armes / achats")
-                else ""
-            )
-        )
+    def tick_timer(self):
+        if self.deadline is None:
+            return
+        if time.monotonic()>=self.deadline:
+            self.deadline=None
+            self.timer_job=None
+            self.awaiting_result=True
+            self.data["farm"]["seconds"]=self.timer_duration
+            if self.page=="farm":
+                self.farm_vars["seconds"].set(str(self.timer_duration))
+            self.bell()
+        else:
+            self.timer_job=self.after(100,self.tick_timer)
+        self.update_timer_display()
 
-    def build_help(self):
-        p = self.pages["Données & aide"]
-        self.heading(
-            p,
-            "Des coûts traçables, un projet portable",
-            "Le fichier fourni reste intact. Voir aussi README.md et docs/SOURCES.md.",
-        )
-        frame = ttk.Frame(p)
-        frame.pack(fill="both", expand=True)
-        text = tk.Text(
-            frame,
-            wrap="word",
-            bg="#172321",
-            fg="#edf0eb",
-            font=("Segoe UI", 11),
-            relief="flat",
-            padx=20,
-            pady=18,
-        )
-        text.pack(side="left", fill="both", expand=True)
-        scroll = ttk.Scrollbar(frame, command=text.yview)
-        scroll.pack(side="right", fill="y")
-        text.configure(yscrollcommand=scroll.set)
-        text.insert(
-            "1.0",
-            f"AUTO ELDEN RING  {__version__}\n\n{len(self.db.weapons)} objets • {len(self.db.categories)} catégories • 712 passages de niveau\nRégulation déclarée : {self.db.metadata['regulation_version']}\n\n"
-            "UTILISATION\n1. Personnage : classe, niveau actuel/cible ou huit attributs permanents.\n2. Catalogue : noms anglais, sélection multiple, ajout au panier.\n"
-            "3. Panier : perles de mineur et stock de pierres. Double-clique une pierre pour son stock/prix.\n4. Farm : mesure un gain réel sur 60 s, puis estime le temps nécessaire.\n"
-            "5. Enregistre le projet JSON pour reprendre tes saisies, panier, inventaire et mesure. Exporte le bilan CSV.\n\n"
-            "PRIX ET MATÉRIAUX\nLe prix +0 → +1 est le paiement au forgeron, pas l'achat de l'arme.\nLes coûts d'amélioration sont ceux du JSON fourni, sans approximation par formule pour les armes connues.\n"
-            "Une arme normale demande 12 pierres de chaque palier [1–8] jusqu'à +24 ; une sombre une pierre de chaque palier [1–9] jusqu'à +9.\n"
-            "Les derniers passages +25 / +10 demandent une pierre de dragon ancienne normale/sombre, disponible en quantité limitée.\n"
-            "Les perles de mineur ne vendent pas ces pierres finales à l'infini. Leur prix reste inconnu sans stock ou source avec prix manuel.\n"
-            "Les perles sont supposées obtenues dans l'ordre. Un prix manuel suppose une source accessible, sans garantir sa disponibilité.\n"
-            "Le suivi passé des armes compte uniquement la forge depuis +0. Il ne permet pas de distinguer les pierres trouvées des pierres achetées.\n\n"
-            "NIVEAUX\nChaque attribut est plafonné à 99 et ne peut descendre sous celui de la classe. Une réattribution peut nécessiter une larme larvaire.\n"
-            "Le début du suivi est un niveau libre entre celui de la classe et le niveau actuel. Il sert au calcul des runes dépensées depuis ton propre point de départ.\n"
-            "Le niveau peut être saisi directement ; le bouton « Calculer depuis ces attributs » synchronise le niveau avec les statistiques.\n\n"
-            "PÉRIMÈTRE\nCette version calcule les runes, niveaux, améliorations, matériaux, budgets, achats libres et temps de farm.\n"
-            "Le JSON ne contient pas les dégâts, affinités, résistances, poids, sorts ou recettes : ces calculs ne sont pas implémentés.\n"
-            "Les noms sont en anglais. Certaines entrées des paramètres peuvent ne pas être accessibles dans ton édition. Le DLC est celui indiqué par le JSON.\n"
-            "Application indépendante, sans connexion ni lecture du jeu. Les sources ci-dessous sont celles déclarées dans le fichier fourni.\n\n"
-            + "\n".join(f"{k} : {v}" for k, v in self.db.metadata["sources"].items()),
-        )
-        text.configure(state="disabled")
+    def update_timer_display(self):
+        if self.page!="farm" or not hasattr(self,"timer_label"):
+            return
+        remaining=max(0,math.ceil(self.deadline-time.monotonic())) if self.deadline else (0 if self.awaiting_result else self.timer_duration)
+        self.timer_label.configure(text=f"{remaining//60:02d}:{remaining%60:02d}")
+        if self.full_index is not None:
+            self.test_label.configure(text=self.t("test_step",index=self.full_index+1,seconds=(60,60,180)[self.full_index]))
+        elif self.awaiting_result:
+            self.test_label.configure(text=self.t("test_finished"))
+        else:
+            self.test_label.configure(text="")
 
-    def project_data(self):
-        return {
-            "fields": {k: v.get() for k, v in self.fields.items()},
-            "items": self.items,
-            "extras": self.extras,
-            "inventory": self.inventory,
-            "prices": self.prices,
-        }
+    def record_result(self):
+        self.read_farm()
+        f=self.data["farm"]
+        if self.full_index is not None and not self.awaiting_result:
+            raise ValueError(self.t("test_finished"))
+        seconds=self.timer_duration if self.full_index is not None else f["seconds"]
+        buffs=self.timer_buffs if self.awaiting_result else (f["talisman"],f["consumable"])
+        self.planner.add_sample(f["runes"],seconds,*buffs,notes=f["notes"])
+        self.awaiting_result=False
+        if self.full_index is not None:
+            self.full_index+=1
+            if self.full_index==3:
+                self.full_index=None
+                self.timer_duration=60
+                messagebox.showinfo(self.t("full_test"),self.t("full_finished"),parent=self)
+            else:
+                self.timer_duration=(60,60,180)[self.full_index]
+        self.autosave()
+        self.show("farm")
 
-    def validate_fields(self, fields):
-        if set(fields) != set(self.fields):
-            raise ValueError("Liste de champs incompatible avec cette version.")
-        name = next((k for k, v in CLASSES_FR.items() if v == fields["class"]), None)
-        level_plan(
-            self.db, name, fields["level_current"], fields["level_target"], fields["level_origin"]
-        )
-        for prefix in ("stat_current_", "stat_target_"):
-            stats_level(name, {a: fields[prefix + a] for a in ATTRIBUTES})
-        bounds = {
-            "normal_bearings": (0, 4),
-            "somber_bearings": (0, 5),
-            "farm_efficiency": (1, 100),
-            "weapon_current": (0, 25),
-            "weapon_target": (0, 25),
-            "weapon_quantity": (1, 999),
-            "custom_current": (0, 25),
-            "custom_target": (0, 25),
-            "inverse_current": (0, 24),
-            "inverse_target": (1, 25),
-            "farm_seconds": (1, None),
-            "farm_runes": (1, None),
-            "custom_base": (1, None),
-            "inverse_cost": (1, None),
-            "wallet": (0, None),
-            "weapon_budget": (0, None),
-            "farm_custom_goal": (0, None),
-        }
-        for key, (low, high) in bounds.items():
-            integer(fields[key], key, low, high)
-        enums = {**ENUMS, "category": ["Toutes"] + list(self.db.categories.values())}
-        for key, values in enums.items():
-            if fields[key] not in values:
-                raise ValueError(f"Choix invalide : {key}")
+    def build_settings(self):
+        form=self.card(self.body)
+        form.pack(fill="x")
+        self.label(form,self.t("language")).grid(row=0,column=0,padx=18,pady=18,sticky="w")
+        self.language_var=tk.StringVar(value=LANGUAGE_NAMES[self.data["language"]])
+        ctk.CTkOptionMenu(form,variable=self.language_var,values=list(LANGUAGE_NAMES.values()),width=240).grid(row=0,column=1,padx=18,pady=18)
+        self.theme_option=self.option(form,"theme",tuple(PALETTES),self.data["theme"],lambda _:None,1)
+        self.button(form,"apply_settings",self.apply_settings).grid(row=2,column=0,padx=18,pady=18)
+        self.label(self.body,self.t("autosave_note"),muted=True,wraplength=900,justify="left").pack(anchor="w",pady=20)
+        for key,command in (("save_project",self.save),("open_project",self.load),("reset_session",self.reset_session)):
+            self.button(self.body,key,command,True).pack(anchor="w",pady=8)
+        self.label(self.body,self.t("help_body"),muted=True,wraplength=900,justify="left").pack(anchor="w",pady=24)
+        if self.startup_error:
+            self.label(self.body,self.startup_error,muted=True,wraplength=900).pack(anchor="w")
 
-    @guarded
+    def apply_settings(self):
+        self.data["language"]=next(k for k,v in LANGUAGE_NAMES.items() if v==self.language_var.get())
+        self.data["theme"]=next(k for k in PALETTES if self.t(k)==self.theme_option.get())
+        self.autosave()
+        self.build_shell()
+
     def save(self):
-        self.validate_fields({k: v.get() for k, v in self.fields.items()})
-        path = filedialog.asksaveasfilename(
-            parent=self,
-            defaultextension=".json",
-            initialfile="mon-build.auto-elden.json",
-            filetypes=[("Projet Auto Elden Ring", "*.json")],
-        )
+        path=filedialog.asksaveasfilename(parent=self,defaultextension=".json",filetypes=[("Auto Elden Ring project","*.json")])
         if path:
-            save_project(path, self.project_data(), self.db)
+            save_project(path,self.data,self.db)
 
-    def apply_project(self, data):
-        # Validation completes before replacing the active session.
-        self.validate_fields(data["fields"])
-        self.stop_timer()
-        self.items, self.extras = data["items"], data["extras"]
-        self.inventory, self.prices = data["inventory"], data["prices"]
-        for key, value in data["fields"].items():
-            self.fields[key].set(value)
-        for attr, label in self.base_labels.items():
-            label.configure(text=CLASS_DATA[self.class_name()]["stats"][attr])
-        self.refresh_catalogue()
-        self.calculate_levels()
-        self.update_plan()
-
-    @guarded
     def load(self):
-        path = filedialog.askopenfilename(
-            parent=self, filetypes=[("Projet Auto Elden Ring", "*.json")]
-        )
-        if path:
-            self.apply_project(load_project(path, self.db))
+        path=filedialog.askopenfilename(parent=self,filetypes=[("Auto Elden Ring project","*.json")])
+        if not path:
+            return
+        state=load_project(path,self.db)
+        window=self.popup(self.t("open_project"),"650x370")
+        self.label(window,self.t("resume_hint"),wraplength=600,justify="left").pack(padx=24,pady=20)
+        keep=tk.BooleanVar(value=True)
+        ctk.CTkCheckBox(window,text=self.t("keep_stats"),variable=keep).pack(anchor="w",padx=24,pady=12)
+        form=self.card(window)
+        form.pack(fill="x",padx=24)
+        wallet=self.entry(form,"runes_held",state["runes"],0)
+        def resume():
+            value=integer(wallet.get())
+            self.reset_timer()
+            self.planner=Planner(self.db,state)
+            self.planner.set_wallet(value)
+            self.page="weapons" if keep.get() else "character"
+            window.destroy()
+            self.autosave()
+            self.build_shell()
+            self.inventory_popup()
+        self.button(window,"done",resume).pack(pady=18)
 
-    def write_csv(self, path):
-        result = self.compute_plan()
+    def reset_session(self):
+        if messagebox.askyesno(self.t("reset_session"),self.t("confirm_reset"),parent=self):
+            self.reset_timer()
+            self.planner=Planner(self.db,default_state())
+            self.page="character"
+            self.autosave()
+            self.build_shell()
 
-        def safe_name(name):
-            return "'" + name if name.startswith(("=", "+", "-", "@")) else name
+    def close(self):
+        try:
+            if self.page=="character":
+                self.calculate_character()
+            elif self.page=="weapons":
+                self.read_weapons()
+            elif self.page=="farm":
+                self.read_farm()
+            self.autosave()
+        except (ValueError,OSError,tk.TclError):
+            pass
+        if self.timer_job:
+            self.after_cancel(self.timer_job)
+        self.destroy()
 
-        with open(path, "w", encoding="utf-8-sig", newline="") as stream:
-            writer = csv.writer(stream, delimiter=";")
-            writer.writerow(
-                ["Auto Elden Ring", __version__, self.db.metadata["regulation_version"]]
-            )
-            writer.writerow(["Approvisionnement complet", result["complete"]])
-            writer.writerow(["Niveaux", result["level_cost"]])
-            writer.writerow(
-                ["Arme", "Actuel", "Cible", "Quantité", "Forge restante", "Forge passée"]
-            )
-            for line in result["lines"]:
-                writer.writerow(
-                    [
-                        safe_name(line["name"]),
-                        line["current"],
-                        line["target"],
-                        line["quantity"],
-                        line["forge"],
-                        line["past_forge"],
-                    ]
-                )
-            writer.writerow(
-                ["Pierre", "Besoin", "Stock utilisé", "Manque", "Prix", "Coût connu", "À résoudre"]
-            )
-            for s in result["stones"]:
-                writer.writerow(
-                    [
-                        stone_label(s["key"]),
-                        s["required"],
-                        s["used"],
-                        s["missing"],
-                        s["unit"],
-                        s["cost"],
-                        s["unresolved"],
-                    ]
-                )
-            writer.writerow(["Achat libre", "Quantité", "Prix unitaire", "Total"])
-            for e in self.extras:
-                writer.writerow(
-                    [safe_name(e["name"]), e["quantity"], e["unit"], e["quantity"] * e["unit"]]
-                )
-            writer.writerow(["Total chiffré", result["combined"]])
-            writer.writerow(
-                ["À farmer", max(0, result["combined"] - integer(self.fields["wallet"].get()))]
-            )
-
-    @guarded
-    def export_csv(self):
-        path = filedialog.asksaveasfilename(
-            parent=self,
-            defaultextension=".csv",
-            initialfile="bilan-auto-elden.csv",
-            filetypes=[("CSV", "*.csv")],
-        )
-        if path:
-            self.write_csv(path)
+    def destroy(self):
+        # Tk callbacks registered by transient widgets must not outlive a root.
+        try:
+            for job in self.tk.splitlist(self.tk.call("after","info")):
+                self.after_cancel(job)
+        except tk.TclError:
+            pass
+        super().destroy()
 
 
 def run():
     App().mainloop()
+

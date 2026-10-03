@@ -1,29 +1,36 @@
-# Vérification Auto Elden Ring 1.0.1
+# Verification — 2.0.0
 
-Les statuts ci-dessous distinguent les tests de l'application et la validation dans le jeu. Le rapport de l'EXE et les empreintes sont associés à la release dans `releases/1.0.1/`.
+The builder runs 34 tests covering exact levels, all catalogue passages,
+inverse profiles, shared inventory, atomic persistence, purchase/upgrade
+transactions, budgets and buff-normalized weighted sample rates.
 
-| Vérification | Statut / portée |
-| --- | --- |
-| Tables de niveau | PASS : 712 passages, formule entière déclarée, limites 1/713 et total niveau 1 → 713 |
-| Classes | PASS : dix minima, huit attributs, limite 99 et niveau maximal |
-| Catalogue | PASS : chargement des 487 entrées et paiement de chaque passage de forge conservé |
-| Pierres | PASS : quantités, prix, partage du stock, perles, pierres de dragon distinctes |
-| Budgets et inverse | PASS : bornes exactes, observation sur un passage ou une plage, profil standard et prix particuliers du catalogue |
-| Farm | PASS : débit mesuré, arrondi supérieur du temps, runes en poche et rendement soutenu |
-| Interface Python | PASS : vrais widgets Tk, catalogue → panier → farm, attributs, inverse, projets et CSV |
-| Chronomètre | PASS : démarrage, arrêt, durée retenue et callback de fin ; le test automatisé force aussi l'échéance pour vérifier la fin sans attendre |
-| EXE empaqueté | Rapport `VERIFICATION_EXE.json` produit par le binaire lui-même, données incluses et version identique |
-| Dans le jeu | NOT TESTED : aucun passage de forge ou achat effectué dans Elden Ring pendant la vérification |
-| Données de régulation | Provenance déclarée par le JSON fourni ; extraction indépendante des 487 armes non exécutée |
-| GitHub | NOT TESTED : dépôt et publication réservés au propriétaire ; workflow fourni mais non exécuté sur GitHub |
-| Autres PC | NOT TESTED : pas de matrice de machines Windows ou d'installation Windows vierge |
+Real widgets exercise attributes, inverse input, catalogue rendering and every
+language/theme combination. The complete 60/60/180 workflow uses simulated
+deadlines with actual callbacks. This verifies timing logic, not a five-minute
+in-game farming session.
 
-Commandes reproductibles :
+The EXE self-check verifies embedded costs and catalogue counts.
+VERIFICATION_EXE.json records its result and database hash.
+VERIFICATION_UI.json records a separate packaged GUI/resource smoke check.
+Screenshots are captures of the actual application.
+RELEASE_MANIFEST.json and SHA256SUMS.txt establish artifact correspondence.
 
-```powershell
-py -3 -m unittest discover -s tests -v
-py -3 main.py --self-test
-.\Auto-Elden-Ring-1.0.1-win-x64.exe --self-test --report .\verification.json
-```
+## Limits
 
-Les tests de forge contrôlent l'utilisation des tables, pas leur exactitude historique contre une extraction indépendante. Les captures dans `docs/screenshots/` montrent l'interface exécutée sur cette machine. Le manifeste de release associe les hashes de toutes les sources incluses au binaire correspondant.
+- No gameplay automation or game-process integration.
+- No independent in-game validation of all regulation entries.
+- No native-speaker review of all localizations.
+- No assertion of unrestricted game-media redistribution rights.
+- Buff comparisons are projections affected by rounding and uptime.
+- Native title-bar colors depend on Windows DWM support.
+- Schema-1 projects require version 1; this release uses schema 2.
+
+## Reproduce
+
+~~~powershell
+python -m unittest discover -s tests -v
+python main.py --self-test --report verification.json
+python main.py --ui-smoke --report verification-ui.json
+~~~
+
+The same report switches work with the standalone executable.

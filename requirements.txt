@@ -1,0 +1,5 @@
+# Runtime dependencies; the Windows executable includes these libraries.
+customtkinter==5.2.2
+darkdetect==0.8.0
+packaging==26.3
+Pillow==12.1.0

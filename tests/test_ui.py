@@ -1,110 +1,96 @@
-"""Real Tk widgets exercised via their application callbacks (no game needed)."""
-
-import copy
-from pathlib import Path
-import tempfile
+"""Exercise real widgets, including timed multi-measurement workflows."""
 import time
 import unittest
 from unittest.mock import patch
-
 from auto_elden_ring.ui import App
-from auto_elden_ring.storage import save_project, load_project
 
 
 class Interface(unittest.TestCase):
     def setUp(self):
-        self.app = App()
+        self.app = App(persist=False)
         self.app.withdraw()
-        self.errors = []
-        self.patch = patch(
-            "auto_elden_ring.ui.messagebox.showerror",
-            side_effect=lambda *a, **kw: self.errors.append(a),
-        )
-        self.patch.start()
         self.app.update()
 
     def tearDown(self):
-        self.app.stop_timer()
+        if self.app.timer_job:
+            self.app.after_cancel(self.app.timer_job)
         self.app.destroy()
-        self.patch.stop()
 
-    def test_catalogue_to_basket_to_farm(self):
+    def test_attributes_compute_levels_and_wallet_route(self):
         a = self.app
-        self.assertEqual(len(a.catalogue.get_children()), 487)
-        a.catalogue.selection_set(("Dagger", "Black Knife"))
-        a.fields["weapon_target"].set(9)
-        a.add_weapons()
-        self.assertEqual(len(a.items), 2)
-        a.fields["farm_goal"].set("Panier armes / achats")
-        a.calculate_farm()
-        self.assertIn("runes à récolter", a.farm_result.get())
-        self.assertTrue(a.last_plan["complete"])
-        self.assertFalse(self.errors)
+        a.stat_vars["stats_target","vigor"].set("60")
+        a.wallet_var.set("1500")
+        a.calculate_character()
+        self.assertEqual(a.planner.character()["target"],54)
+        self.assertEqual(a.planner.character()["current"],9)
+        self.assertEqual(a.data["runes"],1500)
 
-    def test_stats_and_inverse_callbacks(self):
+    def test_manual_inverse_and_no_dragon_shortcut(self):
         a = self.app
-        a.fields["class"].set("Indigent")
-        a.reset_class()
-        a.fields["stat_target_vigor"].set(12)
-        a.calculate_stats()
-        self.assertEqual(a.fields["level_target"].get(), "3")
-        a.calculate_inverse()
-        self.assertEqual(a.fields["custom_base"].get(), "100")
-        a.add_custom()
-        self.assertEqual(len(a.items), 1)
-        self.assertFalse(self.errors)
+        a.show("weapons")
+        a.manual_vars["current"].set("9")
+        a.toggle_inverse()
+        self.assertEqual(a.data["manual"]["input_mode"],"next")
+        self.assertEqual(a.planner.manual_weapon().base,130)
+        a.max_without_dragon()
+        self.assertEqual(a.data["manual"]["target"],24)
 
-    def test_save_restore_and_csv(self):
+    def test_all_languages_and_themes_render_every_page(self):
         a = self.app
-        a.items = [{"name": "Dagger", "current": 0, "target": 25, "quantity": 2, "custom": False}]
-        a.inventory = {"normal:dragon": 2, "normal:1": 6}
-        a.extras = [{"name": "=unsafe formula", "quantity": 2, "unit": 600}]
-        a.fields["farm_notes"].set("Scarabée d'or, spot de test")
-        a.update_plan()
-        initial = a.last_plan["combined"]
-        with tempfile.TemporaryDirectory() as temp:
-            project = Path(temp) / "plan.json"
-            save_project(project, a.project_data(), a.db)
-            a.items = []
-            a.inventory = {}
-            a.apply_project(load_project(project, a.db))
-            self.assertEqual(a.last_plan["combined"], initial)
-            self.assertEqual(a.inventory["normal:dragon"], 2)
-            a.write_csv(Path(temp) / "plan.csv")
-            csv = (Path(temp) / "plan.csv").read_text(encoding="utf-8-sig")
-            self.assertIn("'=unsafe formula", csv)
-            self.assertIn("Total chiffré", csv)
-        self.assertFalse(self.errors)
+        for language in ("en","fr","cs","de","es","ja"):
+            a.data["language"]=language
+            for theme in ("calm","elden","slate"):
+                a.data["theme"]=theme
+                a.build_shell()
+                for page in ("character","weapons","stones","farm","settings"):
+                    a.show(page)
+                    a.update_idletasks()
 
-    def test_invalid_project_does_not_replace_session(self):
+    def test_gallery_card_toggles_selection(self):
         a = self.app
-        data = copy.deepcopy(a.project_data())
-        data["fields"]["wallet"] = "-10"
-        with self.assertRaises(ValueError):
-            a.apply_project(data)
-        self.assertEqual(a.fields["wallet"].get(), "0")
+        a.show("weapons")
+        a.catalogue()
+        a.update()
+        self.assertGreater(len(a.images),0)
+        def descendants(widget):
+            for child in widget.winfo_children():
+                yield child
+                yield from descendants(child)
+        tile=next(w for w in descendants(a) if getattr(w,"weapon_name",None)=="Dagger")
+        tile._canvas.event_generate("<Button-1>",x=20,y=20)
+        a.update()
+        self.assertEqual(a.data["selected"][0]["name"],"Dagger")
+        tile._canvas.event_generate("<Button-1>",x=20,y=20)
+        a.update()
+        self.assertEqual(a.data["selected"],[])
+        a.planner.toggle_weapon("Dagger")
+        a.planner.toggle_weapon("Black Knife")
+        a.show("weapons")
+        self.assertEqual(len(a.data["selected"]),2)
+        a.planner.toggle_weapon("Dagger")
+        self.assertEqual(a.data["selected"][0]["name"],"Black Knife")
 
-    def test_timer_stop_and_deadline(self):
+    def test_full_timer_sequence_records_weighted_five_minutes(self):
         a = self.app
-        a.start_timer()
-        self.assertIsNotNone(a.timer_job)
-        a.timer_started = time.monotonic() - 17
-        a.stop_timer()
-        self.assertEqual(a.fields["farm_seconds"].get(), "17")
-        a.start_timer()
-        a.after_cancel(a.timer_job)
-        a.deadline = time.monotonic() - 1
-        a.tick()
-        self.assertEqual(a.fields["farm_seconds"].get(), "60")
-        self.assertIsNone(a.timer_job)
-        self.assertEqual(a.timer_label.get(), "Test terminé")
+        a.show("farm")
+        a.start_full_test()
+        with patch("auto_elden_ring.ui.messagebox.showinfo"):
+            for index,runes in enumerate((1000,2000,9000)):
+                self.assertEqual(a.timer_duration,(60,60,180)[index])
+                a.after_cancel(a.timer_job)
+                a.timer_job=None
+                a.deadline=time.monotonic()-1
+                a.tick_timer()
+                a.farm_vars["runes"].set(str(runes))
+                a.record_result()
+                if index<2:
+                    a.start_timer()
+        self.assertEqual(a.planner.farm_rates()["seconds"],300)
+        self.assertEqual(a.planner.farm_rates()["measured"],2400)
+        self.assertIsNone(a.full_index)
+        a.reset_timer()
+        self.assertEqual(a.timer_label.cget("text"),"01:00")
 
-    def test_bad_inputs_show_validation(self):
-        a = self.app
-        a.fields["farm_runes"].set(0)
-        a.calculate_farm()
-        self.assertEqual(len(self.errors), 1)
 
-
-if __name__ == "__main__":
+if __name__=="__main__":
     unittest.main()

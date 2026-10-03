@@ -1,6 +1,8 @@
 name: Test and build Auto Elden Ring
 on:
   workflow_dispatch:
+  push:
+    tags: ['v*']
 permissions:
   contents: write
 jobs:
