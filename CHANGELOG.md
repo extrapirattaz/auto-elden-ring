@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.0.2 — 2026-10-03
+
+- Added an integrated Windows title bar with dragging, minimize/maximize/close
+  controls and native resizing, keeping the caption inside the selected theme.
+
 ## 2.0.1 — 2026-10-03
 
 - Preserved elapsed duration in the entry field when an ordinary farming test

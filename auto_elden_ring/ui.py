@@ -51,6 +51,7 @@ class App(ctk.CTk):
         self.minsize(1080, 730)
         self.title(f"Auto Elden Ring · {__version__}")
         self.protocol("WM_DELETE_WINDOW", self.close)
+        self.bind("<Map>",self.on_map,add="+")
         try:
             self.iconbitmap(str(resource_path("assets/app.ico")))
         except tk.TclError:
@@ -97,7 +98,10 @@ class App(ctk.CTk):
         self.configure(fg_color=self.bg)
         self.grid_columnconfigure(1, weight=1)
         self.grid_rowconfigure(0, weight=1)
+        self.grid_rowconfigure(1, weight=0)
+        self.chrome=None
         sidebar = ctk.CTkFrame(self, width=220, fg_color=self.paper, corner_radius=0)
+        self.sidebar=sidebar
         sidebar.grid(row=0, column=0, sticky="ns")
         sidebar.grid_propagate(False)
         self.label(sidebar, "AUTO\nELDEN RING", 24, justify="left").pack(anchor="w", padx=24, pady=(30, 8))
@@ -123,8 +127,55 @@ class App(ctk.CTk):
             for attribute, value in ((35, self.bg), (36, self.ink), (34, self.bg)):
                 packed = color(value)
                 ctypes.windll.dwmapi.DwmSetWindowAttribute(hwnd, attribute, ctypes.byref(packed), 4)
+            self.integrated_titlebar(hwnd)
         except (OSError, AttributeError):
             pass
+
+    def on_map(self,event):
+        if event.widget==self and hasattr(self,"bg"):
+            self.after(100,self.blend_titlebar)
+
+    def integrated_titlebar(self,hwnd):
+        """Keep native resizing/taskbar behavior while replacing the caption."""
+        user32=ctypes.windll.user32
+        user32.GetWindowLongW.argtypes=[ctypes.c_void_p,ctypes.c_int]
+        user32.SetWindowLongW.argtypes=[ctypes.c_void_p,ctypes.c_int,ctypes.c_long]
+        user32.SetWindowPos.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_int,ctypes.c_int,ctypes.c_int,ctypes.c_int,ctypes.c_uint]
+        style=user32.GetWindowLongW(hwnd,-16)
+        user32.SetWindowLongW(hwnd,-16,style & ~0x00C00000)
+        user32.SetWindowPos(hwnd,None,0,0,0,0,0x37)
+        if self.chrome is not None:
+            return
+        self.chrome=ctk.CTkFrame(self,fg_color=self.bg,corner_radius=0,height=32)
+        self.chrome.grid(row=0,column=0,columnspan=2,sticky="ew")
+        self.chrome.grid_propagate(False)
+        self.sidebar.grid_configure(row=1)
+        self.host.grid_configure(row=1)
+        self.grid_rowconfigure(0,weight=0)
+        self.grid_rowconfigure(1,weight=1)
+        title=self.label(self.chrome,f"Auto Elden Ring · {__version__}",12,True)
+        title.pack(side="left",padx=20)
+        for widget in (self.chrome,title):
+            widget.bind("<Button-1>",self.begin_drag)
+            widget.bind("<B1-Motion>",self.drag_window)
+            widget.bind("<Double-Button-1>",lambda _:self.toggle_maximize())
+        for symbol,command in (("×",self.close),("□",self.toggle_maximize),("−",self.iconify)):
+            ctk.CTkButton(self.chrome,text=symbol,width=44,height=26,corner_radius=7,
+                          fg_color=self.bg,hover_color=self.soft,text_color=self.ink,
+                          command=command).pack(side="right",padx=3,pady=3)
+
+    def begin_drag(self,event):
+        self.drag_origin=(event.x_root,event.y_root,self.winfo_x(),self.winfo_y())
+
+    def drag_window(self,event):
+        if self.state()=="zoomed":
+            self.state("normal")
+            self.begin_drag(event)
+        x,y,left,top=self.drag_origin
+        self.geometry(f"+{left+event.x_root-x}+{top+event.y_root-y}")
+
+    def toggle_maximize(self):
+        self.state("normal" if self.state()=="zoomed" else "zoomed")
 
     def show(self, page):
         self.page = page

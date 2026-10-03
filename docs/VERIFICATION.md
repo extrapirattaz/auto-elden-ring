@@ -1,4 +1,4 @@
-# Verification — 2.0.1
+# Verification — 2.0.2
 
 The builder runs 34 tests covering exact levels, all catalogue passages,
 inverse profiles, shared inventory, atomic persistence, purchase/upgrade
@@ -22,7 +22,7 @@ RELEASE_MANIFEST.json and SHA256SUMS.txt establish artifact correspondence.
 - No native-speaker review of all localizations.
 - No assertion of unrestricted game-media redistribution rights.
 - Buff comparisons are projections affected by rounding and uptime.
-- Native title-bar colors depend on Windows DWM support.
+- The Windows caption is integrated into the theme; native resizing is retained.
 - Schema-1 projects require version 1; this release uses schema 2.
 
 ## Reproduce

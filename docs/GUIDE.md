@@ -1,4 +1,4 @@
-# User guide — 2.0.1
+# User guide — 2.0.2
 
 ## Character
 
@@ -82,6 +82,9 @@ entered single measurement; recording enables sample averages again.
 ## Settings, save and resume
 
 Choose six languages and three themes. This release has no Windows XP imitation.
+The Windows title bar is integrated into the selected theme. Drag its empty
+area to move the window, double-click to maximize/restore, and use the right
+controls to minimize, maximize or close. Native resize borders remain available.
 Save build writes goals, current/target attributes, weapons, wallet, stock,
 overrides, farm samples, language and theme into a JSON project.
 

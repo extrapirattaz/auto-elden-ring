@@ -2,10 +2,17 @@
 from pathlib import Path
 import sys
 import time
+import ctypes
 ROOT=Path(__file__).resolve().parent.parent
 sys.path.insert(0,str(ROOT))
 from PIL import ImageGrab
 from auto_elden_ring.ui import App
+
+
+def capture(window,path):
+    ctypes.windll.user32.GetParent.restype=ctypes.c_void_p
+    hwnd=ctypes.windll.user32.GetParent(window.winfo_id())
+    ImageGrab.grab(window=hwnd).save(path)
 
 
 def main():
@@ -27,14 +34,14 @@ def main():
             time.sleep(.3)
             app.update()
             box=(app.winfo_rootx(),app.winfo_rooty(),app.winfo_rootx()+app.winfo_width(),app.winfo_rooty()+app.winfo_height())
-            ImageGrab.grab(bbox=box).save(directory/(page+".png"))
+            capture(app,directory/(page+".png"))
         app.data["theme"]="elden"
         app.data["language"]="fr"
         app.build_shell()
         app.show("weapons")
         app.update()
         time.sleep(.3)
-        ImageGrab.grab(bbox=box).save(directory/"elden-fr.png")
+        capture(app,directory/"elden-fr.png")
         app.catalogue()
         until=time.monotonic()+8
         while time.monotonic()<until:
@@ -46,7 +53,7 @@ def main():
         app.update()
         time.sleep(.4)
         box=(window.winfo_rootx(),window.winfo_rooty(),window.winfo_rootx()+window.winfo_width(),window.winfo_rooty()+window.winfo_height())
-        ImageGrab.grab(bbox=box).save(directory/"catalogue.png")
+        capture(window,directory/"catalogue.png")
     finally:
         app.destroy()
 
