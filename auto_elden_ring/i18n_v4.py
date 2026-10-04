@@ -59,4 +59,15 @@ rgb_hint|Animated RGB colors, with smooth transitions and no strobe flashes.|Cou
 import_unverified|Import reads your latest saved progress, not live game memory. Unrecognized inventory items are reported separately.|L’import lit ta dernière sauvegarde, pas la mémoire du jeu en direct. Les objets non reconnus sont indiqués séparément.|Import čte uložený stav, ne živou paměť hry. Neznámé předměty jsou uvedeny zvlášť.|Der Import liest den gespeicherten Stand, nicht den laufenden Speicher. Unbekannte Gegenstände werden separat angezeigt.|Se lee la última partida guardada, no la memoria en vivo. Los objetos desconocidos se indican aparte.|最新のセーブを読み込みます。リアルタイムのメモリーではありません。不明なアイテムは別途表示します。
 unknown_items|Unrecognized items: {count}|Objets non reconnus : {count}|Neznámé předměty: {count}|Unbekannte Gegenstände: {count}|Objetos no reconocidos: {count}|不明なアイテム: {count}
 changes|Changes since previous event|Changements depuis l’événement précédent|Změny od předchozí události|Änderungen seit dem letzten Ereignis|Cambios desde el evento anterior|前回のイベントからの変更
+back|Back|Retour|Zpět|Zurück|Volver|戻る
+custom_background|Choose Elden Ring background|Choisir le fond Elden Ring|Vybrat pozadí Elden Ring|Elden-Ring-Hintergrund wählen|Elegir fondo de Elden Ring|Elden Ringの背景を選択
+default_background|Restore default background|Rétablir le fond par défaut|Obnovit výchozí pozadí|Standardhintergrund wiederherstellen|Restaurar fondo predeterminado|標準の背景に戻す
+equipment|Equipment|Équipement|Vybavení|Ausrüstung|Equipo|装備
+armor|Armor|Armures|Zbroj|Rüstungen|Armaduras|防具
+items|Items|Objets|Předměty|Gegenstände|Objetos|アイテム
+equipped|Currently equipped|Équipement porté|Aktuálně vybaveno|Aktuell ausgerüstet|Equipo actual|現在の装備
+empty_equipment|No saved equipment data. Import a game save to read equipped items.|Aucun équipement enregistré. Importe une sauvegarde pour lire les objets équipés.|Žádná uložená výbava. Importujte uloženou hru.|Keine gespeicherte Ausrüstung. Importiere einen Spielstand.|Sin equipo guardado. Importa una partida.|装備データがありません。セーブを読み込んでください。
+unknown_item_id|Unresolved item · ID {id}|Objet non identifié · ID {id}|Neznámý předmět · ID {id}|Unbekannter Gegenstand · ID {id}|Objeto sin identificar · ID {id}|未識別アイテム · ID {id}
+bearings|Smithing bell bearings|Perles de mineur|Zvony horníků|Klangperlen der Schmiedesteinschürfer|Esferas de minero|鍛石掘りの鈴玉
+bearing_unknown|Not held. Delivery to the shop is not verified.|Non portée. Remise à la boutique non vérifiée.|Není v inventáři. Odevzdání obchodu není ověřeno.|Nicht im Inventar. Abgabe im Laden nicht geprüft.|No está en el inventario. Entrega a la tienda sin verificar.|所持品にはありません。店への納品状況は未確認です。
 """

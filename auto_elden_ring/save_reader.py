@@ -76,12 +76,18 @@ def read_slot(data,db,index):
     name=player[0x94:0xb4].decode("utf-16-le").split("\0",1)[0]
     if not name.strip():
         raise ValueError("Missing character name.")
-    take(13*16+88+28+88+88)
+    take(13*16+88+28)
+    equipped_ids=struct.unpack("<22I",take(88))
+    equipped_handles=struct.unpack("<22I",take(88))
     count=u32()
     if count>0xa80:
         raise ValueError("Invalid inventory count.")
     entries=[struct.unpack("<3I",take(12)) for _ in range(0xa80)]
-    take(4+0x180*12+8)  # Held key-item header, records and trailing counters.
+    key_count=u32()
+    if key_count>0x180:
+        raise ValueError("Invalid key inventory count.")
+    entries.extend(struct.unpack("<3I",take(12)) for _ in range(0x180))
+    take(8)  # Held inventory counters.
     take(116+140+24)  # Spells, quick items/pouch and gestures.
     projectiles=u32()
     if projectiles>200000:
@@ -93,6 +99,8 @@ def read_slot(data,db,index):
     entries.extend(struct.unpack("<3I",take(12)) for _ in range(0x780))
     ids={entry["id"]:name for category in db.raw["weapons_by_category"].values() for name,entry in category.items()}
     weapons=Counter()
+    armor=Counter()
+    items=Counter()
     stock={f"normal:{tier}":0 for tier in range(1,9)}
     stock.update({f"somber:{tier}":0 for tier in range(1,10)})
     goods={10100+t-1:f"normal:{t}" for t in range(1,9)}
@@ -121,11 +129,32 @@ def read_slot(data,db,index):
             if weapon_name and upgrade<=db.weapons[weapon_name].maximum:
                 weapons[weapon_name,upgrade]+=quantity
             else:
+                items[item]+=quantity
                 unknown+=1
-        elif category==0x40000000 and base in goods:
-            stock[goods[base]]+=quantity
+        elif category==0x10000000:
+            armor[item]+=quantity
+        elif category in (0x20000000,0x40000000,0x80000000):
+            items[item]+=quantity
+            if category==0x40000000 and base in goods:
+                stock[goods[base]]+=quantity
+    equipment=[]
+    # Skip unknown fields, ammo and Great Rune; retain six weapon, four armor
+    # and four talisman slots. Handles take precedence over the duplicate IDs.
+    for slot in (*range(6),*range(12,16),*range(17,21)):
+        item=handles.get(equipped_handles[slot],equipped_ids[slot])
+        if item in (0,0xffffffff):
+            continue
+        record={"slot":slot,"id":item,"quantity":1}
+        if item&0xf0000000==0:
+            base=item&0x0fffffff
+            weapon_name=ids.get(base-base%10000)
+            if weapon_name and base%100<=db.weapons[weapon_name].maximum:
+                record.update(name=weapon_name,current=base%100)
+        equipment.append(record)
     return {"slot":index,"name":name,"class_name":class_name,"level":level,"runes":runes,
-            "stats":stats,"stock":stock,"weapons":[{"name":name,"current":upgrade,"quantity":quantity}
+            "stats":stats,"stock":stock,"equipment":equipment,
+            "armor":[{"id":i,"quantity":q} for i,q in sorted(armor.items())],
+            "items":[{"id":i,"quantity":q} for i,q in sorted(items.items())],"weapons":[{"name":name,"current":upgrade,"quantity":quantity}
              for (name,upgrade),quantity in sorted(weapons.items())],"unknown_items":unknown}
 
 

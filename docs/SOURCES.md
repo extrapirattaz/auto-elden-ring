@@ -118,3 +118,19 @@ formats and modified/new layouts have no support guarantee.
 - Three original fantasy backgrounds were produced using the built-in image
   generation tool. They are inspirations, not extracted Elden Ring scenes.
   Exact prompts and saved paths: GENERATED_BACKGROUNDS.md.
+
+
+## Version 6 inventory data
+
+assets/item_catalogue.json records the pinned SaveForge commit, source URLs,
+source hashes, localized base-game strings and final icon hashes for non-weapon
+items. scripts/import_item_assets.py downloads maintenance data explicitly;
+the released application remains offline. Icons are 96-pixel WebP images,
+deduplicated by content hash. Weapon icons retain their existing manifest.
+
+Equipment slots and held key-item layout follow the pinned Hapfel parser's
+EquipmentSlots and Inventory structures, under the existing MIT attribution.
+Equipment omits ammo/unknown fields and retains weapon, armor and talisman slots.
+Bell bearings are identified by exact inventory goods ID; handed-in shop flags
+are not decoded. Unknown IDs and unsupported localized item strings remain
+explicitly unresolved or use English. No player save contents are bundled.

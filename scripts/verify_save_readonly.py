@@ -46,6 +46,9 @@ def main():
     assert unchanged
     result={"status":"PASS","characters":len(characters),
             "recognized_weapon_variants_per_character":[len(c["weapons"]) for c in characters],
+            "armor_variants_per_character":[len(c["armor"]) for c in characters],
+            "item_variants_per_character":[len(c["items"]) for c in characters],
+            "equipped_slots_per_character":[len(c["equipment"]) for c in characters],
             "unrecognized_items_per_character":[c["unknown_items"] for c in characters],
             "file_sha256_unchanged":True,"file_modification_time_unchanged":True,
             "second_import_added_events":0,"elapsed_seconds":round(time.perf_counter()-start,3),

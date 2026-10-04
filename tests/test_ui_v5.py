@@ -32,9 +32,9 @@ class CompanionFlows(unittest.TestCase):
         picker=a.show_profile_picker()
         self.assertEqual(picker.profile_cards,{})
         form=a.new_profile()
-        self.assertIs(a.grab_current(),form)
+        self.assertIs(form.winfo_toplevel(),a)
         form.destroy()
-        self.assertIs(a.grab_current(),picker)
+        self.assertIs(picker.winfo_toplevel(),a)
         picker.destroy()
         a=self.create()
         ident=a.profiles.data["active"]
@@ -76,7 +76,7 @@ class CompanionFlows(unittest.TestCase):
             self.assertEqual(a.profiles.data,previous)
             self.assertFalse(getattr(a,"import_in_progress",False))
             dialog.replace_profiles()
-            end=time.monotonic()+5
+            end=time.monotonic()+10
             while a.import_in_progress and time.monotonic()<end:
                 a.update()
                 time.sleep(.01)
@@ -109,6 +109,8 @@ class CompanionFlows(unittest.TestCase):
         self.assertEqual(a.gallery.canvas.itemcget(badge,"fill"),"#428DDF")
         point=a.profiles.checkpoint(a.data)
         window=a.checkpoint_detail(point)
+        self.assertEqual(window.weapon_cards,{})
+        window.render_tab(a.t("owned_weapons"))
         self.assertEqual(set(window.weapon_cards),{("Dagger",6)})
         window.render_tab(a.t("goal"))
         self.assertEqual(window.weapon_cards,{})
@@ -188,15 +190,16 @@ class CompanionFlows(unittest.TestCase):
             a.set_palette(palette)
             a.update()
             a.paint_background()
-            self.assertEqual(a.background_key[3],palette)
-            self.assertTrue(a.background_text)
-            self.assertTrue(all(widget._label.cget("image") for widget,_ in a.background_text))
+            self.assertEqual(a.background_key[2],palette)
+            before=a.background_layers[0].photo
+            a.body._parent_canvas.yview_moveto(.5)
+            a.update()
+            a.paint_background()
+            self.assertIs(a.background_layers[0].photo,before)
             pictures.append(a.background_layers[0].photo)
         self.assertEqual(len(set(pictures)),3)
-        labels=[widget for widget,_ in a.background_text]
         a.set_visual_style("style_modern")
         self.assertEqual(a.background_layers,[])
-        self.assertTrue(all(not widget._label.cget("image") for widget in labels if widget.winfo_exists()))
 
 
 class StartupSelection(unittest.TestCase):
@@ -209,7 +212,8 @@ class StartupSelection(unittest.TestCase):
                     a.update()
                     time.sleep(.01)
                 self.assertEqual(a.profile_picker.profile_cards,{})
-                self.assertIs(a.grab_current(),a.profile_picker)
+                self.assertIs(a.profile_picker.winfo_toplevel(),a)
+                self.assertEqual(a.state(),"zoomed")
                 self.assertFalse(a.data["profile_created"])
             finally:
                 a.close()

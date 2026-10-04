@@ -1,5 +1,22 @@
 # Changelog
 
+## 6.0.0 — 2026-10-04
+
+- Open maximized with character selection inside the main window.
+- Replace secondary application windows with owned navigation panels and Back actions.
+- Keep one native window for normal workflows; compact mode temporarily substitutes its borderless companion.
+- Replace floating dropdown windows with in-window lists dismissed on move, resize, navigation, outside click or focus loss.
+- Retain calculator widget identities during palette, style and language changes.
+- Remove per-label/per-scroll background compositing; use fixed artwork behind readable opaque panels.
+- Add a persistent custom PNG/JPEG/WebP background preference for Elden Ring style only.
+- Import armor, talismans, goods, held key items and equipped weapon/armor/talisman slots read-only.
+- Add equipped-only checkpoint overview plus separate Weapons, Armor, Items and Bell Bearings views.
+- Show larger offline item icons, counts, weapon upgrades, goals and inventory changes.
+- Keep handed-in bell bearing status explicitly unverified rather than guessing an absent inventory item means locked shops.
+- Preserve old profiles through schema migration; public archives contain no private profiles or saves.
+- Compress and deduplicate new icon assets; load only visible inventory pages with bounded image caches.
+- Add binary save fixtures and real-widget navigation, startup, menu, background and persistence regression checks.
+
 ## 5.0.0 — 2026-10-04
 
 - Added an explicit startup character chooser with an empty initial library.

@@ -22,7 +22,7 @@ from .styles import STYLES, PALETTES, RAINBOW, appearance
 from .gallery import Gallery
 from .profiles import Profiles, timestamp
 from .audio import Music
-from .windows import load_reading_font, caption_color, cancel_widget_jobs
+from .windows import load_reading_font, caption_color, cancel_widget_jobs, suspend_redraw
 
 
 class ManagedWindow(ctk.CTkToplevel):
@@ -50,6 +50,7 @@ def fmt(value):
 
 
 from .ui_v4 import Features
+from .panels import Panel
 
 
 class App(Features,ctk.CTk):
@@ -57,6 +58,9 @@ class App(Features,ctk.CTk):
 
     def __init__(self, db=None, persist=True, state=None):
         super().__init__()
+        if persist:
+            self.withdraw()
+        self.profile_selection_pending=False
         self.db=db or Database()
         self.persist=persist
         self._closing=False
@@ -103,10 +107,12 @@ class App(Features,ctk.CTk):
         except tk.TclError:
             pass
         self.build_shell()
+        if persist:
+            self.show_profile_picker(startup=True)
+            self.profile_picker.present()
+            self.state("zoomed")
         self.start_rgb()
         self.after_idle(self.blend_titlebar)
-        if persist:
-            self.after(150,lambda:self.show_profile_picker(startup=True))
 
     @property
     def data(self):
@@ -175,6 +181,7 @@ class App(Features,ctk.CTk):
         self.nav={}
         for key in ("character","weapons","stones","farm","journal","settings"):
             self.nav[key]=self.button(self.sidebar,key,lambda k=key:self.navigate(k),True,width=180)
+        self.equipment_button=self.button(self.sidebar,"equipment",self.equipment_view,True,width=180)
         self.version_label=self.label(self.sidebar,f"v{__version__} · {self.t('offline')}",12,True)
         self.side_art=self.label(self.sidebar,"")
         self.host=ctk.CTkFrame(self,fg_color=self.bg,corner_radius=0)
@@ -202,7 +209,7 @@ class App(Features,ctk.CTk):
             self.brand.pack(side="left",padx=12,pady=14)
             self.profile_button.pack(side="left",padx=4,pady=10)
             for button in self.nav.values():
-                button.configure(width=120,height=32)
+                button.configure(width=96,height=32)
                 button.pack(side="left",padx=3,pady=10)
         else:
             self.grid_rowconfigure(0,weight=1)
@@ -224,6 +231,8 @@ class App(Features,ctk.CTk):
                 button.configure(width=180,height=38)
                 button.pack(pady=5,padx=20)
             self.version_label.pack(side="bottom",pady=18)
+        self.equipment_button.configure(width=110 if self.data["style"]=="xp" else 180)
+        self.equipment_button.pack(side="left" if self.data["style"]=="xp" else "top",padx=12,pady=8)
         self.refresh_nav()
 
     def art_image(self,size):
@@ -300,6 +309,10 @@ class App(Features,ctk.CTk):
             self.draw_timeline()
         if page=="farm":
             self.update_timer_display()
+        if self.data["style"]=="elden":
+            self.body.pack_configure(padx=24,pady=18)
+        else:
+            self.body.pack_configure(padx=0,pady=0)
 
 
     def refresh_nav(self):
@@ -311,6 +324,12 @@ class App(Features,ctk.CTk):
                              text_color="#FFFFFF" if key==self.page else color if self.data["style"]=="rainbow" and not self.data["dyslexic"] else self.ink)
 
     def navigate(self,page):
+        if not self.data["profile_created"] or self.profile_selection_pending:
+            return self.show_profile_picker(startup=True)
+        self.dismiss_menu()
+        for panel in tuple(self.popups):
+            if isinstance(panel,Panel):
+                panel.destroy()
         self.commit_current()
         self.autosave()
         self.show(page)
@@ -675,6 +694,17 @@ class App(Features,ctk.CTk):
             self.weapon_time()
 
     def popup(self,title,size="960x740"):
+        self.dismiss_menu()
+        window=Panel(self,title)
+        self.popups.add(window)
+        def present():
+            if window.winfo_exists():
+                self.normalize_surfaces(window)
+                window.present()
+        window.after(0,present)
+        return window
+
+    def native_popup(self,title,size="960x740"):
         window=ManagedWindow(self)
         self.popups.add(window)
         window.title(title)
@@ -1129,6 +1159,11 @@ class App(Features,ctk.CTk):
         reading.grid(row=4,column=0,columnspan=2,padx=18,pady=(0,16),sticky="w")
         self.style_description=self.label(self.body,self.t("style_hint_"+self.data["style"]),muted=True,wraplength=880,justify="left")
         self.style_description.pack(anchor="w",pady=16)
+        self.background_actions=ctk.CTkFrame(self.body,fg_color="transparent")
+        self.button(self.background_actions,"custom_background",self.choose_background,True).pack(side="left",padx=6)
+        self.button(self.background_actions,"default_background",self.reset_background,True).pack(side="left",padx=6)
+        if self.data["style"]=="elden":
+            self.background_actions.pack(anchor="w",pady=10)
         audio=self.card(self.body)
         audio.pack(fill="x",pady=12)
         self.music_label=self.label(audio,self.data["music_file"] or self.t("no_music"),wraplength=820)
@@ -1160,6 +1195,9 @@ class App(Features,ctk.CTk):
 
     def set_visual_style(self,value):
         style=value.removeprefix("style_")
+        notice=getattr(self,"rgb_notice_panel",None)
+        if style!="rainbow" and notice is not None and notice.winfo_exists():
+            notice.destroy()
         entering_rgb=style=="rainbow" and self.data["style"]!="rainbow"
         self.data["style"]=style
         if self.data["theme"] not in STYLES[style]["themes"]:
@@ -1380,14 +1418,19 @@ class App(Features,ctk.CTk):
         self.activate_profile(self.profiles.select(ident))
 
     def activate_profile(self,state):
-        self.timeline_offset=0
-        self.reset_timer()
-        self.music.close()
-        for window in tuple(self.popups):
-            window.destroy()
-        self.planner=Planner(self.db,state)
-        self.replace_views()
-        self.autosave()
+        with suspend_redraw(self):
+            self.profile_selection_pending=False
+            self.timeline_offset=0
+            self.reset_timer()
+            self.music.close()
+            for window in tuple(self.popups):
+                window.destroy()
+            self.planner=Planner(self.db,state)
+            if getattr(self,"profile_sidebar_hidden",False):
+                self.profile_sidebar_hidden=False
+                self.layout_style()
+            self.replace_views()
+            self.autosave()
 
     def replace_views(self):
         for record in self.views.values():

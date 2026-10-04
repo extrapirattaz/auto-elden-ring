@@ -21,6 +21,12 @@ def differences(before,after):
     for key,value in after["stock"].items():
         if before["stock"].get(key,0)!=value:
             changes.append({"field":key,"before":before["stock"].get(key,0),"after":value})
+    for key in ("inventory_armor","inventory_items"):
+        old={i["id"]:i["quantity"] for i in before.get(key,[])}
+        new={i["id"]:i["quantity"] for i in after.get(key,[])}
+        for ident in sorted(set(old)|set(new)):
+            if old.get(ident,0)!=new.get(ident,0):
+                changes.append({"field":"item","id":ident,"before":old.get(ident,0),"after":new.get(ident,0)})
     return changes
 
 
@@ -59,7 +65,10 @@ def _apply_import(profiles,characters,preferences):
             changed=True
         state.update(character_name=character["name"],journey_name=character["name"],class_name=character["class_name"],
                      stats_current=deepcopy(character["stats"]),runes=character["runes"],stock=deepcopy(character["stock"]),
-                     inventory_weapons=deepcopy(character["weapons"]),purchased={},
+                     inventory_weapons=deepcopy(character["weapons"]),
+                     inventory_armor=deepcopy(character.get("armor",[])),
+                     inventory_items=deepcopy(character.get("items",[])),
+                     equipment=deepcopy(character.get("equipment",[])),purchased={},
                      save_link={"path":character["source"],"slot":character["slot"],"fingerprint":character["fingerprint"],
                                 "unknown_items":character["unknown_items"]})
         state["stats_target"]={k:max(v,state["stats_target"][k]) for k,v in state["stats_current"].items()}

@@ -2,13 +2,21 @@
 from copy import deepcopy
 from collections import OrderedDict
 import math
+import json
+from functools import lru_cache
 import time
 import tkinter as tk
 import customtkinter as ctk
 from PIL import Image
 from classes_data import ATTRIBUTES
 from .core import integer, resource_path
+from .profiles import timestamp
 from .windows import monitor_workarea, snap_position, position_window
+
+
+@lru_cache(maxsize=1)
+def item_catalogue():
+    return json.loads(resource_path("assets/item_catalogue.json").read_text(encoding="utf-8"))["items"]
 
 
 class JourneyFeatures:
@@ -20,6 +28,7 @@ class JourneyFeatures:
         if self._closing or self.data["style"]!="rainbow":
             return
         window=self.popup(self.t("rgb_beta"),"650x300")
+        self.rgb_notice_panel=window
         self.label(window,"RGB",30).pack(pady=(22,8))
         self.label(window,self.t("rgb_beta_hint"),16,wraplength=580,justify="left").pack(padx=24,pady=18)
         self.button(window,"done",window.destroy).pack(pady=12)
@@ -28,10 +37,20 @@ class JourneyFeatures:
     def show_profile_picker(self,startup=False):
         current=getattr(self,"profile_picker",None)
         if current is not None and current.winfo_exists():
-            current.destroy()
+            current.lift()
+            return current
+        self.commit_current()
+        self.profile_selection_pending=True
         self.profiles.sync(self.data)
         window=self.popup(self.t("choose_profile"),"820x650")
         self.profile_picker=window
+        if startup:
+            self.profile_sidebar_hidden=True
+            self.sidebar.grid_remove()
+            self.grid_columnconfigure(0,weight=1)
+            self.grid_columnconfigure(1,weight=0)
+            self.host.grid_configure(column=0,columnspan=2)
+            window.heading.pack_forget()
         self.label(window,self.t("choose_profile"),26).pack(pady=(24,8))
         self.label(window,self.t("profile_hint"),muted=True,wraplength=740).pack(pady=8)
         actions=ctk.CTkFrame(window,fg_color="transparent")
@@ -58,7 +77,11 @@ class JourneyFeatures:
             window.profile_cards[ident]=button
         if not window.profile_cards:
             self.label(scroll,self.t("empty_profiles"),muted=True,wraplength=650).pack(pady=35)
-        window.protocol("WM_DELETE_WINDOW",self.close if startup else window.destroy)
+        window.back.configure(state="disabled" if startup or not self.data["profile_created"] else "normal")
+        def back():
+            self.profile_selection_pending=False
+            window.destroy()
+        window.protocol("WM_DELETE_WINDOW",back)
         self.modal(window)
         self.normalize_surfaces(window)
         return window
@@ -95,31 +118,37 @@ class JourneyFeatures:
         option._local_menu_installed=True
         option._dropdown_menu.open=lambda *_:self.open_scroll_menu(option)
 
+    def dismiss_menu(self,event=None):
+        menu=getattr(self,"scroll_menu",None)
+        if menu is not None and menu.winfo_exists():
+            menu.destroy()
+        self.scroll_menu=None
+
     def open_scroll_menu(self,option):
-        previous=getattr(self,"scroll_menu",None)
-        if previous is not None and previous.winfo_exists():
-            previous.destroy()
-        window=self.popup("", "300x320")
+        self.dismiss_menu()
+        self.update_idletasks()
+        self.menu_geometry=(self.winfo_x(),self.winfo_y(),self.winfo_width(),self.winfo_height())
+        # A child frame cannot drift away from its native parent window.
+        window=ctk.CTkFrame(self,fg_color=self.paper,corner_radius=8,border_width=1,border_color=self.soft)
         self.scroll_menu=window
-        window.overrideredirect(True)
         values=option.cget("values")
         height=min(10,max(1,len(values)))*30+8
         width=max(260,option.winfo_width())
-        left,top,right,bottom=monitor_workarea(option)
-        x=min(max(left,option.winfo_rootx()),right-width)
-        y=option.winfo_rooty()+option.winfo_height()
-        if y+height>bottom:
-            y=max(top,option.winfo_rooty()-height)
-        window.geometry(f"{width}x{height}{x:+d}{y:+d}")
-        window.after(0,lambda:position_window(window,x,y))
+        x=max(0,min(option.winfo_rootx()-self.winfo_rootx(),self.winfo_width()-width))
+        y=option.winfo_rooty()-self.winfo_rooty()+option.winfo_height()
+        if y+height>self.winfo_height():
+            y=max(0,y-option.winfo_height()-height)
+        window.configure(width=width,height=height)
+        # Root-relative coordinates are already physical pixels at the current DPI.
+        tk.Place.place(window,x=x,y=y,width=width,height=height)
+        window.lift()
         box=tk.Listbox(window,background=self.paper,foreground=self.ink,
-            selectbackground=self.accent,selectforeground="#FFFFFF",
-            highlightthickness=1,highlightbackground=self.soft,bd=0,
+            selectbackground=self.accent,selectforeground="#FFFFFF",bd=0,highlightthickness=0,
             font=(self.font_family,15 if self.data["dyslexic"] else 13),activestyle="none",exportselection=False)
         bar=ctk.CTkScrollbar(window,command=box.yview,fg_color=self.paper,button_color=self.soft)
         box.configure(yscrollcommand=bar.set)
         bar.pack(side="right",fill="y")
-        box.pack(fill="both",expand=True,padx=3,pady=3)
+        box.pack(fill="both",expand=True,padx=5,pady=5)
         for value in values:
             box.insert("end",value)
         if option.get() in values:
@@ -129,22 +158,41 @@ class JourneyFeatures:
         def wheel(event):
             box.yview_scroll(-int(event.delta/120)*3,"units")
             return "break"
-        def select(_=None):
+        def select(event=None):
             choice=box.curselection()
-            if choice:
+            if choice and (event is None or event.type!=tk.EventType.ButtonRelease or box.bbox(choice[0]) is not None and box.bbox(choice[0])[1]<=event.y<=sum(box.bbox(choice[0])[1::2])):
                 value=values[choice[0]]
-                window.destroy()
-                option._dropdown_callback(value)
+                self.dismiss_menu()
+                if option.winfo_exists():
+                    option._dropdown_callback(value)
             return "break"
         box.bind("<MouseWheel>",wheel)
         box.bind("<ButtonRelease-1>",select)
         box.bind("<Return>",select)
-        window.bind("<Escape>",lambda _:window.destroy())
-        window.bind("<FocusOut>",lambda _:window.after(100,lambda:window.destroy() if window.winfo_exists() and not str(window.focus_get()).startswith(str(window)) else None))
+        box.bind("<Escape>",lambda _:self.dismiss_menu())
+        if not getattr(self,"_menu_bindings",False):
+            self._menu_bindings=True
+            def moved(event):
+                geometry=(self.winfo_x(),self.winfo_y(),self.winfo_width(),self.winfo_height())
+                if event.widget is self and geometry!=getattr(self,"menu_geometry",None):
+                    self.dismiss_menu()
+            def outside(event):
+                menu=getattr(self,"scroll_menu",None)
+                if menu is not None and not str(event.widget).startswith(str(menu)):
+                    self.dismiss_menu()
+            def focus_lost(event):
+                if self._closing:
+                    return
+                self.after(0,lambda:self.dismiss_menu() if self.focus_get() is None else None)
+            self.bind("<Configure>",moved,add="+")
+            self.bind("<ButtonPress-1>",outside,add="+")
+            self.bind("<MouseWheel>",outside,add="+")
+            self.bind("<FocusOut>",focus_lost,add="+")
+            self.bind("<Unmap>",lambda e:self.dismiss_menu() if e.widget is self else None,add="+")
         window.menu_list=box
         window.choose_value=select
         window.wheel=wheel
-        window.after(10,box.focus_set)
+        box.focus_set()
         return window
 
     def weapon_icon(self,name,size=52):
@@ -163,6 +211,34 @@ class JourneyFeatures:
         cache.move_to_end(key)
         return cache[key]
 
+    def item_name(self,ident):
+        item=item_catalogue().get(str(ident))
+        if item:
+            return item["names"].get(self.data["language"],item["name"])
+        return self.t("unknown_item_id",id=ident)
+
+    def item_icon(self,ident,size=84):
+        if not hasattr(self,"item_icons"):
+            self.item_icons=OrderedDict()
+        key=(ident,size)
+        if key not in self.item_icons:
+            item=item_catalogue().get(str(ident),{})
+            if not item.get("icon"):
+                return None
+            with Image.open(resource_path(item["icon"])) as source:
+                image=source.convert("RGBA")
+            self.item_icons[key]=ctk.CTkImage(image,size=(size,size))
+            while len(self.item_icons)>64:
+                self.item_icons.popitem(last=False)
+        self.item_icons.move_to_end(key)
+        return self.item_icons[key]
+
+    def equipment_view(self):
+        if not self.data["profile_created"] or self.profile_selection_pending:
+            return self.show_profile_picker(startup=True)
+        self.commit_current()
+        return self.checkpoint_cards({"state":deepcopy(self.data),"date":timestamp(),"note":"equipped"})
+
     def checkpoint_cards(self,point):
         from .ui_v4 import display_date
         state=point["state"]
@@ -173,14 +249,18 @@ class JourneyFeatures:
         body.pack(fill="both",expand=True,padx=22,pady=14)
         note=self.t(point["note"]) if point["note"] in self.translator.text else point["note"]
         self.label(body,note,18,wraplength=820).pack(anchor="w",pady=8)
-        summary=self.metrics(body,[(self.t("level"),str(sum(state["stats_current"].values())-79)),
-                                  (self.t("runes_held"),f'{state["runes"]:,}')])
+        self.metrics(body,[(self.t("level"),str(sum(state["stats_current"].values())-79)),
+                          (self.t("runes_held"),f'{state["runes"]:,}')])
         stats=self.card(body)
         stats.pack(fill="x",pady=8)
         for index,key in enumerate(ATTRIBUTES):
             self.label(stats,self.t(key)+"   "+str(state["stats_current"][key]),16).grid(
-                row=index//2,column=index%2,sticky="w",padx=20,pady=10)
-        tabs=ctk.CTkSegmentedButton(body,values=[self.t("owned_weapons"),self.t("changes"),self.t("goal")],font=self.font())
+                row=index//4,column=index%4,sticky="w",padx=20,pady=10)
+        held={i["id"]:i["quantity"] for i in state.get("inventory_items",[])}
+        bearings=[{"id":int(ident),"quantity":held.get(int(ident),0)} for ident,item in item_catalogue().items()
+                  if "Miner's Bell Bearing" in item["name"]]
+        keys=("equipped","owned_weapons","armor","items","bearings","changes","goal")
+        tabs=ctk.CTkSegmentedButton(body,values=[self.t(k) for k in keys],font=self.font())
         tabs.pack(fill="x",pady=14)
         content=ctk.CTkFrame(body,fg_color="transparent")
         content.pack(fill="x")
@@ -189,33 +269,53 @@ class JourneyFeatures:
             for child in content.winfo_children():
                 child.destroy()
             window.weapon_cards={}
-            if value==self.t("owned_weapons"):
-                items=state["inventory_weapons"][offset:offset+24]
+            inventory={self.t("equipped"):state.get("equipment",[]),
+                       self.t("owned_weapons"):state["inventory_weapons"],
+                       self.t("armor"):state.get("inventory_armor",[]),
+                       self.t("items"):state.get("inventory_items",[]),
+                       self.t("bearings"):bearings}
+            if value in inventory:
+                all_items=inventory[value]
+                items=all_items[offset:offset+24]
                 window.weapon_page_offset=offset
                 for index,item in enumerate(items):
                     card=self.card(content)
                     card.grid(row=index//2,column=index%2,sticky="ew",padx=5,pady=5)
-                    icon=self.weapon_icon(item["name"])
-                    label=self.label(card,"",image=icon)
-                    label.pack(side="left",padx=12,pady=12)
-                    label.snapshot_icon=icon
-                    self.label(card,self.translator.weapon(item["name"])+f'\n+{item["current"]}  ×{item["quantity"]}',
-                               14,wraplength=290,justify="left").pack(side="left",padx=8,pady=12)
-                    window.weapon_cards[(item["name"],item["current"])]=card
+                    icon=self.weapon_icon(item["name"],84) if "name" in item else self.item_icon(item["id"])
+                    if icon:
+                        label=self.label(card,"",image=icon)
+                        label.pack(side="left",padx=12,pady=12)
+                        label.snapshot_icon=icon
+                    name=self.translator.weapon(item["name"]) if "name" in item else self.item_name(item["id"])
+                    upgrade=f'+{item["current"]}  ' if "current" in item else ""
+                    quantity=f'×{item["quantity"]}' if item["quantity"] else "?"
+                    self.label(card,name+"\n"+upgrade+quantity,
+                               16,wraplength=340,justify="left").pack(side="left",padx=8,pady=20)
+                    if "name" in item:
+                        window.weapon_cards[(item["name"],item["current"])]=card
                 content.grid_columnconfigure((0,1),weight=1)
-                if len(state["inventory_weapons"])>24:
+                if value==self.t("bearings"):
+                    self.label(content,self.t("bearing_unknown"),13,True,wraplength=820).grid(row=5,column=0,columnspan=2,pady=14)
+                if not items:
+                    self.label(content,self.t("empty_equipment"),muted=True,wraplength=800).grid(row=0,column=0,columnspan=2,pady=30)
+                if len(all_items)>24:
                     navigation=ctk.CTkFrame(content,fg_color="transparent")
                     navigation.grid(row=12,column=0,columnspan=2,pady=12)
                     if offset:
                         self.button(navigation,"previous_page",lambda:render(value,max(0,offset-24)),True).pack(side="left",padx=6)
-                    if offset+24<len(state["inventory_weapons"]):
+                    if offset+24<len(all_items):
                         self.button(navigation,"next_page",lambda:render(value,offset+24),True).pack(side="left",padx=6)
             else:
                 if value==self.t("changes"):
                     lines=[]
                     for change in point.get("changes",[]):
                         field=change["field"]
-                        title=self.translator.weapon(change["name"])+f' +{change["upgrade"]}' if field=="weapon" else self.translator.stone(field) if ":" in field else self.t(field)
+                        if field=="weapon":
+                            title=self.translator.weapon(change["name"])+f' +{change["upgrade"]}'
+                        elif field=="item":
+                            title=self.item_name(change["id"])
+                        else:
+                            title=self.translator.stone(field) if ":" in field else self.t(field)
                         lines.append(f'{title}: {change["before"]} → {change["after"]}')
                 else:
                     lines=[self.t(k)+f': {state["stats_current"][k]} → {state["stats_target"][k]}' for k in ATTRIBUTES]
@@ -225,8 +325,9 @@ class JourneyFeatures:
                         lines.append(self.t("manual_mode")+f'  +{m["current"]} → +{m["target"]} ×{m["quantity"]}')
                 for line in lines:
                     self.label(content,line,15,wraplength=820,justify="left").pack(anchor="w",pady=6)
+            self.normalize_surfaces(content)
         tabs.configure(command=render)
-        tabs.set(self.t("owned_weapons"))
+        tabs.set(self.t("equipped"))
         render(tabs.get())
         window.detail_tabs=tabs
         window.render_tab=render
@@ -251,7 +352,7 @@ class JourneyFeatures:
             popup.destroy()
         if hasattr(self,"gallery"):
             self.gallery.cache.clear()
-        window=self.popup(self.t("small_mode"),"430x630")
+        window=self.native_popup(self.t("small_mode"),"430x630")
         self.compact_window=window
         window.transient("")
         window.overrideredirect(True)

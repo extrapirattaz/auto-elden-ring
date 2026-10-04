@@ -18,20 +18,20 @@
     "notes": "Same Windows host and Python environment; no Elden Ring process or minimum-spec PC tested."
   },
   "current": {
-    "version": "5.0.0",
-    "startup_seconds": 0.689,
+    "version": "6.0.0",
+    "startup_seconds": 0.847,
     "startup_memory": {
-      "working_mib": 47.88,
-      "private_mib": 28.48
+      "working_mib": 50.73,
+      "private_mib": 29.09
     },
-    "catalogue_seconds": 0.159,
+    "catalogue_seconds": 0.15,
     "catalogue_memory": {
-      "working_mib": 55.5,
-      "private_mib": 35.77
+      "working_mib": 57.89,
+      "private_mib": 36.1
     },
-    "visible_cards": 18,
-    "image_cache": 18,
-    "idle_cpu_seconds_per_3_seconds": 0.0469,
+    "visible_cards": 15,
+    "image_cache": 15,
+    "idle_cpu_seconds_per_3_seconds": 0.0312,
     "callback_errors": [],
     "notes": "Same Windows host and Python environment; no Elden Ring process or minimum-spec PC tested."
   },
@@ -123,6 +123,51 @@
       "memory": {
         "working_mib": 57.86,
         "private_mib": 36.33
+      },
+      "cached_pages": 1
+    },
+    "callback_errors": []
+  },
+  "previous_5": {
+    "version": "5.0.0",
+    "startup_seconds": 0.689,
+    "startup_memory": {
+      "working_mib": 47.88,
+      "private_mib": 28.48
+    },
+    "catalogue_seconds": 0.159,
+    "catalogue_memory": {
+      "working_mib": 55.5,
+      "private_mib": 35.77
+    },
+    "visible_cards": 18,
+    "image_cache": 18,
+    "idle_cpu_seconds_per_3_seconds": 0.0469,
+    "callback_errors": [],
+    "notes": "Same Windows host and Python environment; no Elden Ring process or minimum-spec PC tested."
+  },
+  "presentation_modes_6": {
+    "all_pages_modern": {
+      "cpu_seconds_per_3_seconds": 0.0156,
+      "memory": {
+        "working_mib": 56.05,
+        "private_mib": 34.39
+      },
+      "cached_pages": 6
+    },
+    "animated_rgb": {
+      "cpu_seconds_per_3_seconds": 0.2188,
+      "memory": {
+        "working_mib": 57.4,
+        "private_mib": 35.57
+      },
+      "cached_pages": 6
+    },
+    "compact_rgb_paused": {
+      "cpu_seconds_per_3_seconds": 0.0625,
+      "memory": {
+        "working_mib": 58.57,
+        "private_mib": 37.46
       },
       "cached_pages": 1
     },

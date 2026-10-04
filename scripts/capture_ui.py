@@ -3,6 +3,8 @@ from pathlib import Path
 import sys
 import time
 import ctypes
+import tempfile
+from unittest.mock import patch
 ROOT=Path(__file__).resolve().parent.parent
 sys.path.insert(0,str(ROOT))
 from PIL import ImageGrab
@@ -18,6 +20,13 @@ def capture(window,path):
 def main():
     directory=ROOT/"docs/screenshots"
     directory.mkdir(parents=True,exist_ok=True)
+    with tempfile.TemporaryDirectory() as temporary,patch.dict("os.environ",{"LOCALAPPDATA":temporary}):
+        startup=App(persist=True)
+        try:
+            startup.update()
+            capture(startup,directory/"startup.png")
+        finally:
+            startup.close()
     app=App(persist=False)
     app.geometry("1280x860+30+30")
     app.attributes("-topmost",True)
@@ -28,6 +37,9 @@ def main():
     app.data["farm"]["runes"]=50000
     app.planner.toggle_weapon("Dagger")
     app.planner.toggle_weapon("Black Knife")
+    app.data["equipment"]=[{"id":1000006,"slot":1,"quantity":1,"name":"Dagger","current":6}]
+    app.data["inventory_armor"]=[{"id":0x100249f0,"quantity":1}]
+    app.data["inventory_items"]=[{"id":1073750775,"quantity":1}]
     app.data["inventory_weapons"]=[{"name":"Dagger","current":6,"quantity":1},{"name":"Black Knife","current":4,"quantity":1}]
     app.profiles.checkpoint(app.data,"Starting journey","2026-10-03T12:00:00+02:00")
     app.data["stats_current"]["vigor"]=25
@@ -56,24 +68,29 @@ def main():
         while time.monotonic()<until:
             app.update()
             time.sleep(.02)
-        window=next(w for w in app.winfo_children() if w.winfo_class()=="Toplevel")
-        window.attributes("-topmost",True)
+        window=app.gallery_window
         window.lift()
         app.update()
         time.sleep(.4)
         box=(window.winfo_rootx(),window.winfo_rooty(),window.winfo_rootx()+window.winfo_width(),window.winfo_rooty()+window.winfo_height())
-        capture(window,directory/"catalogue.png")
+        capture(app,directory/"catalogue.png")
         window.destroy()
         details=app.checkpoint_detail(app.profiles.active["checkpoints"][-1])
         app.update()
         time.sleep(.2)
-        capture(details,directory/"checkpoint.png")
+        capture(app,directory/"checkpoint.png")
+        details.render_tab(app.t("armor"))
+        app.update()
+        capture(app,directory/"equipment-armor.png")
+        details.render_tab(app.t("items"))
+        app.update()
+        capture(app,directory/"equipment-items.png")
         details.destroy()
         picker=app.show_profile_picker()
         app.update()
         time.sleep(.2)
-        capture(picker,directory/"profiles.png")
-        picker.destroy()
+        capture(app,directory/"profiles.png")
+        picker.back.invoke()
         for palette in ("moon","ember"):
             app.set_palette(palette)
             app.update()
@@ -87,6 +104,9 @@ def main():
             time.sleep(.2)
             app.update()
             capture(app,directory/("style-"+style+".png"))
+        notice=getattr(app,"rgb_notice_panel",None)
+        if notice is not None and notice.winfo_exists():
+            notice.destroy()
         app.data["dyslexic"]=True
         app.apply_appearance()
         app.update()

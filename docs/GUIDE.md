@@ -1,12 +1,16 @@
-# User guide â€” 5.0.0
+# User guide â€” 6.0.0
 
 ## Start with a character
+
+The main window opens maximized. Choose New Character, Import Save Game or an
+existing character. Change Character returns to this chooser inside the main
+window; Back returns from nested views.
 
 Open Journal, then New character. Enter the character's in-game name and original
 starting class. There is one name for both the character and its journey.
 The starting class cannot be changed later. No sample character or timeline
 event is added automatically. Click a character card to open its timeline.
-Manual calculators also work before creating a profile.
+Choose a character before entering the calculators.
 
 Add event offers two paths:
 
@@ -26,8 +30,8 @@ alter an older snapshot. Show older/newer events pages through histories in grou
 Use Import game save in Journal or Settings. The installed executable and the
 save are stored separately: typical PC saves are in
 %APPDATA%/EldenRing/account-folder/ER0000.sl2. Selecting the installation folder
-checks for saves there, then the roaming directory. If several exist, select
-the intended .sl2/.co2 file explicitly.
+checks for saves there, then the roaming directory. All detected supported characters are imported. You can also select an intended
+.sl2/.co2 file explicitly.
 
 The app reads the latest saved state in a background worker. It never modifies
 the game file, attaches to a game process, repairs a checksum or injects input.
@@ -40,8 +44,18 @@ Names, original classes, permanent stats, levels, held runes, owned catalogue
 weapons/upgrades and ordinary smithing stones are imported. Weapons and stones
 include inventory and storage; withdraw stored items when needed in the game.
 Ancient dragon stones retain question marks in the ordinary purchase planner.
-Armor, talismans, ammunition, consumables and other items are not a complete item
-encyclopedia here. Entries the weapon catalogue cannot resolve are counted.
+Equipment in the sidebar opens the current profile summary. Checkpoint details
+open the corresponding immutable snapshot in that same main window. The default
+Equipped tab shows equipment slots, not every acquired or upgraded weapon.
+Weapons, Armor and Items show inventory plus storage counts; weapon copies are
+grouped by upgrade. At most 24 cards are rendered per page, with 84-pixel icons.
+Unknown item IDs remain visible. Some DLC and Czech item names currently fall
+back to English; all six interface languages and weapon name tables remain.
+
+Bell Bearings shows smithing/somber miner bearings held in the inventory.
+A question mark means not held: it does not prove the bearing was never given
+to Twin Maiden Husks. Shop delivery flags are not parsed. Character portrait
+rendering is not supported; the profile uses an initial avatar.
 
 Choose the intended character card. Refresh from save keeps that selected slot,
 updates current values, preserves higher goals and named farm spots, and adds a
@@ -176,8 +190,8 @@ counts. Selection checks identify weapons chosen for your goal. Not in saved
 inventory refers to this supported catalogue and the latest imported/manual
 snapshot. The catalogue does not inspect live game memory.
 
-Checkpoint details display attribute cards and Acquired Weapons / Changes / Goal
-tabs. Weapon cards include their bundled icons, upgrades and copies. Large
+Checkpoint details display attribute cards and Equipped / Weapons / Armor /
+Items / Bell Bearings / Changes / Goal tabs. Weapon cards include their bundled icons, upgrades and copies. Large
 inventories are paginated at 24 cards to keep memory and native widgets bounded.
 
 ## Compact tools and music
@@ -208,3 +222,24 @@ RGB keeps backgrounds fixed and animates cached native text with a three-second
 hue cycle, at most 15 updates/s. Its styled beta notice explains the playful troll
 mode. It is optional and contains no strobe flashes. All dropdown menus capture
 wheel input inside their list rather than scrolling the parent page.
+
+
+## Window behavior and personal backgrounds
+
+Forms, imports, weapon selection and snapshot details are owned panels inside
+the main window. Back closes the current panel. Selecting a calculator closes
+transient panels. The native operating-system file chooser is used only when
+selecting a file or directory. Compact mode hides the main window and presents
+its single small companion.
+
+Dropdowns are child controls, never independent desktop windows. Scrolling a
+list leaves the calculator scroll position unchanged. Moving/resizing the main
+window, navigating away, clicking outside, Escape or switching applications
+closes a list without changing its selection. Only a click or Enter commits.
+
+Elden Ring Settings offers Choose Background and Restore Default. PNG, JPEG
+and WebP are supported. The chosen path is stored per character; if the file
+is missing later, generated theme artwork is used. Personal files are not copied
+into release artifacts. Content panels have opaque palette backgrounds to avoid
+Tk transparency artifacts during scrolling. Artwork is updated for resizing or
+palette/background changes, never for scrolling.

@@ -28,6 +28,8 @@ def self_check():
     from .i18n import Translator
     from .core import resource_path
     checks["six complete name tables"]=all(len(Translator(locale).names[locale])==487 for locale in ("en","fr","cs","de","es","ja"))
+    items=json.loads(resource_path("assets/item_catalogue.json").read_text(encoding="utf-8"))["items"]
+    checks["offline inventory names and icons"]=len(items)>=2950 and all(resource_path(i["icon"]).is_file() for i in items.values())
     checks["487 bundled icons"]=len(list(resource_path("assets/catalogue").glob("*.webp")))==487
     checks["bundled reading font"]=resource_path("assets/fonts/OpenDyslexic-Regular.otf").is_file()
     checks["bundled landscape"]=resource_path("assets/elden-landscape.webp").is_file()

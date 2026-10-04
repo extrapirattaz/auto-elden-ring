@@ -5,9 +5,9 @@ rune farming and character timelines. Written in Python with a standalone x64 EX
 
 ![Character planner](docs/screenshots/character.png)
 
-## Run version 5.0.0
+## Run version 6.0.0
 
-- Without Python: run Auto-Elden-Ring-5.0.0-win-x64.exe from the Windows ZIP.
+- Without Python: run Auto-Elden-Ring-6.0.0-win-x64.exe from the Windows ZIP.
   Images, translations, fonts and cost tables are included.
 - From source: install Python 3.14 x64 and run START_AUTO_ELDEN_RING.bat, or install
   requirements.txt with pip and run main.py. First-time dependency installation
@@ -16,11 +16,18 @@ rune farming and character timelines. Written in Python with a standalone x64 EX
 English is the default language. French, Czech, German, Spanish and Japanese
 are available in Settings. Modern, Elden Ring and RGB have three palettes;
 Windows XP has one classic blue/grey palette with square controls.
-Elden Ring artwork fills the background. RGB colors animate continuously with
+Elden Ring uses fixed background artwork and readable opaque content panels.
+Choose your own PNG/JPEG/WebP screenshot in Settings while this style is active;
+the image remains on your computer and is never included in shared releases. RGB colors animate continuously with
 smooth transitions, without strobe flashes. Optional reading mode uses bundled
 OpenDyslexic, larger text and a cream palette. Local MP3/WAV/FLAC/OGG playback is optional.
 
 ## Your characters and progress
+
+The application opens maximized with an in-window character chooser. A fresh
+installation contains no demo profiles. New characters remain saved locally on
+future launches. Forms, imports, the catalogue, equipment and checkpoint details
+use the same main window, with Back navigation.
 
 The journal starts empty. Create a character using its in-game name and original
 class, or import a PC save. Character cards open individual timelines.
@@ -32,8 +39,13 @@ Confirming weapon upgrades automatically records a timeline event.
 Import game save reads checksum-valid PC .sl2/.co2 files without modifying them.
 Choose the installation folder to locate the roaming save, or select the file
 directly. Imported names, starting classes, attributes, levels, held runes,
-catalogue weapons/upgrades and ordinary stones populate each profile.
-Inventory and storage are read; items outside the supported catalogue are reported.
+catalogue weapons/upgrades, armor, talismans, goods, key items and ordinary stones
+populate each profile. Equipment displays the six weapon, four armor and four
+talisman slots separately from all acquired weapons.
+Inventory and storage counts are combined. Non-weapon item metadata and small
+icons are bundled offline. Unresolved IDs remain visible; some new item names
+fall back to English. Smithing bell bearings held in inventory are shown, while
+delivery to the shop remains unverified.
 Refresh from save records changes without duplicating unchanged snapshots.
 The reader uses saved progress rather than live game memory.
 
@@ -85,9 +97,9 @@ See the [guide](docs/GUIDE.md), [verification](docs/VERIFICATION.md) and
 Run BUILD_RELEASE.ps1 on Windows x64. The builder tests real widgets/calculations,
 builds the EXE, checks embedded resources and produces:
 
-- auto-elden-ring-5.0.0-source.zip: architecture-independent Python source.
-- auto-elden-ring-5.0.0-windows-x64.zip: standalone Windows x64 package.
-- Auto-Elden-Ring-5.0.0-win-x64.exe: executable for release downloads.
+- auto-elden-ring-6.0.0-source.zip: architecture-independent Python source.
+- auto-elden-ring-6.0.0-windows-x64.zip: standalone Windows x64 package.
+- Auto-Elden-Ring-6.0.0-win-x64.exe: executable for release downloads.
 - RELEASE_MANIFEST.json and SHA256SUMS.txt: artifact/source correspondence.
 
 Each version lives in releases/version; existing versions are never overwritten.

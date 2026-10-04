@@ -1,6 +1,6 @@
-# Verification â€” 5.0.0
+# Verification â€” 6.0.0
 
-The release builder runs 73 tests covering exact rune costs, every supplied
+The release builder runs 79 tests covering exact rune costs, every supplied
 catalogue passage, inverse math, shared stock, budgets, atomic storage, migrations,
 weighted farming and real Tk workflows.
 
@@ -56,7 +56,7 @@ Measurements do not include one-file extraction or antivirus scanning.
 Native caption/resize/close handling is retained. CustomTkinter's disruptive
 withdraw/update/reveal caption sequence remains disabled. Theme/language/reading
 updates suspend native repaint, mutate retained controls, then repaint children.
-Native inner scroll-frame backgrounds now follow semantic colors as well. Artwork is reused during window movement, remains aligned to the scroll viewport and is replaced only after new image layers are ready.
+Native inner scroll-frame backgrounds now follow semantic colors as well. Artwork is reused during window movement. Version 6 removes scroll-dependent layers entirely; opaque panels scroll over fixed decorative artwork.
 These checks do not prove the absence of compositor artifacts on every GPU.
 
 Six generated silence fixtures exercise WAV PCM16, WAV float32, MP3 constant/variable bitrate with metadata, FLAC and OGG. Tests verify decoder loading, pause/resume without rewind, Unicode paths, resource release and recovery after an invalid stream. The packaged EXE repeats decoding with SDL's dummy device and reports VERIFICATION_AUDIO.json. Silence/device-state checks do not prove audible output or compatibility with every malformed/music file.
@@ -104,3 +104,30 @@ Normal app screenshots use synthetic Demo Tarnished data only. Generated
 background sources/prompts are documented in GENERATED_BACKGROUNDS.md. The
 window background and transparent labels/containers share crops from the same
 scene, with a fixed readability tint; cards remain opaque by design.
+
+
+## Version 6 window and inventory regression coverage
+
+Real widgets verify a single maximized startup window, empty fresh profiles,
+future profile persistence, nested Back navigation, in-window catalogue/details,
+menu dismissal on movement/navigation without selecting a value, and stable
+native window identity. Background images retain the same PhotoImage through
+repeated scroll operations. A chosen personal PNG path survives persistence.
+
+An additional checksum-valid binary fixture contains armor instances, held key
+items and equipped weapon/armor IDs. The reader preserves their IDs, quantities,
+weapon upgrade, profile state and immutable checkpoint data without file writes.
+Checkpoint overview shows equipped weapons rather than every acquired weapon;
+separate inventory tabs render icons with bounded caches. Local save validation
+checks anonymous counts only; gameplay-side accuracy of every inventory icon,
+equipment slot and shop-unlock flag is not claimed.
+
+
+Version 6 measurements on the same host: source startup 0.847 s, first catalogue
+paint 0.150 s, catalogue working/private memory 57.89 / 36.10 MiB, and 0.0312 CPU
+seconds in a three-second catalogue idle sample. Six cached modern pages used
+0.0156 CPU seconds in three seconds; RGB used 0.2188 and compact RGB-paused used
+0.0625. New inventory assets contain 2,950 metadata entries and 1,915 shared
+96-pixel WebP icons totaling 7,251,220 bytes. Icons are paginated and decoded
+lazily, rather than loaded wholesale at startup. These are individual samples,
+not a statistical performance guarantee.

@@ -20,7 +20,7 @@ def default_state():
     stats = deepcopy(CLASS_DATA["Vagabond"]["stats"])
     return {"language":"en","theme":"calm","style":"modern","dyslexic":False,
             "character_name":"Tarnished","journey_name":"Journey 1","music_file":"",
-            "profile_created":False,"save_link":{},"inventory_weapons":[],"farm_spots":[],
+            "custom_background":"","inventory_armor":[],"inventory_items":[],"equipment":[],"profile_created":False,"save_link":{},"inventory_weapons":[],"farm_spots":[],
             "purchased":{},"class_name":"Vagabond",
             "stats_current":deepcopy(stats),"stats_target":deepcopy(stats),"runes":0,
             "wallet_baseline":None,"runes_spent":0,"weapon_mode":"manual",
@@ -47,7 +47,7 @@ def validate_state(state,db):
         raise ValueError("The selected color palette does not belong to this style.")
     if not isinstance(state["dyslexic"],bool):
         raise ValueError("Invalid reading preference.")
-    for key in ("character_name","journey_name","music_file"):
+    for key in ("character_name","journey_name","music_file","custom_background"):
         if not isinstance(state[key],str) or len(state[key])>4096:
             raise ValueError("Invalid profile text.")
     if not isinstance(state["profile_created"],bool) or not isinstance(state["save_link"],dict):
@@ -58,6 +58,16 @@ def validate_state(state,db):
         weapon=db.weapons[item["name"]]
         integer(item["current"],"Owned upgrade",0,weapon.maximum)
         integer(item["quantity"],"Owned copies",1)
+    for key in ("inventory_armor","inventory_items","equipment"):
+        if not isinstance(state[key],list) or len(state[key])>4608:
+            raise ValueError("Invalid inventory records.")
+        for item in state[key]:
+            integer(item["id"],"Item ID",1,0xffffffff)
+            integer(item["quantity"],"Item quantity",1,999999)
+            if key=="equipment":
+                integer(item["slot"],"Equipment slot",0,21)
+                if "name" in item:
+                    integer(item["current"],"Equipped upgrade",0,db.weapons[item["name"]].maximum)
     if not isinstance(state["farm_spots"],list) or len(state["farm_spots"])>100:
         raise ValueError("Invalid farming spots.")
     for spot in state["farm_spots"]:

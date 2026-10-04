@@ -10,6 +10,14 @@ _fonts_loaded=False
 @contextmanager
 def suspend_redraw(window):
     """Batch presentation changes without hiding or recreating the window."""
+    depth=getattr(window,"_redraw_depth",0)
+    if depth:
+        window._redraw_depth=depth+1
+        try:
+            yield
+        finally:
+            window._redraw_depth=depth
+        return
     if os.name!="nt" or not window.winfo_viewable():
         yield
         return
@@ -18,11 +26,13 @@ def suspend_redraw(window):
     user.GetParent.restype=ctypes.c_void_p
     hwnd=user.GetParent(window.winfo_id())
     user.SendMessageW.argtypes=[ctypes.c_void_p,ctypes.c_uint,ctypes.c_size_t,ctypes.c_ssize_t]
+    window._redraw_depth=1
     user.SendMessageW(hwnd,0xB,0,0)
     try:
         yield
         window.update_idletasks()
     finally:
+        window._redraw_depth=0
         user.SendMessageW(hwnd,0xB,1,0)
         user.RedrawWindow.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_uint]
         user.RedrawWindow(hwnd,None,None,0x185)

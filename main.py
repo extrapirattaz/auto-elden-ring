@@ -82,6 +82,8 @@ def main():
             app.data["inventory_weapons"]=[{"name":"Dagger","current":6,"quantity":1}]
             point=app.profiles.checkpoint(app.data)
             detail=app.checkpoint_detail(point)
+            checks["details inside main window"]=detail.winfo_toplevel() is app
+            detail.render_tab(app.t("owned_weapons"))
             checks["checkpoint weapon icons"]=("Dagger",6) in detail.weapon_cards
             detail.destroy()
             app.compact_mode()

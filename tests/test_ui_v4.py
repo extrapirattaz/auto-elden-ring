@@ -197,5 +197,6 @@ class ProgressInterface(unittest.TestCase):
         body=a.views["stones"]["body"]
         body._parent_canvas.yview_moveto(.4)
         a.update()
-        self.assertEqual(int(body._background_layer.place_info()["y"]),int(body._parent_canvas.canvasy(0)))
+        self.assertFalse(hasattr(body,"_background_layer"))
+        self.assertEqual(a.background_layers[0].place_info()["y"],"0")
         self.assertEqual(tuple(a.background_layers),layers)

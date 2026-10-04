@@ -45,7 +45,7 @@ class Profiles:
         state["stats_current"]=deepcopy(CLASS_DATA[class_name]["stats"])
         state["stats_target"]=deepcopy(state["stats_current"])
         if preferences:
-            for key in ("style","theme","language","dyslexic","music_file"):
+            for key in ("style","theme","language","dyslexic","music_file","custom_background"):
                 state[key]=preferences[key]
         ident=uuid4().hex
         self.data["profiles"][ident]={"state":state,"checkpoints":[]}

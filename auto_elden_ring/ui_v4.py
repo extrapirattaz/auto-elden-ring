@@ -24,6 +24,7 @@ def display_date(value):
 
 class Features(JourneyFeatures):
     def apply_appearance(self):
+        self.dismiss_menu()
         with suspend_redraw(self):
             self._legacy_apply_appearance()
             self.refresh_goal_spots()
@@ -133,103 +134,83 @@ class Features(JourneyFeatures):
             self.after_cancel(self.background_job)
         self.background_job=self.after(120,self.paint_background)
 
+    def choose_background(self):
+        if self.data["style"]!="elden":
+            return
+        path=filedialog.askopenfilename(parent=self,filetypes=[("Images","*.png *.jpg *.jpeg *.webp")])
+        if path:
+            with Image.open(path) as image:
+                image.verify()
+            self.data["custom_background"]=path
+            self.background_key=None
+            self.paint_background()
+            self.autosave()
+
+    def reset_background(self):
+        self.data["custom_background"]=""
+        self.background_key=None
+        self.paint_background()
+        self.autosave()
+
     def paint_background(self):
         self.background_job=None
-        if self.data["style"]!="elden" or self.data["dyslexic"] or self._closing or not self.winfo_viewable():
-            for widget,_ in getattr(self,"background_text",[]):
-                if widget.winfo_exists():
-                    widget._label.configure(image="")
-            self.background_text=[]
+        if self._closing:
+            return
+        if hasattr(self,"background_actions") and self.background_actions.winfo_exists():
+            if self.data["style"]=="elden":
+                if self.background_actions.winfo_manager()!="pack":
+                    self.background_actions.pack(after=self.style_description,anchor="w",pady=10)
+            else:
+                self.background_actions.pack_forget()
+        enabled=self.data["style"]=="elden" and not self.data["dyslexic"]
+        if not enabled:
             for layer in self.background_layers:
                 if layer.winfo_exists():
                     layer.destroy()
             self.background_layers=[]
             self.background_key=None
             return
-        width,height=max(1,self.winfo_width()),max(1,self.winfo_height())
-        if width<100:
+        if not self.winfo_viewable():
             return
-        record=self.views[self.page]
-        surfaces=[]
-        base_widgets=(self,self.host,record["frame"],record["body"])
-        allowed=base_widgets+(record["body"]._parent_frame,)
-        art_widgets=list(base_widgets)
-        text_widgets=[]
-        def collect(widget,blocked=False):
-            if isinstance(widget,ctk.CTkFrame) and widget not in allowed:
-                if widget.cget("fg_color")=="transparent" and not blocked and widget.winfo_ismapped():
-                    art_widgets.append(widget)
-                elif widget.cget("fg_color")!="transparent":
-                    blocked=True
-            if isinstance(widget,ctk.CTkLabel) and not blocked and widget._image is None and widget.winfo_ismapped():
-                art_widgets.append(widget)
-                text_widgets.append(widget)
-            for child in widget.winfo_children():
-                collect(child,blocked)
-        collect(record["frame"])
-        for widget in art_widgets:
-            viewport=widget._parent_canvas if isinstance(widget,ctk.CTkScrollableFrame) else widget
-            w,h=max(1,viewport.winfo_width()),min(height,max(1,viewport.winfo_height()))
-            x,y=viewport.winfo_rootx()-self.winfo_rootx(),viewport.winfo_rooty()-self.winfo_rooty()
-            surfaces.append((widget,viewport,w,h,x,y))
-        key=(width,height,self.page,self.data["theme"],tuple((widget._w,w,h,x,y) for widget,_,w,h,x,y in surfaces))
-        if key==getattr(self,"background_key",None) and len(self.background_layers)==len(surfaces) and all(layer.winfo_exists() for layer in self.background_layers):
-            return  # Moving the window does not change relative artwork geometry.
-        path={"moon":"elden-moon.webp","ember":"elden-ember.webp","elden":"elden-night.webp"}[self.data["theme"]]
-        with Image.open(resource_path("assets/"+path)) as source:
+        width,height=max(1,self.winfo_width()),max(1,self.winfo_height())
+        default={"moon":"elden-moon.webp","ember":"elden-ember.webp","elden":"elden-night.webp"}[self.data["theme"]]
+        path=Path(self.data["custom_background"]) if self.data["custom_background"] else resource_path("assets/"+default)
+        if not path.is_file():
+            path=resource_path("assets/"+default)
+        key=(width,height,self.data["theme"],str(path),path.stat().st_mtime_ns,self.page)
+        if (key==getattr(self,"background_key",None) and len(self.background_layers)==2
+                and all(layer.winfo_exists() for layer in self.background_layers)):
+            return
+        # Only the fixed window surface owns artwork. Scrolling content is
+        # drawn on opaque, readable panels: no scrolling crops or fake alpha.
+        with Image.open(path) as source:
+            source.draft("RGB",(width,height))
             picture=ImageOps.fit(source.convert("RGB"),(width,height))
-        picture=Image.blend(picture,Image.new("RGB",(width,height),self.bg),.48)
-        old_layers=self.background_layers
-        self.background_layers=[]
-        for widget,_ in getattr(self,"background_text",[]):
-            if widget.winfo_exists():
-                widget._label.configure(image="")
-        self.background_text=[]
-        for widget,viewport,w,h,x,y in surfaces:
-            # Out-of-window gutters must use the palette, not Pillow's black pad.
-            crop=Image.new("RGB",(w,h),self.bg)
-            left,top,right,bottom=max(0,x),max(0,y),min(width,x+w),min(height,y+h)
-            if right>left and bottom>top:
-                crop.paste(picture.crop((left,top,right,bottom)),(left-x,top-y))
-            photo=ImageTk.PhotoImage(crop,master=self)
-            layer=tk.Label(widget,image=photo,bd=0,highlightthickness=0)
-            layer.photo=photo
-            scroll=int(viewport.canvasy(0)) if viewport is not widget else 0
-            layer.place(x=0,y=scroll,width=w,height=h)
-            layer.lower()
-            # CTk frames draw a full-size canvas: place art above that canvas
-            # while leaving interactive child controls above the background.
-            canvas=getattr(widget,"_canvas",None)
-            if canvas is not None and canvas.master is widget:
-                layer.tk.call("raise",layer._w,canvas._w)
-            self.background_layers.append(layer)
-            if widget in text_widgets:
-                native=widget._label
-                nx,ny=native.winfo_rootx()-self.winfo_rootx(),native.winfo_rooty()-self.winfo_rooty()
-                nw,nh=max(1,native.winfo_width()),max(1,native.winfo_height())
-                patch=Image.new("RGB",(nw,nh),self.bg)
-                l,t,r,b=max(0,nx),max(0,ny),min(width,nx+nw),min(height,ny+nh)
-                if r>l and b>t:
-                    patch.paste(picture.crop((l,t,r,b)),(l-nx,t-ny))
-                text_photo=ImageTk.PhotoImage(patch,master=self)
-                native.configure(image=text_photo,compound="center")
-                self.background_text.append((widget,text_photo))
-            if isinstance(widget,ctk.CTkScrollableFrame):
-                widget._background_layer=layer
-                if not getattr(widget,"_background_scroll_bound",False):
-                    def scroll_art(first,last,body=widget):
-                        body._scrollbar.set(first,last)
-                        art=getattr(body,"_background_layer",None)
-                        if art is not None and art.winfo_exists():
-                            art.place_configure(y=int(body._parent_canvas.canvasy(0)))
-                        self.queue_background()
-                    viewport.configure(yscrollcommand=scroll_art)
-                    widget._background_scroll_bound=True
-        # Construct replacement images first, so resize never exposes an empty
-        # background while an old native image window is being removed.
-        for layer in old_layers:
-            if layer.winfo_exists():
-                layer.destroy()
+        picture=Image.blend(picture,Image.new("RGB",(width,height),self.bg),.38)
+        photo=ImageTk.PhotoImage(picture,master=self)
+        if self.background_layers and self.background_layers[0].winfo_exists():
+            layer=self.background_layers[0]
+            layer.configure(image=photo)
+        else:
+            layer=tk.Label(self,image=photo,bd=0,highlightthickness=0)
+            self.background_layers=[layer]
+        layer.photo=photo
+        layer.place(x=0,y=0,relwidth=1,relheight=1)
+        layer.lower()
+        for old in self.background_layers[1:]:
+            if old.winfo_exists():
+                old.destroy()
+        self.background_layers=self.background_layers[:1]
+        frame=self.views[self.page]["frame"]
+        if frame.winfo_ismapped():
+            x,y=frame.winfo_rootx()-self.winfo_rootx(),frame.winfo_rooty()-self.winfo_rooty()
+            w,h=frame.winfo_width(),frame.winfo_height()
+            crop=ImageTk.PhotoImage(picture.crop((x,y,x+w,y+h)),master=self)
+            panel=tk.Label(frame,image=crop,bd=0,highlightthickness=0)
+            panel.photo=crop
+            panel.place(x=0,y=0,relwidth=1,relheight=1)
+            panel.tk.call("raise",panel._w,frame._canvas._w)
+            self.background_layers.append(panel)
         self.background_key=key
 
     def start_rgb(self):
