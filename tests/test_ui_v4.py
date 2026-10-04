@@ -93,7 +93,7 @@ class ProgressInterface(unittest.TestCase):
             chars.append(other)
             ids=import_characters(a.profiles,chars,a.data)
             a.activate_profile(a.profiles.select(ids[1]))
-            with patch("auto_elden_ring.ui_v4.read_save",return_value=chars):
+            with patch("auto_elden_ring.ui_v4.read_saves",return_value=chars):
                 a.begin_import(path)
                 until=time.monotonic()+5
                 while time.monotonic()<until and a.import_in_progress:

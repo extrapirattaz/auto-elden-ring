@@ -104,3 +104,17 @@ Affinity variants use the same catalogue base weapon while retaining upgrades;
 affinity and Ash of War are not tracked by this planner.
 The local real-save check covered slot versions 210 and 250. Console/encrypted
 formats and modified/new layouts have no support guarantee.
+
+
+## Version 5 audio and backgrounds
+
+- pygame-ce 2.5.8 / SDL_mixer streaming: https://pyga.me/docs/ref/music.html
+  and https://pyga.me/docs/ref/mixer.html. The runtime wheel is pinned; pygame's
+  LGPL notice and dependency licenses from the 2.5.8 tag are bundled under
+  assets/licenses. pygame-ce is unmodified and initializes only for playback.
+- Decoder fixtures are one second of generated silence, encoded locally with
+  FFmpeg via imageio-ffmpeg 0.6.0. That fixture-generation tool is not a runtime
+  dependency and its binary is not distributed in the application.
+- Three original fantasy backgrounds were produced using the built-in image
+  generation tool. They are inspirations, not extracted Elden Ring scenes.
+  Exact prompts and saved paths: GENERATED_BACKGROUNDS.md.

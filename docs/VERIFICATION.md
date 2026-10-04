@@ -1,6 +1,6 @@
-# Verification â€” 4.0.1
+# Verification â€” 5.0.0
 
-The release builder runs 61 tests covering exact rune costs, every supplied
+The release builder runs 73 tests covering exact rune costs, every supplied
 catalogue passage, inverse math, shared stock, budgets, atomic storage, migrations,
 weighted farming and real Tk workflows.
 
@@ -31,26 +31,26 @@ wallet. VERIFICATION_EXE.json and VERIFICATION_UI.json record those results. A s
 RELEASE_MANIFEST.json hashes the precise source snapshot and all three artifacts.
 Screenshots show actual rendered application windows with synthetic demo data.
 
-Version 4.0.1 also checks the level-713 input, a single goal duration, starting-class investment, its farm-time equivalent, wallet separation, efficiency, boundary levels and legacy measurements. Performance samples below are retained from 4.0.0; they were not remeasured for this adjustment.
+Version 4.0.1 introduced checks for the level-713 input, a single goal duration, starting-class investment, its farm-time equivalent, wallet separation, efficiency, boundary levels and legacy measurements. Version 5.0.0 remeasured startup, catalogue and presentation modes on the same host.
 
 ## Performance
 
 Single source-process samples on this Windows host, with the pinned Python
 environment. PERFORMANCE.json retains earlier comparison data.
 
-| Measurement | 2.0.2 | 3.0.0 | 4.0.0 |
-| --- | ---: | ---: | ---: |
-| Startup including imports | 0.789 s | 0.631 s | 0.726 s |
-| First catalogue paint | 24.694 s | 0.144 s | 0.159 s |
-| Working memory with catalogue | 216.03 MiB | 56.16 MiB | 57.72 MiB |
-| Private memory with catalogue | 194.36 MiB | 35.11 MiB | 36.25 MiB |
-| CPU in a 3-second idle sample | 0 s | 0.0312 s | 0.0312 s |
+| Measurement | 2.0.2 | 3.0.0 | 4.0.0 | 5.0.0 |
+| --- | ---: | ---: | ---: | ---: |
+| Startup including imports | 0.789 s | 0.631 s | 0.726 s | 0.689 s |
+| First catalogue paint | 24.694 s | 0.144 s | 0.159 s | 0.159 s |
+| Working memory with catalogue | 216.03 MiB | 56.16 MiB | 57.72 MiB | 55.50 MiB |
+| Private memory with catalogue | 194.36 MiB | 35.11 MiB | 36.25 MiB | 35.77 MiB |
+| CPU in a 3-second idle sample | 0 s | 0.0312 s | 0.0312 s | 0.0469 s |
 
 Only visible cards are drawn; the image cache is capped at 64. Catalogue assets
-remain 2,265,200 bytes. RGB is opt-in and draws at most eight times per second
-with a 12-second hue cycle; it pauses drawing while the main window is hidden.
+remain 2,265,200 bytes. RGB is opt-in and draws native text at most 15 times per second
+with a three-second hue cycle and fixed surfaces; it pauses drawing while the main window is hidden.
 Background art is static and resize rendering is debounced. Save parsing runs
-in one background worker. The compact view releases inactive cached pages and remains visible independently of the hidden main window. A separate source sample measured 0.0156 CPU seconds in three seconds with six modern pages, 1.0469 seconds with RGB animation, and 0.0625 seconds in compact mode with RGB drawing paused. RGB is more expensive than the static styles; these are single host samples, not hardware guarantees.
+in one background worker. The compact view releases inactive cached pages and remains visible independently of the hidden main window. The 4.0.0 source sample measured 1.0469 CPU seconds in three seconds with RGB animation. The 5.0.0 sample measured 0.0312 seconds with six modern pages, 0.1875 seconds with animated RGB text, and 0.0625 seconds in compact mode with RGB drawing paused. RGB is more expensive than the static styles; these are single host samples, not hardware guarantees.
 Measurements do not include one-file extraction or antivirus scanning.
 
 Native caption/resize/close handling is retained. CustomTkinter's disruptive
@@ -59,8 +59,7 @@ updates suspend native repaint, mutate retained controls, then repaint children.
 Native inner scroll-frame backgrounds now follow semantic colors as well. Artwork is reused during window movement, remains aligned to the scroll viewport and is replaced only after new image layers are ready.
 These checks do not prove the absence of compositor artifacts on every GPU.
 
-Native MCI open/play/pause/close was checked previously with a generated silent
-WAV; no new audible-output or MP3-decoder claim is made.
+Six generated silence fixtures exercise WAV PCM16, WAV float32, MP3 constant/variable bitrate with metadata, FLAC and OGG. Tests verify decoder loading, pause/resume without rewind, Unicode paths, resource release and recovery after an invalid stream. The packaged EXE repeats decoding with SDL's dummy device and reports VERIFICATION_AUDIO.json. Silence/device-state checks do not prove audible output or compatibility with every malformed/music file.
 
 ## Limits
 
@@ -90,3 +89,18 @@ python scripts/verify_save_readonly.py --save YOUR_SAVE.sl2 --report save-check.
 ~~~
 
 The self-test and GUI switches also work in the standalone EXE.
+
+
+## Version 5 profile and UI checks
+
+New real-widget cases verify empty startup selection and modal ownership,
+explicit character activation, keep/replace decisions, replacement rollback,
+installation/roaming discovery, catalogue ownership and checkpoint icons,
+wheel capture without parent movement, compact zero-wallet stone checks,
+compact timer/result capture, native-text RGB with fixed surfaces, per-palette
+artwork replacement and restoration of plain surfaces.
+
+Normal app screenshots use synthetic Demo Tarnished data only. Generated
+background sources/prompts are documented in GENERATED_BACKGROUNDS.md. The
+window background and transparent labels/containers share crops from the same
+scene, with a fixed readability tint; cards remain opaque by design.

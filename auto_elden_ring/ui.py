@@ -37,9 +37,12 @@ class ManagedWindow(ctk.CTkToplevel):
     def destroy(self):
         if not self.winfo_exists():
             return
+        previous=getattr(self,"_previous_grab",None)
         cancel_widget_jobs(self)
         self.master.popups.discard(self)
         super().destroy()
+        if previous is not None and not self.master._closing and previous.winfo_exists():
+            previous.grab_set()
 
 
 def fmt(value):
@@ -102,6 +105,8 @@ class App(Features,ctk.CTk):
         self.build_shell()
         self.start_rgb()
         self.after_idle(self.blend_titlebar)
+        if persist:
+            self.after(150,lambda:self.show_profile_picker(startup=True))
 
     @property
     def data(self):
@@ -166,7 +171,7 @@ class App(Features,ctk.CTk):
         self.sidebar.grid_propagate(False)
         self.brand=self.label(self.sidebar,"AUTO\nELDEN RING",24)
         self.tagline=self.label(self.sidebar,self.t("tagline"),muted=True,wraplength=190,justify="left")
-        self.profile_button=self.button(self.sidebar,"switch_character",lambda:self.navigate("journal"),True,width=180)
+        self.profile_button=self.button(self.sidebar,"switch_character",self.show_profile_picker,True,width=180)
         self.nav={}
         for key in ("character","weapons","stones","farm","journal","settings"):
             self.nav[key]=self.button(self.sidebar,key,lambda k=key:self.navigate(k),True,width=180)
@@ -697,6 +702,7 @@ class App(Features,ctk.CTk):
         window=self.popup(self.t("choose_weapons"),"1100x800")
         self.gallery_window=window
         self.label(window,self.t("catalogue_hint"),muted=True).pack(anchor="w",padx=24,pady=16)
+        self.label(window,self.t("ownership_hint"),muted=True,wraplength=1040).pack(anchor="w",padx=24,pady=(0,8))
         query=tk.StringVar()
         self.label(window,self.t("search"),muted=True).pack(anchor="w",padx=24)
         ctk.CTkEntry(window,textvariable=query,width=600,font=self.font()).pack(anchor="w",padx=24,pady=8)
@@ -791,6 +797,11 @@ class App(Features,ctk.CTk):
             self.read_weapons()
         window=self.popup(self.t("missing_stones"),"850x650")
         self.label(window,self.t("planning_wallet"),muted=True,wraplength=780,justify="left").pack(padx=20,pady=16)
+        def acknowledge_all():
+            self.acknowledge_all_stones()
+            for row in window.purchase_rows.values():
+                row["update"]()
+        self.button(window,"all_stones",acknowledge_all,True).pack(pady=6)
         scroll=ctk.CTkScrollableFrame(window,fg_color=self.bg)
         scroll.pack(fill="both",expand=True,padx=20,pady=10)
         rows=[r for r in self.planner.weapons()["stones"] if not r["key"].endswith("dragon")]
@@ -818,7 +829,7 @@ class App(Features,ctk.CTk):
                 self.autosave()
             button=self.button(panel,"bought",buy)
             button.pack(side="right",padx=14)
-            window.purchase_rows[key]={"panel":panel,"label":label,"button":button,"buy":buy}
+            window.purchase_rows[key]={"panel":panel,"label":label,"button":button,"buy":buy,"update":update}
             update()
         if not rows:
             self.label(scroll,self.t("ready")).pack(pady=20)
@@ -1125,7 +1136,7 @@ class App(Features,ctk.CTk):
         actions=ctk.CTkFrame(audio,fg_color="transparent")
         actions.pack(anchor="w",padx=18,pady=(0,16))
         for key,command in (("choose_music",self.choose_music),("play_music",lambda:self.music.play(self.data["music_file"])),
-                            ("pause_music",self.music.pause),("stop_music",self.music.close)):
+                            ("pause_music",self.music.pause)):
             self.button(actions,key,command,True).pack(side="left",padx=4)
         label=self.label(audio,self.t("music_hint"),muted=True,wraplength=830,justify="left")
         label._translation_key="music_hint"
@@ -1140,18 +1151,22 @@ class App(Features,ctk.CTk):
             self.label(self.body,self.startup_error,muted=True,wraplength=900).pack(anchor="w")
 
     def choose_music(self):
-        path=filedialog.askopenfilename(parent=self,filetypes=[("MP3 / WAV","*.mp3 *.wav")])
+        path=filedialog.askopenfilename(parent=self,filetypes=[("MP3 / WAV / FLAC / OGG","*.mp3 *.wav *.flac *.ogg")])
         if path:
+            self.music.close()
             self.data["music_file"]=path
             self.music_label.configure(text=path)
             self.autosave()
 
     def set_visual_style(self,value):
         style=value.removeprefix("style_")
+        entering_rgb=style=="rainbow" and self.data["style"]!="rainbow"
         self.data["style"]=style
         if self.data["theme"] not in STYLES[style]["themes"]:
             self.data["theme"]=STYLES[style]["themes"][0]
         self.apply_appearance()
+        if entering_rgb:
+            self.after(0,self.rgb_notice)
 
     def set_palette(self,value):
         self.data["theme"]=value
@@ -1349,32 +1364,7 @@ class App(Features,ctk.CTk):
 
 
     def checkpoint_detail(self,point):
-        state=point["state"]
-        window=self.popup(self.t("view_checkpoint"),"780x650")
-        from .ui_v4 import display_date
-        self.label(window,state["character_name"],24).pack(pady=18)
-        self.label(window,display_date(point["date"])+" · "+self.t(state["class_name"])).pack(pady=8)
-        body=ctk.CTkTextbox(window,font=self.font(),fg_color=self.paper,text_color=self.ink,wrap="word")
-        body.pack(fill="both",expand=True,padx=24,pady=18)
-        note=self.t(point["note"]) if point["note"] in self.translator.text else point["note"]
-        lines=[note,self.t("level")+": "+str(sum(state["stats_current"].values())-79)]
-        lines.extend(self.t(k)+": "+str(v) for k,v in state["stats_current"].items())
-        lines.append("")
-        lines.append(self.t("owned_weapons"))
-        lines.extend(self.translator.weapon(i["name"])+f'   +{i["current"]} ×{i["quantity"]}' for i in state["inventory_weapons"])
-        if point.get("changes"):
-            lines.extend(("",self.t("changes")))
-            for change in point["changes"]:
-                key=change["field"]
-                title=self.translator.weapon(change["name"])+f' +{change["upgrade"]}' if key=="weapon" else self.translator.stone(key) if ":" in key else self.t(key)
-                lines.append(f'{title}: {change["before"]} → {change["after"]}')
-        lines.extend(self.translator.weapon(i["name"])+f'   +{i["current"]} → +{i["target"]}' for i in state["selected"])
-        if state["weapon_mode"]=="manual":
-            m=state["manual"]
-            lines.append(self.t("manual_mode")+f'   +{m["current"]} → +{m["target"]}')
-        body.insert("1.0","\n".join(lines))
-        body.configure(state="disabled")
-
+        return self.checkpoint_cards(point)
 
     def new_profile(self):
         return self.profile_form(True)

@@ -1,40 +1,50 @@
-"""Optional local MP3/WAV playback through Windows MCI; no decoder dependency."""
-import ctypes
+"""Lazy streaming playback; no display initialization or whole-file decoding."""
 import os
 from pathlib import Path
-from uuid import uuid4
 
 
 class Music:
     def __init__(self):
-        self.alias="auto_elden_"+uuid4().hex
         self.opened=False
-
-    def command(self,text):
-        if os.name!="nt":
-            raise ValueError("Music playback requires Windows.")
-        code=ctypes.windll.winmm.mciSendStringW(text,None,0,None)
-        if code:
-            message=ctypes.create_unicode_buffer(512)
-            ctypes.windll.winmm.mciGetErrorStringW(code,message,512)
-            raise ValueError(message.value)
+        self.path=None
+        self.paused=False
+        self.backend=None
 
     def play(self,path):
         path=Path(path)
-        if not path.is_file() or path.suffix.lower() not in (".mp3",".wav"):
-            raise ValueError("Choose an existing local MP3 or WAV file.")
-        self.close()
-        self.command(f'open "{path.resolve()}" type mpegvideo alias {self.alias}')
-        self.opened=True
-        self.command(f"play {self.alias} from 0 repeat")
+        if not path.is_file() or path.suffix.lower() not in (".mp3",".wav",".flac",".ogg"):
+            raise ValueError("Choose an existing MP3, WAV, FLAC or OGG file.")
+        os.environ.setdefault("PYGAME_HIDE_SUPPORT_PROMPT","1")
+        import pygame.mixer as mixer
+        import pygame
+        try:
+            if not mixer.get_init():
+                mixer.init(buffer=1024)
+            self.backend=mixer
+            if self.opened and self.path==path.resolve() and self.paused:
+                mixer.music.unpause()
+            elif not self.opened or self.path!=path.resolve():
+                mixer.music.load(str(path.resolve()))
+                mixer.music.play(loops=-1)
+                self.path=path.resolve()
+            self.opened=True
+            self.paused=False
+        except (pygame.error,OSError) as exc:
+            self.close()
+            raise ValueError(f"Cannot decode or play this audio file: {exc}") from exc
 
     def pause(self):
         if self.opened:
-            self.command(f"pause {self.alias}")
+            self.backend.music.pause()
+            self.paused=True
 
     def close(self):
-        if self.opened:
+        if self.backend is not None and self.backend.get_init():
             try:
-                self.command(f"close {self.alias}")
+                self.backend.music.stop()
+                self.backend.music.unload()
+                self.backend.quit()
             finally:
                 self.opened=False
+                self.paused=False
+                self.path=None

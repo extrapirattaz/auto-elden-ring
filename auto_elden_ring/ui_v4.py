@@ -12,16 +12,17 @@ from PIL import Image, ImageOps, ImageTk
 from classes_data import CLASS_DATA, ATTRIBUTES
 from .core import integer, resource_path
 from .profiles import timestamp
-from .save_reader import read_save, discover
+from .save_reader import read_save, read_saves, discover
 from .history import import_characters,differences
 from .windows import suspend_redraw,cancel_widget_jobs
+from .ui_v5 import JourneyFeatures
 
 
 def display_date(value):
     return datetime.fromisoformat(value).astimezone().strftime("%d/%m/%Y %H:%M")
 
 
-class Features:
+class Features(JourneyFeatures):
     def apply_appearance(self):
         with suspend_redraw(self):
             self._legacy_apply_appearance()
@@ -29,10 +30,13 @@ class Features:
             self.normalize_surfaces()
             if "journal" in self.views:
                 self.draw_timeline()
+            self.update_idletasks()
+            self.paint_background()
         self.start_rgb()
 
     def normalize_surfaces(self,root=None):
         """Use semantic roles, never compare the previous palette's hex values."""
+        self.rgb_targets=None
         def parent_color(widget):
             parent=widget.master
             while parent is not None:
@@ -77,6 +81,7 @@ class Features:
                     elif widget.cget("fg_color")!="transparent":
                         configure(widget,fg_color=self.bg)
                 elif isinstance(widget,ctk.CTkOptionMenu):
+                    self.install_scroll_menu(widget)
                     configure(widget,fg_color=self.soft,button_color=self.accent,button_hover_color=self.accent,
                                      text_color=self.ink,dropdown_fg_color=self.paper,dropdown_text_color=self.ink,
                                      dropdown_hover_color=self.soft)
@@ -131,6 +136,10 @@ class Features:
     def paint_background(self):
         self.background_job=None
         if self.data["style"]!="elden" or self.data["dyslexic"] or self._closing or not self.winfo_viewable():
+            for widget,_ in getattr(self,"background_text",[]):
+                if widget.winfo_exists():
+                    widget._label.configure(image="")
+            self.background_text=[]
             for layer in self.background_layers:
                 if layer.winfo_exists():
                     layer.destroy()
@@ -142,20 +151,46 @@ class Features:
             return
         record=self.views[self.page]
         surfaces=[]
-        for widget in (self,self.host,record["frame"],record["body"]):
+        base_widgets=(self,self.host,record["frame"],record["body"])
+        allowed=base_widgets+(record["body"]._parent_frame,)
+        art_widgets=list(base_widgets)
+        text_widgets=[]
+        def collect(widget,blocked=False):
+            if isinstance(widget,ctk.CTkFrame) and widget not in allowed:
+                if widget.cget("fg_color")=="transparent" and not blocked and widget.winfo_ismapped():
+                    art_widgets.append(widget)
+                elif widget.cget("fg_color")!="transparent":
+                    blocked=True
+            if isinstance(widget,ctk.CTkLabel) and not blocked and widget._image is None and widget.winfo_ismapped():
+                art_widgets.append(widget)
+                text_widgets.append(widget)
+            for child in widget.winfo_children():
+                collect(child,blocked)
+        collect(record["frame"])
+        for widget in art_widgets:
             viewport=widget._parent_canvas if isinstance(widget,ctk.CTkScrollableFrame) else widget
             w,h=max(1,viewport.winfo_width()),min(height,max(1,viewport.winfo_height()))
             x,y=viewport.winfo_rootx()-self.winfo_rootx(),viewport.winfo_rooty()-self.winfo_rooty()
             surfaces.append((widget,viewport,w,h,x,y))
-        key=(width,height,self.page,tuple((widget._w,w,h,x,y) for widget,_,w,h,x,y in surfaces))
+        key=(width,height,self.page,self.data["theme"],tuple((widget._w,w,h,x,y) for widget,_,w,h,x,y in surfaces))
         if key==getattr(self,"background_key",None) and len(self.background_layers)==len(surfaces) and all(layer.winfo_exists() for layer in self.background_layers):
             return  # Moving the window does not change relative artwork geometry.
-        with Image.open(resource_path("assets/elden-landscape.webp")) as source:
+        path={"moon":"elden-moon.webp","ember":"elden-ember.webp","elden":"elden-night.webp"}[self.data["theme"]]
+        with Image.open(resource_path("assets/"+path)) as source:
             picture=ImageOps.fit(source.convert("RGB"),(width,height))
+        picture=Image.blend(picture,Image.new("RGB",(width,height),self.bg),.48)
         old_layers=self.background_layers
         self.background_layers=[]
+        for widget,_ in getattr(self,"background_text",[]):
+            if widget.winfo_exists():
+                widget._label.configure(image="")
+        self.background_text=[]
         for widget,viewport,w,h,x,y in surfaces:
-            crop=picture.crop((x,y,x+w,y+h))
+            # Out-of-window gutters must use the palette, not Pillow's black pad.
+            crop=Image.new("RGB",(w,h),self.bg)
+            left,top,right,bottom=max(0,x),max(0,y),min(width,x+w),min(height,y+h)
+            if right>left and bottom>top:
+                crop.paste(picture.crop((left,top,right,bottom)),(left-x,top-y))
             photo=ImageTk.PhotoImage(crop,master=self)
             layer=tk.Label(widget,image=photo,bd=0,highlightthickness=0)
             layer.photo=photo
@@ -168,6 +203,17 @@ class Features:
             if canvas is not None and canvas.master is widget:
                 layer.tk.call("raise",layer._w,canvas._w)
             self.background_layers.append(layer)
+            if widget in text_widgets:
+                native=widget._label
+                nx,ny=native.winfo_rootx()-self.winfo_rootx(),native.winfo_rooty()-self.winfo_rooty()
+                nw,nh=max(1,native.winfo_width()),max(1,native.winfo_height())
+                patch=Image.new("RGB",(nw,nh),self.bg)
+                l,t,r,b=max(0,nx),max(0,ny),min(width,nx+nw),min(height,ny+nh)
+                if r>l and b>t:
+                    patch.paste(picture.crop((l,t,r,b)),(l-nx,t-ny))
+                text_photo=ImageTk.PhotoImage(patch,master=self)
+                native.configure(image=text_photo,compound="center")
+                self.background_text.append((widget,text_photo))
             if isinstance(widget,ctk.CTkScrollableFrame):
                 widget._background_layer=layer
                 if not getattr(widget,"_background_scroll_bound",False):
@@ -176,6 +222,7 @@ class Features:
                         art=getattr(body,"_background_layer",None)
                         if art is not None and art.winfo_exists():
                             art.place_configure(y=int(body._parent_canvas.canvasy(0)))
+                        self.queue_background()
                     viewport.configure(yscrollcommand=scroll_art)
                     widget._background_scroll_bound=True
         # Construct replacement images first, so resize never exposes an empty
@@ -199,43 +246,41 @@ class Features:
         if self._closing or self.data["style"]!="rainbow" or self.data["dyslexic"]:
             return
         if self.winfo_viewable():
-            hue=((time.monotonic()-self.rgb_started)/12)%1
+            hue=((time.monotonic()-self.rgb_started)/3)%1
             def color(offset,value=.85):
-                rgb=colorsys.hsv_to_rgb((hue+offset)%1,.65,value)
+                rgb=colorsys.hsv_to_rgb((hue+offset)%1,.75,value)
                 return "#"+"".join(f"{int(c*255):02x}" for c in rgb)
-            def visit(widget,index=0):
-                if isinstance(widget,ctk.CTkButton):
-                    # One redraw per button, rather than separate foreground/text draws.
-                    widget.configure(text_color=color(index*.07),fg_color=color(index*.05,.4))
-                elif isinstance(widget,(ctk.CTkLabel,ctk.CTkEntry,ctk.CTkOptionMenu,ctk.CTkTextbox,ctk.CTkCheckBox)):
-                    widget.configure(text_color=color(index*.07))
-                if isinstance(widget,ctk.CTkFrame) and widget.cget("fg_color")!="transparent":
-                    widget.configure(fg_color=color(index*.04,.22))
-                if isinstance(widget,ctk.CTkScrollableFrame):
-                    background=color(index*.04,.18)
-                    tk.Frame.configure(widget,bg=background)
-                    widget._parent_canvas.configure(bg=background)
-                for i,child in enumerate(widget.winfo_children()):
-                    visit(child,index+i+1)
-            visit(self.sidebar)
-            visit(self.views[self.page]["frame"])
-            self.configure(fg_color=color(0,.16))
-            self.host.configure(fg_color=color(.03,.18))
-            for popup in tuple(self.popups):
-                if popup.winfo_exists():
-                    popup.configure(fg_color=color(.02,.18))
-                    visit(popup)
+            targets=getattr(self,"rgb_targets",None)
+            if targets is None:
+                targets=[]
+                def collect(widget):
+                    # Native text color changes do not redraw rounded CTk surfaces.
+                    for attribute in ("_text_label","_label","_entry","_textbox"):
+                        native=getattr(widget,attribute,None)
+                        if isinstance(native,(tk.Label,tk.Entry,tk.Text)) and native not in targets:
+                            targets.append(native)
+                    for child in widget.winfo_children():
+                        collect(child)
+                collect(self.sidebar)
+                collect(self.views[self.page]["frame"])
+                for popup in tuple(self.popups):
+                    if popup.winfo_exists():
+                        collect(popup)
+                self.rgb_targets=targets
+            light=self.data["theme"] in ("pastel","prism")
+            for index,native in enumerate(targets):
+                if native.winfo_exists():
+                    native.configure(fg=color(index*.07,.48 if light else .95))
             canvases=[]
             if getattr(self,"timeline",None) is not None and self.timeline.winfo_exists():
                 canvases.append(self.timeline)
             if getattr(self,"gallery_window",None) is not None and self.gallery_window.winfo_exists():
                 canvases.append(self.gallery.canvas)
             for canvas in canvases:
-                canvas.configure(bg=color(.04,.18))
                 for index,item in enumerate(canvas.find_all()):
                     if canvas.type(item)=="text":
                         canvas.itemconfigure(item,fill=color(index*.07))
-        self.rgb_job=self.after(125,self.rgb_tick)
+        self.rgb_job=self.after(66,self.rgb_tick)
 
     def build_journal(self):
         actions=ctk.CTkFrame(self.body,fg_color="transparent")
@@ -335,6 +380,7 @@ class Features:
 
     def profile_form(self,creating):
         window=self.popup(self.t("new_character" if creating else "rename_profile"),"700x350")
+        self.modal(window)
         form=self.card(window)
         form.pack(fill="x",padx=20,pady=20)
         name=self.entry(form,"character_name","" if creating else self.data["character_name"],0,width=320)
@@ -502,14 +548,17 @@ class Features:
         self.label(window,self.t("import_unverified"),muted=True,wraplength=740,justify="left").pack(padx=24,pady=12)
         status=self.label(window,"")
         status.pack(pady=8)
+        self.modal(window)
         def choose_folder():
             folder=filedialog.askdirectory(parent=window,title=self.t("game_folder"))
             if folder:
                 status.configure(text=folder)
                 # Executable installation and roaming save are separate locations.
-                paths=list(Path(folder).glob("*.sl2")) or discover()
+                paths=discover(folder)
                 if len(paths)==1:
-                    self.begin_import(paths[0],window,status)
+                    self.begin_import(paths[0],window,status,policy=None)
+                elif paths:
+                    self.begin_import(paths,window,status,policy=None)
                 else:
                     choose_save()
         def choose_save():
@@ -517,12 +566,17 @@ class Features:
             path=filedialog.askopenfilename(parent=window,title=self.t("select_save"),
                  initialdir=str(files[0].parent) if files else None,filetypes=[("PC save","*.sl2 *.co2")])
             if path:
-                self.begin_import(path,window,status)
-        self.button(window,"game_folder",choose_folder,True).pack(pady=8)
+                self.begin_import(path,window,status,policy=None)
+        self.button(window,"import_folder",choose_folder,True).pack(pady=8)
         self.button(window,"select_save",choose_save).pack(pady=8)
 
-    def begin_import(self,path,window=None,status=None):
-        if getattr(self,"import_future",None) and not self.import_future.done():
+    def begin_import(self,path,window=None,status=None,policy="keep"):
+        if policy is None:
+            manual=any(p["state"]["profile_created"] and not p["state"]["save_link"] for p in self.profiles.data["profiles"].values())
+            if manual:
+                return self.ask_import_policy(path,window,status)
+            policy="keep"
+        if getattr(self,"import_in_progress",False):
             return
         if status:
             status.configure(text=self.t("importing"))
@@ -533,24 +587,30 @@ class Features:
         previous_link=deepcopy(self.data["save_link"])
         previous_page=self.page
         self.import_in_progress=True
-        self.import_future=self.reader_pool.submit(read_save,path,self.db)
+        paths=[Path(p).resolve() for p in path] if isinstance(path,(tuple,list)) else [Path(path).resolve()]
+        self.import_future=self.reader_pool.submit(read_saves,paths,self.db)
         def poll():
             if self._closing:
+                return
+            if window is not None and not window.winfo_exists():
+                self.import_in_progress=False
                 return
             if not self.import_future.done():
                 self.after(80,poll)
                 return
             def finish():
                 characters=self.import_future.result()
-                ids=import_characters(self.profiles,characters,self.data)
+                ids=import_characters(self.profiles,characters,self.data,replace_manual=policy=="replace")
                 selected=next((ident for ident in ids
                     if self.profiles.data["profiles"][ident]["state"]["save_link"].get("path")==previous_link.get("path")
                     and self.profiles.data["profiles"][ident]["state"]["save_link"].get("slot")==previous_link.get("slot")),ids[0])
                 state=self.profiles.select(selected)
                 if window and window.winfo_exists():
                     window.destroy()
-                self.page=previous_page if previous_link.get("path")==str(Path(path).resolve()) else "journal"
+                self.page=previous_page if previous_link.get("path") in [str(p) for p in paths] else "journal"
                 self.activate_profile(state)
+                if not previous_link:
+                    self.show_profile_picker()
             self.action(finish)
             self.import_in_progress=False
         self.after(80,poll)
@@ -628,74 +688,10 @@ class Features:
             self.spot_option.set(name)
 
     def compact_mode(self):
-        self.commit_current()
-        if getattr(self,"compact_window",None) and self.compact_window.winfo_exists():
-            self.compact_window.lift()
-            return
-        for popup in tuple(self.popups):
-            popup.destroy()
-        if hasattr(self,"gallery"):
-            self.gallery.cache.clear()
-        window=self.popup(self.t("small_mode"),"430x490")
-        self.compact_window=window
-        # A transient owned by the hidden root would also become invisible.
-        window.transient("")
-        window.attributes("-topmost",True)
-        self.label(window,self.data["character_name"],22).pack(pady=18)
-        text=self.label(window,"",wraplength=380,justify="left")
-        text.pack(padx=20,pady=12)
-        wallet=self.card(window)
-        wallet.pack(fill="x",padx=16,pady=6)
-        runes=self.entry(wallet,"runes_held",self.data["runes"],0,width=140)
-        mode=tk.StringVar(value=self.page if self.page in ("character","weapons","farm") else "character")
-        buttons=ctk.CTkFrame(window,fg_color="transparent")
-        buttons.pack(pady=10)
-        def refresh():
-            character=self.planner.character()
-            weapons=self.planner.weapons()
-            value=mode.get()
-            remaining=weapons["deficit"] if value=="weapons" else max(0,character["cost"]-self.data["runes"])
-            detail=self.t("level_route",current=character["current"],target=character["target"],count=character["levels"])
-            if value=="weapons":
-                detail="\n".join(self.translator.weapon(i["name"])+f' +{i["current"]} → +{i["target"]}' for i in self.data["selected"][:3]) if self.data["weapon_mode"]=="catalogue" else f'+{self.data["manual"]["current"]} → +{self.data["manual"]["target"]}'
-            if value=="farm":
-                goal,_=self.planner.farm_goal()
-                remaining=max(0,goal-self.data["runes"])
-                try:
-                    detail=self.t("time_needed")+": "+self.translator.duration(self.planner.farm_projection()["time"])
-                except ValueError:
-                    detail=self.t("new_measurement")
-            text.configure(text=self.t(value)+"\n\n"+detail+"\n\n"+self.t("to_farm")+": "+f"{remaining:,}")
-        def set_runes(*_):
-            try:
-                value=integer(runes.get(),"Runes")
-            except ValueError:
-                return
-            self.data["runes"]=value
-            for variable in self.wallet_vars.values():
-                variable.set(str(value))
-            self.autosave()
-            refresh()
-        runes.trace_add("write",set_runes)
-        for page in ("character","weapons","farm"):
-            self.button(buttons,page,lambda p=page:(mode.set(p),refresh()),True,width=110).pack(side="left",padx=3)
-        def reopen():
-            self.deiconify()
-            self.show(mode.get())
-            window.destroy()
-        window.protocol("WM_DELETE_WINDOW",reopen)
-        self.button(window,"full_window",reopen).pack(pady=18)
-        window.rune_var=runes
-        window.mode_var=mode
-        window.refresh_summary=refresh
-        window.summary_label=text
-        window.reopen=reopen
-        refresh()
-        self.withdraw()
-        window.deiconify()
-        window.lift()
-        # Keep the current page (including a running farm timer), but release
-        # inactive pages and their native drawing resources while playing.
+        return self.compact_dashboard()
+
+    def release_compact_pages(self):
+        # Keep the active timer page; release other cached native drawing resources.
         for page,record in tuple(self.views.items()):
             if page!=self.page:
                 cancel_widget_jobs(record["frame"])
@@ -705,7 +701,12 @@ class Features:
         if getattr(self,"background_job",None):
             self.after_cancel(self.background_job)
             self.background_job=None
-        for layer in self.background_layers:
+        for layer in getattr(self,"background_layers",[]):
             if layer.winfo_exists():
                 layer.destroy()
         self.background_layers=[]
+        for widget,_ in getattr(self,"background_text",[]):
+            if widget.winfo_exists():
+                widget._label.configure(image="")
+        self.background_text=[]
+

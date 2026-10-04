@@ -1,5 +1,22 @@
 # Changelog
 
+## 5.0.0 — 2026-10-04
+
+- Added an explicit startup character chooser with an empty initial library.
+- Added keep/replace decisions for manual profiles, transactional import and cancellation.
+- Discover PC saves from installation folders plus roaming accounts; import all detected characters.
+- Added blue ownership badges with upgrade/copy counts to the weapon selector.
+- Replaced checkpoint text dumps with attribute cards, tabs and paginated weapon icons.
+- Added wheel-local scrollable dropdowns in every style.
+- Added distinct generated Elden Night, Moonlight and Ember backgrounds.
+- Composited transparent text/containers on artwork and removed black crop padding.
+- Kept RGB surfaces fixed; animate cached native text at a maximum of 15 updates/s.
+- Added an experimental RGB notice without strobe flashes.
+- Replaced MCI with lazy SDL streaming for MP3/WAV/FLAC/OGG and true pause/resume.
+- Removed the redundant music Stop action; audio resources are released on track/profile changes.
+- Added a borderless mini companion, monitor-edge snapping, stone checklist and timer/results.
+- Added decoder fixtures, packaged audio checks and profile/mini/menu regression tests.
+
 ## 4.0.1 — 2026-10-04
 
 - Added an editable current level for the level-713 farming objective.

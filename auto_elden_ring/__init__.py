@@ -1,3 +1,3 @@
 """Auto Elden Ring: offline rune planning using the supplied regulation tables."""
 
-__version__ = "4.0.1"
+__version__ = "5.0.0"

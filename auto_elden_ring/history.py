@@ -24,10 +24,13 @@ def differences(before,after):
     return changes
 
 
-def import_characters(profiles,characters,preferences):
+def import_characters(profiles,characters,preferences,replace_manual=False):
     # A rejected character must not leave a partially imported profile library.
     previous=deepcopy(profiles.data)
     try:
+        if replace_manual and characters:
+            profiles.data["profiles"]={i:p for i,p in profiles.data["profiles"].items()
+                if p["state"]["save_link"] or not p["state"]["profile_created"]}
         return _apply_import(profiles,characters,preferences)
     except Exception:
         profiles.data=previous
@@ -71,5 +74,5 @@ def _apply_import(profiles,characters,preferences):
             next(p for p in profiles.active["checkpoints"] if p["id"]==point["id"])["changes"]=differences(previous,state)
         profiles.sync(state)
         results.append(ident)
-    profiles.data["active"]=active
+    profiles.data["active"]=active if active in profiles.data["profiles"] else results[0]
     return results

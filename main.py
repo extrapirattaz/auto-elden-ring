@@ -3,6 +3,15 @@ import sys
 
 
 def main():
+    if "--audio-check" in sys.argv:
+        from auto_elden_ring.selfcheck import audio_check
+        from pathlib import Path
+        report=audio_check()
+        if "--report" in sys.argv:
+            Path(sys.argv[sys.argv.index("--report")+1]).write_text(report,encoding="utf-8")
+        elif sys.stdout is not None:
+            print(report)
+        return
     if "--save-check" in sys.argv:
         from auto_elden_ring.selfcheck import save_check
         from pathlib import Path
@@ -67,10 +76,19 @@ def main():
                 and app.invested_metrics.winfo_manager()=="pack"
                 and projection["invested"]==app.db.level_cost(8,150)
                 and projection["goal"]==app.db.level_cost(150,713))
+            picker=app.show_profile_picker()
+            checks["explicit profile chooser"]=bool(picker.profile_cards)
+            picker.destroy()
+            app.data["inventory_weapons"]=[{"name":"Dagger","current":6,"quantity":1}]
+            point=app.profiles.checkpoint(app.data)
+            detail=app.checkpoint_detail(point)
+            checks["checkpoint weapon icons"]=("Dagger",6) in detail.weapon_cards
+            detail.destroy()
             app.compact_mode()
             app.compact_window.rune_var.set("1500")
             app.update()
             checks["compact companion"]=app.data["runes"]==1500 and len(app.views)==1 and app.compact_window.winfo_viewable() and not app.winfo_viewable()
+            checks["borderless compact"]=bool(app.compact_window.overrideredirect())
             app.compact_window.reopen()
             app.update()
             checks["no callback errors"]=not app.callback_errors

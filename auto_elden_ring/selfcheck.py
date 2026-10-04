@@ -45,6 +45,32 @@ def self_check():
         "data_sha256":hashlib.sha256(db.path.read_bytes()).hexdigest()},ensure_ascii=False,indent=2)
 
 
+def audio_check():
+    """Packaged decoder/device lifecycle proof; silence is not audible-output proof."""
+    import os
+    from .audio import Music
+    from .core import resource_path
+    os.environ["SDL_AUDIODRIVER"]="dummy"
+    checks={}
+    music=Music()
+    try:
+        for path in resource_path("assets/audio-check").iterdir():
+            if path.suffix not in (".mp3",".wav",".flac",".ogg",".opus"):
+                continue
+            music.play(path)
+            loaded=music.backend.music.get_busy()
+            music.pause()
+            music.play(path)
+            checks[path.name]=loaded and not music.paused and music.backend.music.get_busy()
+            music.close()
+    finally:
+        music.close()
+    if len(checks)!=6 or not all(checks.values()):
+        raise RuntimeError("Packaged audio decoder check failed.")
+    return json.dumps({"app_version":__version__,"status":"PASS","checks":checks,
+                       "audible_output":"NOT TESTED"},indent=2)
+
+
 def save_check(path):
     """Exercise the packaged reader without exporting character identifiers."""
     from pathlib import Path

@@ -53,8 +53,8 @@ class Gallery(tk.Frame):
             self.layout.append(("heading",category,12,y,width,36))
             y+=46
             for index,name in enumerate(names):
-                self.layout.append(("card",name,(index%columns)*card_width+6,y+(index//columns)*205,card_width-12,195))
-            y+=math.ceil(len(names)/columns)*205+14
+                self.layout.append(("card",name,(index%columns)*card_width+6,y+(index//columns)*225,card_width-12,215))
+            y+=math.ceil(len(names)/columns)*225+14
         self.canvas.configure(scrollregion=(0,0,width,max(y,self.canvas.winfo_height())))
         self.schedule()
 
@@ -98,6 +98,7 @@ class Gallery(tk.Frame):
         bottom=top+canvas.winfo_height()+420
         canvas.delete("all")
         self.hitboxes=[]
+        self.ownership_badges={}
         selected={i["name"] for i in self.app.data["selected"]}
         self.visible_photos=[]
         family=self.app.font_family
@@ -121,7 +122,12 @@ class Gallery(tk.Frame):
             self.visible_photos.append(photo)
             canvas.create_image(x+w/2,y+78,image=photo)
             canvas.create_text(x+w/2,y+145,text=self.app.translator.weapon(name),fill=self.app.ink,width=w-16,font=(family,12))
-            canvas.create_text(x+w/2,y+181,text=self.app.t("dlc")+": "+self.app.t("yes" if weapon.dlc else "no"),fill=self.app.muted,font=(family,10))
+            canvas.create_text(x+w/2,y+174,text=self.app.t("dlc")+": "+self.app.t("yes" if weapon.dlc else "no"),fill=self.app.muted,font=(family,10))
+            owned=[i for i in self.app.data["inventory_weapons"] if i["name"]==name]
+            status=("✓ "+self.app.t("owned")+"  "+"/".join(f'+{i["current"]} ×{i["quantity"]}' for i in owned)) if owned else self.app.t("not_owned")
+            badge=canvas.create_text(x+w/2,y+199,text=status,width=w-16,
+                fill="#428DDF" if owned else self.app.muted,font=(family,10,"bold" if owned else "normal"))
+            self.ownership_badges[name]=badge
             if on:
                 canvas.create_text(x+w-14,y+116,text="✓",fill=self.app.accent,font=(family,18,"bold"))
             self.hitboxes.append((name,x,y,x+w,y+h))

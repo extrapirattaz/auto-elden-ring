@@ -52,6 +52,11 @@ def main():
     run(exe,"--self-test","--report",report)
     ui_report=work/"exe-ui-check.json"
     run(exe,"--ui-smoke","--report",ui_report)
+    audio_report=work/"exe-audio-check.json"
+    run(exe,"--audio-check","--report",audio_report)
+    audio_result=json.loads(audio_report.read_text(encoding="utf-8"))
+    if audio_result["status"]!="PASS" or audio_result["app_version"]!=__version__:
+        raise SystemExit("Packaged audio decoder check failed.")
     sys.path.insert(0,str(ROOT/"tests"))
     from test_save_reader import fixture
     save_fixture=work/"ER0000.sl2"
@@ -72,6 +77,7 @@ def main():
     shutil.copy2(exe,release/exe.name)
     shutil.copy2(report,release/"VERIFICATION_EXE.json")
     shutil.copy2(ui_report,release/"VERIFICATION_UI.json")
+    shutil.copy2(audio_report,release/"VERIFICATION_AUDIO.json")
     shutil.copy2(save_report,release/"VERIFICATION_SAVE.json")
     source_files = [p for p in ROOT.iterdir() if p.is_file() and p.suffix in (".py",".json",".md",".txt",".ps1",".bat")]
     source_files.append(ROOT/".gitignore")
@@ -96,11 +102,12 @@ def main():
             archive.write(p,"licenses/"+p.name)
         archive.write(report,"VERIFICATION_EXE.json")
         archive.write(ui_report,"VERIFICATION_UI.json")
+        archive.write(audio_report,"VERIFICATION_AUDIO.json")
         archive.write(save_report,"VERIFICATION_SAVE.json")
     manifest = {"version":__version__,"python":sys.version,"platform":"Windows x64", "game_data_sha256":sha(ROOT/"elden_ring_costs.json"),
                 "build_dependencies":(ROOT/"requirements-build.txt").read_text(encoding="utf-8"),
                 "source_files_sha256":snapshot,"artifacts_sha256":{p.name:sha(p) for p in (release/exe.name,source_zip,portable_zip)},
-                "verification":result,"gui_verification":ui_result,"save_verification":save_result}
+                "verification":result,"gui_verification":ui_result,"save_verification":save_result,"audio_verification":audio_result}
     (release/"RELEASE_MANIFEST.json").write_text(json.dumps(manifest,indent=2,ensure_ascii=False),encoding="utf-8")
     (release/"SHA256SUMS.txt").write_text("".join(f"{sha(p)}  {p.name}\n" for p in sorted(release.iterdir()) if p.is_file()),encoding="utf-8")
     print(f"Release ready: {release}")

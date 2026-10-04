@@ -28,6 +28,7 @@ def main():
     app.data["farm"]["runes"]=50000
     app.planner.toggle_weapon("Dagger")
     app.planner.toggle_weapon("Black Knife")
+    app.data["inventory_weapons"]=[{"name":"Dagger","current":6,"quantity":1},{"name":"Black Knife","current":4,"quantity":1}]
     app.profiles.checkpoint(app.data,"Starting journey","2026-10-03T12:00:00+02:00")
     app.data["stats_current"]["vigor"]=25
     app.data["selected"][0]["current"]=6
@@ -48,6 +49,7 @@ def main():
         app.show("weapons")
         app.update()
         time.sleep(.3)
+        app.update()
         capture(app,directory/"elden-fr.png")
         app.catalogue()
         until=time.monotonic()+.3
@@ -62,6 +64,22 @@ def main():
         box=(window.winfo_rootx(),window.winfo_rooty(),window.winfo_rootx()+window.winfo_width(),window.winfo_rooty()+window.winfo_height())
         capture(window,directory/"catalogue.png")
         window.destroy()
+        details=app.checkpoint_detail(app.profiles.active["checkpoints"][-1])
+        app.update()
+        time.sleep(.2)
+        capture(details,directory/"checkpoint.png")
+        details.destroy()
+        picker=app.show_profile_picker()
+        app.update()
+        time.sleep(.2)
+        capture(picker,directory/"profiles.png")
+        picker.destroy()
+        for palette in ("moon","ember"):
+            app.set_palette(palette)
+            app.update()
+            time.sleep(.2)
+            app.update()
+            capture(app,directory/("elden-"+palette+".png"))
         for style in ("modern","elden","xp","rainbow"):
             app.set_visual_style("style_"+style)
             app.show("settings")
@@ -80,6 +98,14 @@ def main():
         app.update()
         time.sleep(.2)
         capture(app.compact_window,directory/"compact.png")
+        app.compact_window.mode_var.set("weapons")
+        app.compact_window.refresh_summary()
+        app.update()
+        capture(app.compact_window,directory/"compact-stones.png")
+        app.compact_window.mode_var.set("farm")
+        app.compact_window.refresh_summary()
+        app.update()
+        capture(app.compact_window,directory/"compact-farm.png")
         app.compact_window.reopen()
     finally:
         app.destroy()

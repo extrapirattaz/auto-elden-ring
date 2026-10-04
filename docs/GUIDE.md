@@ -1,4 +1,4 @@
-# User guide â€” 4.0.1
+# User guide â€” 5.0.0
 
 ## Start with a character
 
@@ -132,7 +132,7 @@ Reading mode applies larger OpenDyslexic text and a calm cream palette, then
 restores the selected style when disabled. Changes retain existing page widgets
 and batch presentation updates without reopening the main window.
 
-Choose a local MP3/WAV to play, restart, pause or stop music. Closing the app
+Choose a local MP3/WAV/FLAC/OGG to play or pause; Play resumes a paused track. Closing the app
 closes its playback device. Files stay local; playback does not start automatically.
 
 Small companion is always on top and provides character/weapon/farm views and
@@ -148,3 +148,63 @@ Profiles and timelines autosave to
 No save/open-build buttons are present. Existing version-3 libraries and previous
 schema-2/3 state files are migrated. Version-1 projects require version 1.
 An invalid local library is reported in Settings.
+
+
+## Profile selection and import decisions
+
+Every normal startup asks you to choose a character. A fresh installation lists
+no characters and offers New Character and Import Save Game. Existing profiles
+show their name, original class and level. Selecting one restores its goals,
+weapon selections, stock and farming measurements. The name in the sidebar
+opens this chooser again. The chooser uses an initial badge, not an extracted
+game portrait.
+
+Import Installation Folder checks that folder, its Game/save/saves subfolders,
+and the standard roaming EldenRing account folders. Installation files and saves
+normally live separately. All characters in the detected PC saves are imported;
+Select .sl2/.co2 also accepts a specific file. Detection does not promise support
+for unknown future binary layouts. Reads remain bounded and checksum validated.
+
+When manual characters exist, import asks whether to keep them and add game
+characters, or replace only manual profiles. Previously imported characters and
+matching goals are preserved. Replacement is transactional: an invalid import
+leaves the library intact. Canceling a pending import dialog stops its application
+without changing profiles. Refresh from Save keeps profiles without asking again.
+
+Blue checks in the catalogue mean owned weapons, with saved upgrades and copy
+counts. Selection checks identify weapons chosen for your goal. Not in saved
+inventory refers to this supported catalogue and the latest imported/manual
+snapshot. The catalogue does not inspect live game memory.
+
+Checkpoint details display attribute cards and Acquired Weapons / Changes / Goal
+tabs. Weapon cards include their bundled icons, upgrades and copies. Large
+inventories are paginated at 24 cards to keep memory and native widgets bounded.
+
+## Compact tools and music
+
+The mini companion has no native minimize/maximize/resize caption. Drag its
+character heading; releasing it near a monitor edge snaps to that monitor's
+usable area, including monitors with negative desktop coordinates. Open Full
+Application restores the main window.
+
+Weapons shows the total, remaining runes and a scrollable stone checklist.
+I have all missing stones acknowledges possession regardless of the wallet.
+Individual checks update the same profile inventory as the main calculator.
+Ancient dragon stones stay outside the purchase checklist.
+
+Farm provides Start, Stop, Reset, runes held and measured runes. Entering updated
+held runes during/after a test prefills the gain relative to the starting wallet;
+you can edit the measured gain. Record Result stores it as a farming sample.
+An already running main-window timer continues in compact mode. Opening a
+compact view does not change your goals or spend runes.
+
+Music streams MP3, WAV, FLAC and OGG using bundled SDL decoders, initialized only
+when Play is pressed. Play resumes the same track after Pause. Choosing another
+file or changing character releases the previous stream. There is no music Stop
+button. Corrupt streams or unavailable audio devices display an error and release
+resources; another file can then be selected.
+
+RGB keeps backgrounds fixed and animates cached native text with a three-second
+hue cycle, at most 15 updates/s. Its styled beta notice explains the playful troll
+mode. It is optional and contains no strobe flashes. All dropdown menus capture
+wheel input inside their list rather than scrolling the parent page.

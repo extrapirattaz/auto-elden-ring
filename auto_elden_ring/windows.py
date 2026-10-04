@@ -68,3 +68,46 @@ def cancel_widget_jobs(widget):
             # Cancel scheduling only; the owning widget deletes its Tcl command.
             # Calling another widget's after_cancel deletes the command twice.
             widget.tk.call("after","cancel",job)
+
+
+def monitor_workarea(widget):
+    """Return the current monitor's usable rectangle, including negative origins."""
+    if os.name!="nt":
+        return (0,0,widget.winfo_screenwidth(),widget.winfo_screenheight())
+    from ctypes import wintypes
+    class MonitorInfo(ctypes.Structure):
+        _fields_=[("size",wintypes.DWORD),("monitor",wintypes.RECT),
+                  ("work",wintypes.RECT),("flags",wintypes.DWORD)]
+    user=ctypes.windll.user32
+    user.MonitorFromWindow.argtypes=[wintypes.HWND,wintypes.DWORD]
+    user.MonitorFromWindow.restype=wintypes.HANDLE
+    info=MonitorInfo()
+    info.size=ctypes.sizeof(info)
+    user.GetMonitorInfoW.argtypes=[wintypes.HANDLE,ctypes.POINTER(MonitorInfo)]
+    if not user.GetMonitorInfoW(user.MonitorFromWindow(widget.winfo_id(),2),ctypes.byref(info)):
+        return (0,0,widget.winfo_screenwidth(),widget.winfo_screenheight())
+    return (info.work.left,info.work.top,info.work.right,info.work.bottom)
+
+
+def snap_position(x,y,width,height,area,threshold=28):
+    left,top,right,bottom=area
+    x=min(max(left,x),max(left,right-width))
+    y=min(max(top,y),max(top,bottom-height))
+    for edge in (left,right-width):
+        if abs(x-edge)<=threshold:
+            x=edge
+    for edge in (top,bottom-height):
+        if abs(y-edge)<=threshold:
+            y=edge
+    return x,y
+
+
+def position_window(window,x,y):
+    if os.name=="nt":
+        user=ctypes.windll.user32
+        user.GetParent.argtypes=[ctypes.c_void_p]
+        user.GetParent.restype=ctypes.c_void_p
+        user.SetWindowPos.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_int,ctypes.c_int,ctypes.c_int,ctypes.c_int,ctypes.c_uint]
+        user.SetWindowPos(user.GetParent(window.winfo_id()),None,x,y,0,0,0x15)
+    else:
+        window.geometry(f"{x:+d}{y:+d}")

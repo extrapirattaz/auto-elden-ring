@@ -16,9 +16,22 @@ SLOT_SIZE=0x280000
 STRIDE=SLOT_SIZE+16
 
 
-def discover():
+def discover(installation=None):
+    """Installation files and roaming saves are independent; search both roots."""
     directory=Path(os.environ.get("APPDATA",str(Path.home())))/"EldenRing"
-    return sorted(directory.glob("*/ER0000.sl2"))+sorted(directory.glob("*/ER0000.co2"))
+    files=list(directory.glob("*/ER0000.sl2"))+list(directory.glob("*/ER0000.co2"))
+    if installation:
+        root=Path(installation)
+        for folder in (root,root/"Game",root/"save",root/"saves"):
+            for pattern in ("*.sl2","*.co2"):
+                files.extend(folder.glob(pattern))
+    return sorted(set(p.resolve() for p in files if p.is_file()))
+
+
+def read_saves(paths,db):
+    if not 1<=len(paths)<=20:
+        raise ValueError("Select between one and twenty PC save files.")
+    return [character for path in paths for character in read_save(path,db)]
 
 
 def read_slot(data,db,index):
