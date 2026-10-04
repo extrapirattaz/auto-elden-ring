@@ -5,9 +5,9 @@ rune farming and character timelines. Written in Python with a standalone x64 EX
 
 ![Character planner](docs/screenshots/character.png)
 
-## Run version 4.0.0
+## Run version 4.0.1
 
-- Without Python: run Auto-Elden-Ring-4.0.0-win-x64.exe from the Windows ZIP.
+- Without Python: run Auto-Elden-Ring-4.0.1-win-x64.exe from the Windows ZIP.
   Images, translations, fonts and cost tables are included.
 - From source: install Python 3.14 x64 and run START_AUTO_ELDEN_RING.bat, or install
   requirements.txt with pip and run main.py. First-time dependency installation
@@ -85,9 +85,9 @@ See the [guide](docs/GUIDE.md), [verification](docs/VERIFICATION.md) and
 Run BUILD_RELEASE.ps1 on Windows x64. The builder tests real widgets/calculations,
 builds the EXE, checks embedded resources and produces:
 
-- auto-elden-ring-4.0.0-source.zip: architecture-independent Python source.
-- auto-elden-ring-4.0.0-windows-x64.zip: standalone Windows x64 package.
-- Auto-Elden-Ring-4.0.0-win-x64.exe: executable for release downloads.
+- auto-elden-ring-4.0.1-source.zip: architecture-independent Python source.
+- auto-elden-ring-4.0.1-windows-x64.zip: standalone Windows x64 package.
+- Auto-Elden-Ring-4.0.1-win-x64.exe: executable for release downloads.
 - RELEASE_MANIFEST.json and SHA256SUMS.txt: artifact/source correspondence.
 
 Each version lives in releases/version; existing versions are never overwritten.

@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.0.1 — 2026-10-04
+
+- Added an editable current level for the level-713 farming objective.
+- Removed its duplicate maximum-level duration card.
+- Added runes invested since the starting class and their equivalent farming time.
+- Kept investment separate from held runes and left character attributes unchanged.
+- Added numerical boundary, legacy-state and real-widget regression checks.
+
 ## 4.0.0 — 2026-10-04
 
 - Fixed stale native scroll backgrounds and semantic palette propagation.

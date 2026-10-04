@@ -57,6 +57,16 @@ def main():
             app.data["farm_spots"]=[{"name":"Release spot","farm":dict(app.data["farm"])}]
             app.select_farm_spot("Release spot")
             checks["named farm spot"]=app.spot_option.get()=="Release spot"
+            app.set_farm_option("goal","maximum")
+            app.farm_vars["maximum_current"].set("150")
+            app.farm_vars["runes"].set("20000")
+            app.calculate_farm()
+            projection=app.planner.farm_projection()
+            checks["maximum goal and investment"]=(
+                app.farm_metrics.values[2].master.winfo_manager()==""
+                and app.invested_metrics.winfo_manager()=="pack"
+                and projection["invested"]==app.db.level_cost(8,150)
+                and projection["goal"]==app.db.level_cost(150,713))
             app.compact_mode()
             app.compact_window.rune_var.set("1500")
             app.update()

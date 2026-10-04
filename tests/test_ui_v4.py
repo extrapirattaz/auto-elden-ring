@@ -5,7 +5,7 @@ import tempfile
 import time
 import unittest
 from unittest.mock import patch
-from auto_elden_ring.ui import App
+from auto_elden_ring.ui import App, fmt
 from auto_elden_ring.history import import_characters
 from auto_elden_ring.save_reader import read_save
 from auto_elden_ring.styles import STYLES
@@ -40,6 +40,31 @@ class ProgressInterface(unittest.TestCase):
         self.assertEqual(a.class_option.cget("state"),"disabled")
         a.set_class("Wretch")
         self.assertEqual(a.data["class_name"],"Warrior")
+
+    def test_maximum_farm_goal_has_one_duration_and_investment_summary(self):
+        a=self.create()
+        a.show("farm")
+        self.assertEqual(a.maximum_goal_frame.winfo_manager(),"")
+        a.set_farm_option("goal","maximum")
+        self.assertEqual(a.farm_vars["maximum_current"].get(),"8")
+        self.assertEqual(a.maximum_goal_frame.winfo_manager(),"grid")
+        self.assertEqual(a.farm_metrics.values[2].master.winfo_manager(),"")
+        self.assertEqual(a.invested_metrics.winfo_manager(),"pack")
+        self.assertEqual(a.invested_metrics.values[0].cget("text"),"0")
+        self.assertEqual(a.invested_metrics.values[1].cget("text"),"—")
+        a.farm_vars["maximum_current"].set("150")
+        a.farm_vars["runes"].set("20000")
+        a.calculate_farm()
+        projection=a.planner.farm_projection()
+        self.assertEqual(a.invested_metrics.values[0].cget("text"),fmt(projection["invested"]))
+        self.assertEqual(a.invested_metrics.values[1].cget("text"),a.translator.duration(projection["invested_time"]))
+        a.set_farm_option("goal","free")
+        self.assertEqual(a.maximum_goal_frame.winfo_manager(),"")
+        self.assertEqual(a.invested_metrics.winfo_manager(),"")
+        self.assertEqual(a.farm_metrics.values[2].master.winfo_manager(),"grid")
+        self.assertEqual(a.free_goal_frame.winfo_manager(),"grid")
+        a.set_farm_option("goal","maximum")
+        self.assertEqual(a.farm_vars["maximum_current"].get(),"150")
 
     def test_custom_event_derives_level_and_keeps_live_attributes(self):
         a=self.create()

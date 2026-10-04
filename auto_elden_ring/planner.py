@@ -28,7 +28,7 @@ def default_state():
                       "observed":130,"current":0,"target":24,"quantity":1},
             "selected":[],"stock":{k:0 for k in STONE_PRICES if not k.endswith("dragon")},
             "prices":{},"farm":{"runes":0,"seconds":60,"efficiency":100,"talisman":"none",
-              "consumable":"none","notes":"","goal":"combined","free_goal":100000,"samples":[],"use_samples":False}}
+              "consumable":"none","notes":"","goal":"combined","free_goal":100000,"maximum_current":None,"samples":[],"use_samples":False}}
 
 
 def buff_multiplier(talisman,consumable):
@@ -109,6 +109,10 @@ def validate_state(state,db):
     integer(f["seconds"],"Measured duration",1,86400)
     integer(f["efficiency"],"Efficiency",1,100)
     integer(f["free_goal"],"Free goal")
+    if f.get("maximum_current") is not None:
+        integer(f["maximum_current"],"Current level",1,MAX_LEVEL)
+        if f["goal"]=="maximum":
+            integer(f["maximum_current"],"Current level",CLASS_DATA[state["class_name"]]["level"],MAX_LEVEL)
     buff_multiplier(f["talisman"],f["consumable"])
     if f["goal"] not in ("combined","character","weapons","maximum","free") or not isinstance(f["notes"],str):
         raise ValueError("Invalid farming goal.")
@@ -281,9 +285,15 @@ class Planner:
         if f["goal"]=="character":
             return c["cost"],False
         if f["goal"]=="maximum":
-            return c["maximum_cost"],False
+            return self.db.level_cost(self.maximum_farm_level(),MAX_LEVEL),False
         w = self.weapons()
         return w["total"]+(c["cost"] if f["goal"]=="combined" else 0),bool(w["dragon_needed"])
+
+    def maximum_farm_level(self):
+        """Use the explicit farm level without inventing character attributes."""
+        level=self.state["farm"].get("maximum_current")
+        return integer(self.character()["current"] if level is None else level,
+                       "Current level",CLASS_DATA[self.state["class_name"]]["level"],MAX_LEVEL)
 
     def farm_projection(self):
         rates = self.farm_rates()
@@ -292,9 +302,12 @@ class Planner:
         goal,incomplete = self.farm_goal()
         remaining = max(0,goal-self.state["runes"])
         efficiency = Fraction(self.state["farm"]["efficiency"],100)
-        maximum = max(0,self.character()["maximum_cost"]-self.state["runes"])
+        current=self.maximum_farm_level() if self.state["farm"]["goal"]=="maximum" else self.character()["current"]
+        maximum = max(0,self.db.level_cost(current,MAX_LEVEL)-self.state["runes"])
+        invested=self.db.level_cost(CLASS_DATA[self.state["class_name"]]["level"],current)
         def duration(cost,rate):
             return int(-(-Fraction(cost*60)//(rate*efficiency)))
         return {**rates,"remaining":remaining,"goal":goal,"incomplete":incomplete,
                 "time":duration(remaining,rates["measured"]),"maximum_time":duration(maximum,rates["measured"]),
-                "optimized_time":duration(remaining,rates["optimized"])}
+                "optimized_time":duration(remaining,rates["optimized"]),
+                "invested":invested,"invested_time":duration(invested,rates["measured"])}

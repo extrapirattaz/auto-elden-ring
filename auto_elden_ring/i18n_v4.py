@@ -1,5 +1,8 @@
 """Additional interface messages, maintained across all six languages."""
 ROWS="""
+farm_current_level|Current level|Niveau actuel|Současná úroveň|Aktuelle Stufe|Nivel actual|現在のレベル
+invested_runes|Runes already invested since your starting class|Runes déjà investies depuis la classe de départ|Runy již investované od počáteční třídy|Seit der Startklasse investierte Runen|Runas ya invertidas desde la clase inicial|初期クラスから消費したルーン
+invested_farm_time|Equivalent farming time for invested runes|Temps de farm équivalent aux runes déjà investies|Odpovídající doba farmení investovaných run|Entsprechende Farmzeit für investierte Runen|Tiempo de farmeo equivalente a las runas invertidas|消費済みルーンに相当する稼ぎ時間
 newer_events|Show newer events|Afficher les événements suivants|Zobrazit novější události|Neuere Ereignisse anzeigen|Mostrar eventos posteriores|新しいイベントを表示
 runes|Runes|Runes|Runy|Runen|Runas|ルーン
 weapon_acquired|Acquired|Récupérée|Získaná|Erhalten|Obtenida|入手

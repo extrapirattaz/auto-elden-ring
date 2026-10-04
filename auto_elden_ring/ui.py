@@ -891,6 +891,12 @@ class App(Features,ctk.CTk):
         self.farm_vars["free_goal"]=self.entry(self.free_goal_frame,"free_goal",f["free_goal"],0)
         if f["goal"]!="free":
             self.free_goal_frame.grid_remove()
+        self.maximum_goal_frame=ctk.CTkFrame(form,fg_color="transparent")
+        self.maximum_goal_frame.grid(row=7,column=0,columnspan=2,sticky="ew")
+        self.farm_vars["maximum_current"]=self.entry(self.maximum_goal_frame,"farm_current_level",
+            self.planner.maximum_farm_level(),0)
+        if f["goal"]!="maximum":
+            self.maximum_goal_frame.grid_remove()
         self.farm_vars["notes"]=self.entry(form,"notes",f["notes"],8,width=400)
         actions=ctk.CTkFrame(self.body,fg_color="transparent")
         actions.pack(fill="x",pady=16)
@@ -899,6 +905,8 @@ class App(Features,ctk.CTk):
         self.sample_label=self.label(self.body,"",muted=True)
         self.sample_label.pack(anchor="w")
         self.farm_metrics=self.metrics(self.body,[("","—")]*3)
+        self.invested_metrics=self.metrics(self.body,[("","—")]*2)
+        self.invested_metrics.pack_forget()
         self.rate_labels={}
         for key in ("without_buffs","with_scarab","with_foot","with_both","optimized","remaining_plan"):
             label=self.label(self.body,"",16)
@@ -922,6 +930,12 @@ class App(Features,ctk.CTk):
                 self.free_goal_frame.grid()
             else:
                 self.free_goal_frame.grid_remove()
+            if value=="maximum":
+                if self.data["farm"].get("maximum_current") is None:
+                    self.farm_vars["maximum_current"].set(str(self.planner.character()["current"]))
+                self.maximum_goal_frame.grid()
+            else:
+                self.maximum_goal_frame.grid_remove()
         self.refresh_farm_results()
         self.autosave()
 
@@ -929,6 +943,22 @@ class App(Features,ctk.CTk):
         if "farm" not in self.views or not hasattr(self,"farm_metrics"):
             return
         f=self.data["farm"]
+        maximum_goal=f["goal"]=="maximum"
+        # Remove the duplicate maximum-duration card rather than leaving a blank.
+        if maximum_goal:
+            self.farm_metrics.values[2].master.grid_remove()
+            self.farm_metrics.grid_columnconfigure(2,weight=0)
+            self.invested_metrics.pack(fill="x",pady=12,after=self.farm_metrics)
+        else:
+            self.farm_metrics.values[2].master.grid()
+            self.farm_metrics.grid_columnconfigure(2,weight=1)
+            self.invested_metrics.pack_forget()
+        invested=self.planner.db.level_cost(CLASS_DATA[self.data["class_name"]]["level"],
+            self.planner.maximum_farm_level()) if maximum_goal else 0
+        self.invested_metrics.titles[0].configure(text=self.t("invested_runes"))
+        self.invested_metrics.titles[1].configure(text=self.t("invested_farm_time"))
+        self.invested_metrics.values[0].configure(text=fmt(invested))
+        self.invested_metrics.values[1].configure(text="—")
         self.sample_label.configure(text=self.t("sample_summary",count=len(f["samples"]),
             seconds=sum(s["seconds"] for s in f["samples"])) if f["samples"] and f["use_samples"] else "")
         titles=(self.t("rate"),self.t("time_needed"),self.t("to_maximum",current=self.planner.character()["current"]))
@@ -936,6 +966,7 @@ class App(Features,ctk.CTk):
         if self.planner.farm_rates()["measured"]>0:
             p=self.planner.farm_projection()
             values=(fmt(p["measured"]),self.translator.duration(p["time"]),self.translator.duration(p["maximum_time"]))
+            self.invested_metrics.values[1].configure(text=self.translator.duration(p["invested_time"]))
             for key,field in (("without_buffs","baseline"),("with_scarab","gold_scarab"),("with_foot","gold_foot"),
                               ("with_both","scarab_foot"),("optimized","optimized")):
                 self.rate_labels[key].configure(text=self.t(key)+": "+fmt(p[field]))
@@ -954,6 +985,8 @@ class App(Features,ctk.CTk):
     def read_farm(self):
         clone=deepcopy(self.data)
         for field,var in self.farm_vars.items():
+            if field=="maximum_current" and clone["farm"]["goal"]!="maximum":
+                continue
             clone["farm"][field]=var.get() if field=="notes" else integer(var.get())
         validate_state(clone,self.db)
         if any(clone["farm"][k]!=self.data["farm"][k] for k in ("runes","seconds")):

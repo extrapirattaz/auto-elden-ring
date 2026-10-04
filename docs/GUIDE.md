@@ -1,4 +1,4 @@
-# User guide â€” 4.0.0
+# User guide â€” 4.0.1
 
 ## Start with a character
 
@@ -114,6 +114,13 @@ Save this farming spot names the current measurement/sample set for this
 character. Selecting a spot restores its rates and buffs. The farm page supports
 character, weapons, combined, level 713 or free objectives; a free amount appears
 only for a free objective. Held runes are deducted once. Efficiency adjusts time.
+For the level-713 objective, enter your current level (prefilled from the
+character). Its goal duration appears once. Two additional cards show runes
+already invested since the starting class and the equivalent time at the chosen
+farm rate and efficiency. This is an estimate using today's method, not a record
+of past play time. Held runes do not reduce the invested amount. Entering a farm
+level does not change character attributes; older saved measurements use the
+character level until a level is entered.
 Character and weapon pages can also select saved spots for their own goals.
 
 ## Appearance, music and small mode

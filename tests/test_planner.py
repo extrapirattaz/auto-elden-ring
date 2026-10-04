@@ -68,6 +68,37 @@ class Planning(unittest.TestCase):
         self.assertEqual(buff_multiplier("silver","silver_foot"),1)
         self.assertEqual(buff_multiplier("gold","gold_horn"),Fraction(42,25))
 
+    def test_maximum_farm_level_accounts_for_investment_and_wallet_separately(self):
+        p=Planner(self.db)
+        original=deepcopy(p.state["stats_current"])
+        p.state["farm"].update(goal="maximum",maximum_current=150,runes=12000,efficiency=80)
+        p.set_wallet(1234)
+        result=p.farm_projection()
+        invested=self.db.level_cost(9,150)
+        self.assertEqual(result["goal"],self.db.level_cost(150,713))
+        self.assertEqual(result["invested"],invested)
+        self.assertEqual(result["invested"]+result["remaining"]+1234,self.db.level_cost(9,713))
+        self.assertEqual(result["invested_time"],int(-(-Fraction(invested*60)//9600)))
+        self.assertEqual(result["time"],result["maximum_time"])
+        self.assertEqual(p.state["stats_current"],original)
+        p.set_wallet(result["goal"]+1)
+        self.assertEqual(p.farm_projection()["time"],0)
+        self.assertEqual(p.farm_projection()["invested"],invested)
+
+    def test_maximum_farm_level_boundaries_and_legacy_default(self):
+        p=Planner(self.db)
+        p.state["farm"].update(goal="maximum",runes=1000)
+        p.state["farm"].pop("maximum_current")
+        self.assertEqual(p.farm_projection()["invested"],0)
+        for level in (0,8,714):
+            p.state["farm"]["maximum_current"]=level
+            with self.assertRaises(ValueError):
+                p.farm_projection()
+        p.state["farm"]["maximum_current"]=713
+        result=p.farm_projection()
+        self.assertEqual(result["time"],0)
+        self.assertEqual(result["invested"],self.db.level_cost(9,713))
+
     def test_shared_budget_boundary(self):
         p=Planner(self.db)
         p.state["manual"].update(target=1)

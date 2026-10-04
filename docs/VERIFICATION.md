@@ -1,6 +1,6 @@
-# Verification â€” 4.0.0
+# Verification â€” 4.0.1
 
-The release builder runs 58 tests covering exact rune costs, every supplied
+The release builder runs 61 tests covering exact rune costs, every supplied
 catalogue passage, inverse math, shared stock, budgets, atomic storage, migrations,
 weighted farming and real Tk workflows.
 
@@ -30,6 +30,8 @@ four styles, fonts, images, empty/event timelines, named spots and the compact
 wallet. VERIFICATION_EXE.json and VERIFICATION_UI.json record those results. A synthetic PC save also runs through the packaged reader; VERIFICATION_SAVE.json records deduplication, unchanged-file checks and held/storage stone totals.
 RELEASE_MANIFEST.json hashes the precise source snapshot and all three artifacts.
 Screenshots show actual rendered application windows with synthetic demo data.
+
+Version 4.0.1 also checks the level-713 input, a single goal duration, starting-class investment, its farm-time equivalent, wallet separation, efficiency, boundary levels and legacy measurements. Performance samples below are retained from 4.0.0; they were not remeasured for this adjustment.
 
 ## Performance
 
