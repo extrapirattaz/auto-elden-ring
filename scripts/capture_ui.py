@@ -21,6 +21,8 @@ def main():
     app=App(persist=False)
     app.geometry("1280x860+30+30")
     app.attributes("-topmost",True)
+    state=app.profiles.create("Demo Tarnished","Demo Tarnished","Vagabond",app.data)
+    app.activate_profile(state)
     app.data["stats_target"]["vigor"]=60
     app.data["runes"]=1500
     app.data["farm"]["runes"]=50000
@@ -71,6 +73,14 @@ def main():
         app.apply_appearance()
         app.update()
         capture(app,directory/"reading.png")
+        app.data["dyslexic"]=False
+        app.set_visual_style("style_modern")
+        app.show("settings")
+        app.compact_mode()
+        app.update()
+        time.sleep(.2)
+        capture(app.compact_window,directory/"compact.png")
+        app.compact_window.reopen()
     finally:
         app.destroy()
 

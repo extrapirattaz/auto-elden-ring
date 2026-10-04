@@ -20,6 +20,7 @@ def default_state():
     stats = deepcopy(CLASS_DATA["Vagabond"]["stats"])
     return {"language":"en","theme":"calm","style":"modern","dyslexic":False,
             "character_name":"Tarnished","journey_name":"Journey 1","music_file":"",
+            "profile_created":False,"save_link":{},"inventory_weapons":[],"farm_spots":[],
             "purchased":{},"class_name":"Vagabond",
             "stats_current":deepcopy(stats),"stats_target":deepcopy(stats),"runes":0,
             "wallet_baseline":None,"runes_spent":0,"weapon_mode":"manual",
@@ -49,6 +50,20 @@ def validate_state(state,db):
     for key in ("character_name","journey_name","music_file"):
         if not isinstance(state[key],str) or len(state[key])>4096:
             raise ValueError("Invalid profile text.")
+    if not isinstance(state["profile_created"],bool) or not isinstance(state["save_link"],dict):
+        raise ValueError("Invalid profile metadata.")
+    if not isinstance(state["inventory_weapons"],list) or len(state["inventory_weapons"])>4608:
+        raise ValueError("Invalid owned weapons.")
+    for item in state["inventory_weapons"]:
+        weapon=db.weapons[item["name"]]
+        integer(item["current"],"Owned upgrade",0,weapon.maximum)
+        integer(item["quantity"],"Owned copies",1)
+    if not isinstance(state["farm_spots"],list) or len(state["farm_spots"])>100:
+        raise ValueError("Invalid farming spots.")
+    for spot in state["farm_spots"]:
+        if not isinstance(spot["name"],str) or not spot["name"].strip():
+            raise ValueError("Invalid farming spot name.")
+        validate_state({**state,"farm_spots":[],"farm":spot["farm"]},db)
     for key,value in state["purchased"].items():
         if key not in state["stock"]:
             raise ValueError("Invalid purchased material.")
@@ -197,7 +212,8 @@ class Planner:
             selection.remove(existing)
         else:
             w = self.db.weapons[name]
-            selection.append({"name":name,"current":0,"target":24 if w.maximum==25 else 9 if w.maximum==10 else 0,"quantity":1})
+            current=min((i["current"] for i in self.state["inventory_weapons"] if i["name"]==name),default=0)
+            selection.append({"name":name,"current":current,"target":max(current,24 if w.maximum==25 else 9 if w.maximum==10 else 0),"quantity":1})
 
     def without_dragon(self):
         if self.state["weapon_mode"]=="manual":

@@ -11,7 +11,10 @@ from .planner import default_state, validate_state
 
 
 def timestamp(value=None):
-    result=datetime.fromisoformat(value) if value else datetime.now().astimezone()
+    if value and "/" in value:
+        result=datetime.strptime(value,"%d/%m/%Y %H:%M")
+    else:
+        result=datetime.fromisoformat(value) if value else datetime.now().astimezone()
     # A user-specified local date is assigned the system's local timezone.
     if result.tzinfo is None:
         result=result.astimezone()
@@ -33,10 +36,12 @@ class Profiles:
         self.active["state"]=deepcopy(state)
 
     def create(self,name,journey,class_name,preferences=None):
+        if len(self.data["profiles"])>=100:
+            raise ValueError("The profile library is full (100 characters).")
         if not name.strip() or not journey.strip() or class_name not in CLASS_DATA:
             raise ValueError("Enter a character name, journey name and starting class.")
         state=default_state()
-        state.update(character_name=name.strip(),journey_name=journey.strip(),class_name=class_name)
+        state.update(character_name=name.strip(),journey_name=name.strip(),class_name=class_name,profile_created=True)
         state["stats_current"]=deepcopy(CLASS_DATA[class_name]["stats"])
         state["stats_target"]=deepcopy(state["stats_current"])
         if preferences:
@@ -54,6 +59,8 @@ class Profiles:
         return deepcopy(self.active["state"])
 
     def checkpoint(self,state,note="",date=None):
+        if len(self.active["checkpoints"])>=10000:
+            raise ValueError("The timeline is full (10,000 events).")
         validate_state(state,self.db)
         entry={"id":uuid4().hex,"date":timestamp(date),"note":str(note),"state":deepcopy(state)}
         self.active["checkpoints"].append(entry)
@@ -64,11 +71,17 @@ class Profiles:
         data=self.data
         if data.get("schema")!=1 or data["active"] not in data["profiles"] or len(data["profiles"])>100:
             raise ValueError("Invalid profile library.")
+        from .storage import upgrade_state
         for profile in data["profiles"].values():
+            if "profile_created" not in profile["state"]:
+                placeholder=profile["state"].get("character_name")=="Tarnished" and profile["state"].get("journey_name")=="Journey 1" and not profile["checkpoints"]
+                profile["state"]=upgrade_state(profile["state"])
+                profile["state"]["profile_created"]=not placeholder
             validate_state(profile["state"],self.db)
             if not isinstance(profile["checkpoints"],list) or len(profile["checkpoints"])>10000:
                 raise ValueError("Invalid checkpoint timeline.")
             for point in profile["checkpoints"]:
+                point["state"]=upgrade_state(point["state"])
                 timestamp(point["date"])
                 if not isinstance(point["note"],str) or not isinstance(point["id"],str):
                     raise ValueError("Invalid checkpoint.")

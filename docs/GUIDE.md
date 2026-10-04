@@ -1,130 +1,143 @@
-# User guide — 3.0.0
+# User guide â€” 4.0.0
 
-## Character
+## Start with a character
 
-Choose the original starting class. Enter permanent attributes without equipment
-or temporary bonuses. The class sets minimum values; attributes are capped at 99.
-Level equals the sum of attributes minus 79.
+Open Journal, then New character. Enter the character's in-game name and original
+starting class. There is one name for both the character and its journey.
+The starting class cannot be changed later. No sample character or timeline
+event is added automatically. Click a character card to open its timeline.
+Manual calculators also work before creating a profile.
 
-Levels update while valid attributes are entered. Calculate levels refreshes
-costs after recording held runes. Spending covers the starting-class level
-through the calculated current level. The budget result states actual levels,
-levels gained and remaining runes. Lower target attributes display a rebirth
-notice; redistribution itself is not charged as level growth.
+Add event offers two paths:
+
+- Save current progress snapshots the selected character's current calculator
+  state, settings, stock, goals and weapons.
+- Custom event lets you enter permanent attributes and record acquired or
+  upgraded weapons with their upgrade/copy counts. It derives the level from
+  the attributes and leaves the current calculator state unchanged.
+
+Dates default to the computer's current local time. An optional custom date
+uses DD/MM/YYYY HH:MM. Events are sorted by date; click View checkpoint for
+attributes, owned weapons, planning targets and changes. Later edits cannot
+alter an older snapshot. Show older/newer events pages through histories in groups of at most 100 events.
+
+## Import and refresh a game save
+
+Use Import game save in Journal or Settings. The installed executable and the
+save are stored separately: typical PC saves are in
+%APPDATA%/EldenRing/account-folder/ER0000.sl2. Selecting the installation folder
+checks for saves there, then the roaming directory. If several exist, select
+the intended .sl2/.co2 file explicitly.
+
+The app reads the latest saved state in a background worker. It never modifies
+the game file, attaches to a game process, repairs a checksum or injects input.
+Plaintext PC BND4 saves must pass slot MD5 checks, section bounds and
+class/attribute/level checks. Unsupported, damaged or changing files produce an
+error rather than a guessed character.
+
+Each non-empty supported slot becomes a profile with one initial event.
+Names, original classes, permanent stats, levels, held runes, owned catalogue
+weapons/upgrades and ordinary smithing stones are imported. Weapons and stones
+include inventory and storage; withdraw stored items when needed in the game.
+Ancient dragon stones retain question marks in the ordinary purchase planner.
+Armor, talismans, ammunition, consumables and other items are not a complete item
+encyclopedia here. Entries the weapon catalogue cannot resolve are counted.
+
+Choose the intended character card. Refresh from save keeps that selected slot,
+updates current values, preserves higher goals and named farm spots, and adds a
+change event only when the saved slot changed. No live polling runs while playing.
+You can edit held runes manually, or refresh from the saved file.
+Renaming/reusing a slot with the same class cannot reliably identify a new journey;
+the reader matches the save path, slot and class. A replaced class creates a new
+profile and preserves the old one.
+
+## Character levels
+
+Enter permanent attributes without equipment or temporary bonuses. Original
+class stats set minimum values, with a maximum of 99. Level equals the attribute
+sum minus 79. Current and target levels update from valid input.
+Calculate levels records held runes and shows remaining cost, spending since the
+starting class level, cost to 713, affordable levels and leftover runes.
+Lower target attributes show a rebirth notice; redistribution is not charged as
+new level growth. Choose a saved farm spot for an approximate farming duration.
 
 ## Weapons
 
-Manual price asks for normal/somber, blacksmith price for +0 → +1, current
-upgrade, target and optional copies. Defaults are +24 normal and +10 somber.
-Use next-upgrade price changes the input to the quote for the next step:
-enter current +9 and the +9 → +10 quote, for example. The standard profile
-is inverted before remaining costs are calculated.
+Manual mode asks for normal/somber, blacksmith price for +0 to +1, current upgrade,
+target and copies. Defaults are +24 normal and +10 somber.
+Use next-upgrade price replaces the base price with the quote for the current
+upgrade's next step, such as +9 to +10. The standard formula is inverted first.
+Catalogue tariffs take priority for known exceptions.
 
-Choose weapons opens category headings and illustrated cards. Click to select,
-click again to deselect. Search accepts English and localized names. Done opens
-the selected weapon overview. Choose a weapon in the editor to set its individual
-current/target upgrades and copies; the other selected weapons retain their values.
+Choose weapons opens illustrated cards grouped by category. Click to select,
+click again to deselect. Search accepts localized or English names.
+Owned imported weapons start at their lowest owned upgrade. Choose each selected
+weapon in the editor to set its current upgrade, target and copies independently.
+Maximum without dragon stones sets +24 normal/+9 somber without reducing a
+higher existing upgrade. Totals separate forge fees and missing-stone purchases.
+The affordable result raises a shared target using stock and budget; it does
+not optimize which weapon should receive priority.
 
-Maximum without dragon stones sets +24 normal and +9 somber without reducing
-already higher upgrades. Totals separate forge fees and missing-stone purchases.
-The affordable result uses shared stock and wallet, progressively raising a
-common target capped at +24/+9. It does not optimize which weapon to prioritize.
+## Materials and acknowledgements
 
-Manual formulas assume a standard profile. Catalogue weapons retain supplied
-exact tariffs, including Soldier's Crossbow, Pulley Crossbow and Jar Cannon.
+Enter owned counts in the stone calculator or choose I have none.
+Stock is shared across planned weapons, so a stone is not allocated twice.
+Missing stones lists amounts and purchase costs. Mark Purchased after buying
+the indicated batch in game. Stock increases, and the row remains visibly checked.
+Held runes never block or charge a purchase acknowledgement.
 
-## Materials and progress
+After visiting the blacksmith, confirm Upgrades completed. Current upgrades
+become their targets, other owned copies are preserved, and ALL recorded ordinary
+stones, held runes and purchase checks reset to zero. This includes surplus stock;
+enter actual leftovers again. A created character receives an automatic event.
+An unnamed manual weapon remains recorded as its manual upgrade state; the app
+cannot invent a catalogue identity from a price alone.
 
-The planner assumes all relevant miner's bell bearings are available at the
-Twin Maiden Husks. Enter owned counts or select I have none. Stock is shared:
-one stone cannot be allocated twice.
+Ancient stones have no unit price or ordinary stock requirement. Rune totals
+include the blacksmith's final fee but exclude a fictitious dragon-stone purchase.
+Double-click an ordinary unit price to override it after confirmation.
 
-Missing stones lists quantities and costs. Confirm Purchased after acquiring
-the indicated batch: stones are added and the row stays checked in green.
-No wallet value is required. This records what you did in the game; it does not
-simulate a rune transaction. The same satisfied requirement cannot be purchased twice.
+## Farm measurements and spots
 
-After buying materials and visiting the blacksmith, confirm Upgrades completed.
-Current upgrades become their targets and ALL recorded ordinary stock, held
-runes and purchase checks reset to zero, including surplus materials. Actual
-leftovers can be entered again. This acknowledgement is accepted even if the
-planning wallet or materials were insufficient. The app trusts your confirmation.
-
-Ancient prices, ordinary requirements and stock show question marks. Rune totals
-exclude their acquisition. Double-click an ordinary unit price to override it
-after confirming the standard value is being replaced. Restore prices removes
-overrides.
-
-Held runes are user-reported and only calculate the remaining farming deficit;
-the application never reads the game.
-
-## Rune farming
-
-Record rune gain only, excluding pre-existing runes. A zero starting balance is
-convenient but not required. Start one minute runs 60 seconds. Reset cancels and
-restores one minute. A stopped ordinary test uses its elapsed duration.
-
-Full test clears earlier measurements and runs separately started 60, 60 and
-180-second tests. After each finish enter gain and notes, record the result, then
-start the next test. The final rate is total runes divided by 300 seconds,
-expressed per minute. Each sample keeps buffs selected at timer start.
+Record rune gain only, excluding an existing balance. Start one minute runs
+60 seconds; Reset restores 60 seconds. A stopped test uses elapsed duration.
+Full test runs separately started 60, 60 and 180-second trials. After each trial
+enter gain/notes, record it, then start the next. Rates are weighted by duration.
+Each sample retains buffs selected at timer start.
 
 Gold Scarab is +20%, gold-pickled fowl foot +30%, golden horn tender +40%.
-Scarab multiplies a single consumable; foot and horn are mutually exclusive.
-Silver discovery items add 0% runes. Each sample is normalized using its own
-multiplier before aggregation. Projections compare no buffs, scarab, foot,
-scarab + foot and scarab + horn. Enemy rounding and buff uptime make these
-projections estimates rather than exact future earnings.
+Scarab multiplies one consumable; foot and horn are mutually exclusive.
+Silver discovery buffs add 0% runes. Comparisons normalize each sample using
+its own multiplier. Per-enemy rounding and buff uptime affect actual results.
 
-Choose character, weapons, combined, level 713 or free objective. The free input
-appears only for free objectives. Held runes are deducted once. Efficiency adjusts
-time estimates. Editing gain/duration switches from sample averages to the
-entered single measurement; recording enables sample averages again.
+Save this farming spot names the current measurement/sample set for this
+character. Selecting a spot restores its rates and buffs. The farm page supports
+character, weapons, combined, level 713 or free objectives; a free amount appears
+only for a free objective. Held runes are deducted once. Efficiency adjusts time.
+Character and weapon pages can also select saved spots for their own goals.
 
-## Settings, save and resume
+## Appearance, music and small mode
 
-Choose six languages and three themes. This release has no Windows XP imitation.
-The Windows title bar is integrated into the selected theme. Drag its empty
-area to move the window, double-click to maximize/restore, and use the right
-controls to minimize, maximize or close. Native resize borders remain available.
-Save build writes goals, current/target attributes, weapons, wallet, stock,
-overrides, farm samples, language and theme into a JSON project.
+Modern uses rounded panels. Elden Ring uses a full fantasy landscape background,
+serif text and dark palettes. Windows XP uses square controls, blue accents and
+grey surfaces with one palette. RGB animates colors smoothly; it has no strobe.
+Reading mode applies larger OpenDyslexic text and a calm cream palette, then
+restores the selected style when disabled. Changes retain existing page widgets
+and batch presentation updates without reopening the main window.
 
-Open build prompts for current runes and whether to keep saved current attributes.
-Otherwise the character screen opens for editing. The stock calculator then asks
-for current owned stones.
+Choose a local MP3/WAV to play, restart, pause or stop music. Closing the app
+closes its playback device. Files stay local; playback does not start automatically.
 
-Autosave lives at %LOCALAPPDATA%\AutoEldenRing\session-v2.json, outside the source
-and download folders. Failed loads start a new session and show the error in
-Settings. Version-1 projects remain tied to version 1.
+Small companion is always on top and provides character/weapon/farm views and
+editable held runes. It hides the main window, closes extra popups and releases
+inactive cached pages. A running timer on the current farm page is retained.
+Open full application returns to the selected view. It is an ordinary desktop
+window, not an injected game overlay; exclusive fullscreen may cover it.
 
+## Local progress
 
-## Visual styles and reading mode
-
-Style changes button geometry, font, navigation layout and decoration. Modern
-uses rounded panels; Elden Ring uses serif text, gold accents, icons and bundled
-fantasy landscape art; XP nostalgia uses square buttons and a horizontal toolbar;
-Rainbow uses static multicolored headings/navigation. Each style has three color
-palettes. No animation loop runs in the background.
-
-Reading mode temporarily applies larger OpenDyslexic text and a cream palette.
-The selected style/palette remain saved and return when reading mode is disabled.
-Music is optional: choose a local MP3/WAV, play/restart, pause or stop. Closing
-the app closes its own playback device. Playback does not start automatically.
-
-## Characters and journal
-
-Open Journal or the character button, then New character. Enter a character
-name, journey name and original class. Profiles have independent attributes,
-weapons, stock, runes and checkpoints. Switching saves the valid current state
-and stops the active timer/music before changing context.
-
-To record progress, enter a checkpoint note and an ISO date/time, or Use now.
-Save checkpoint creates an immutable snapshot, sorted by date. View checkpoint
-shows the saved class, attributes, level and weapon upgrades. Later edits do
-not change earlier snapshots. Names/journey labels can be renamed.
-
-The library saves locally to %LOCALAPPDATA%/AutoEldenRing/profiles-v3.json.
-Back up this file for all profiles and checkpoint history. Save project exports
-one current build state, rather than the entire library. Schema-2 builds import
-with default profile/style preferences; new exports use schema 3.
+Profiles and timelines autosave to
+%LOCALAPPDATA%/AutoEldenRing/profiles-v3.json. Back up this file for all history.
+No save/open-build buttons are present. Existing version-3 libraries and previous
+schema-2/3 state files are migrated. Version-1 projects require version 1.
+An invalid local library is reported in Settings.

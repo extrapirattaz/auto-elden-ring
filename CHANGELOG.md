@@ -1,5 +1,23 @@
 # Changelog
 
+## 4.0.0 — 2026-10-04
+
+- Fixed stale native scroll backgrounds and semantic palette propagation.
+- Batched language, palette and reading-mode repainting without reopening pages.
+- Moved Elden landscape art into the full window background.
+- Renamed Windows XP, restricted it to one blue/grey palette and square geometry.
+- Animated opt-in RGB smoothly; no strobe flashes are implemented.
+- Replaced the journal with initially empty character cards and a true timeline.
+- Unified character/journey names, fixed starting classes and added custom events.
+- Added read-only checksum-validated PC save import and deduplicated change events.
+- Imported stats, runes, catalogue weapons/upgrades and held/storage stones.
+- Preserved selected save slots, higher targets and other owned weapon copies.
+- Added automatic weapon-upgrade events and immutable detailed snapshots.
+- Removed save/open-build actions; retained atomic local progress/migration.
+- Added named farm spots and character/weapon time estimates.
+- Added an always-on-top compact companion with editable runes and inactive-page release.
+- Added save-reader, atomic-import, timeline, appearance and compact-flow checks.
+
 ## 3.0.0 — 2026-10-03
 
 - Restored native Windows caption, move, maximize, resize and close handling;

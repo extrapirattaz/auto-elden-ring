@@ -2,7 +2,7 @@
 from collections import OrderedDict
 import math
 import tkinter as tk
-from tkinter import ttk
+import customtkinter as ctk
 from PIL import Image, ImageTk
 from .core import resource_path
 
@@ -18,7 +18,9 @@ class Gallery(tk.Frame):
         self.max_cache=64
         self.job=None
         self.canvas=tk.Canvas(self,bg=app.bg,highlightthickness=0,bd=0)
-        self.scrollbar=ttk.Scrollbar(self,orient="vertical",command=self.scroll)
+        self.scrollbar=ctk.CTkScrollbar(self,orientation="vertical",command=self.scroll,
+            fg_color=app.bg,bg_color=app.bg,button_color=app.soft,button_hover_color=app.accent,
+            corner_radius=app.style_spec["button_radius"],width=12)
         self.canvas.configure(yscrollcommand=self.scrollbar.set)
         self.scrollbar.pack(side="right",fill="y")
         self.canvas.pack(fill="both",expand=True)
@@ -35,6 +37,9 @@ class Gallery(tk.Frame):
     def reflow(self):
         self.configure(bg=self.app.bg)
         self.canvas.configure(bg=self.app.bg)
+        self.scrollbar.configure(fg_color=self.app.bg,bg_color=self.app.bg,
+            button_color=self.app.soft,button_hover_color=self.app.accent,
+            corner_radius=self.app.style_spec["button_radius"],width=18 if self.app.data["style"]=="xp" else 12)
         width=max(340,self.canvas.winfo_width())
         columns=max(1,width//190)
         card_width=width/columns

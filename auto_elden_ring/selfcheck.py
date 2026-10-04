@@ -43,3 +43,29 @@ def self_check():
     return json.dumps({"app_version":__version__,"status":"PASS","checks":checks,
         "catalogue_count":len(db.weapons),"regulation":db.metadata["regulation_version"],
         "data_sha256":hashlib.sha256(db.path.read_bytes()).hexdigest()},ensure_ascii=False,indent=2)
+
+
+def save_check(path):
+    """Exercise the packaged reader without exporting character identifiers."""
+    from pathlib import Path
+    from .save_reader import read_save
+    from .profiles import Profiles
+    from .history import import_characters
+    from .planner import Planner,default_state
+    path=Path(path)
+    before=path.stat()
+    digest=hashlib.sha256(path.read_bytes()).digest()
+    db=Database()
+    characters=read_save(path,db)
+    profiles=Profiles(db)
+    ids=import_characters(profiles,characters,default_state())
+    checks={"planner levels":all(Planner(db,profiles.select(ident)).character()["current"]==char["level"]
+                               for ident,char in zip(ids,characters))}
+    import_characters(profiles,read_save(path,db),default_state())
+    checks["deduplicated refresh"]=all(len(profiles.data["profiles"][ident]["checkpoints"])==1 for ident in ids)
+    checks["file unchanged"]=digest==hashlib.sha256(path.read_bytes()).digest() and before.st_mtime_ns==path.stat().st_mtime_ns
+    if not all(checks.values()):
+        raise RuntimeError("Save-reader self-check failed.")
+    return json.dumps({"app_version":__version__,"status":"PASS","characters":len(characters),
+        "weapon_variants":sum(len(c["weapons"]) for c in characters),
+        "ordinary_stones_total":sum(sum(c["stock"].values()) for c in characters),"checks":checks},indent=2)

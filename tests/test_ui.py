@@ -126,8 +126,9 @@ class Interface(unittest.TestCase):
         state=a.profiles.create("Ranni","NG+","Wretch",a.data)
         a.activate_profile(state)
         a.show("journal")
-        a.checkpoint_note.set("First step")
-        a.save_checkpoint()
+        window=a.event_dialog()
+        window.event_note.set("First step")
+        window.save_current()
         point=a.profiles.active["checkpoints"][0]
         a.checkpoint_detail(point)
         a.switch_profile(first)

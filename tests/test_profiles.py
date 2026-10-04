@@ -11,6 +11,14 @@ from auto_elden_ring.storage import save_project,load_project
 
 
 class Journals(unittest.TestCase):
+    def test_legacy_unnamed_placeholder_does_not_create_a_character(self):
+        profiles=Profiles(self.db)
+        state=profiles.active["state"]
+        for key in ("profile_created","save_link","inventory_weapons","farm_spots"):
+            state.pop(key)
+        profiles.validate()
+        self.assertFalse(profiles.active["state"]["profile_created"])
+
     def setUp(self):
         self.db=Database()
 

@@ -221,7 +221,8 @@ great_katana|Great katanas|Grands katanas|Velké katany|Großkatanas|Grandes kat
 beast_claw|Beast claws|Griffes bestiales|Zvířecí drápy|Bestienklauen|Garras de bestia|獣爪
 """
 from .i18n_v3 import ROWS as EXTRA_ROWS
-ROWS=ROWS.strip()+"\n"+EXTRA_ROWS.strip()
+from .i18n_v4 import ROWS as NEW_ROWS
+ROWS=ROWS.strip()+"\n"+EXTRA_ROWS.strip()+"\n"+NEW_ROWS.strip()
 TEXT = {language:{} for language in LANGUAGE_NAMES}
 for row in ROWS.strip().splitlines():
     key,*values = row.split("|")
@@ -229,6 +230,8 @@ for row in ROWS.strip().splitlines():
         raise RuntimeError(f"Invalid translation row: {key}")
     for language,value in zip(TEXT,values):
         TEXT[language][key] = value
+for language in TEXT:
+    TEXT[language]["style_xp"]="Windows XP"
 
 
 from functools import lru_cache

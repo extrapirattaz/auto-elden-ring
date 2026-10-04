@@ -3,6 +3,15 @@ import sys
 
 
 def main():
+    if "--save-check" in sys.argv:
+        from auto_elden_ring.selfcheck import save_check
+        from pathlib import Path
+        report=save_check(sys.argv[sys.argv.index("--save-check")+1])
+        if "--report" in sys.argv:
+            Path(sys.argv[sys.argv.index("--report")+1]).write_text(report,encoding="utf-8")
+        elif sys.stdout is not None:
+            print(report)
+        return
     if "--ui-smoke" in sys.argv:
         from auto_elden_ring.ui import App
         from auto_elden_ring import __version__
@@ -35,6 +44,25 @@ def main():
             app.data["dyslexic"]=True
             app.apply_appearance()
             checks["reading font"]=app.font_family=="OpenDyslexic"
+            app.data["dyslexic"]=False
+            app.set_visual_style("style_modern")
+            state=app.profiles.create("Release fixture","Release fixture","Warrior",app.data)
+            app.activate_profile(state)
+            app.show("journal")
+            checks["empty character timeline"]=len(app.timeline.find_all())==1
+            app.profiles.checkpoint(app.data,"Release checkpoint")
+            app.draw_timeline()
+            checks["timeline event"]=len(app.timeline.find_all())>1
+            app.show("farm")
+            app.data["farm_spots"]=[{"name":"Release spot","farm":dict(app.data["farm"])}]
+            app.select_farm_spot("Release spot")
+            checks["named farm spot"]=app.spot_option.get()=="Release spot"
+            app.compact_mode()
+            app.compact_window.rune_var.set("1500")
+            app.update()
+            checks["compact companion"]=app.data["runes"]==1500 and len(app.views)==1 and app.compact_window.winfo_viewable() and not app.winfo_viewable()
+            app.compact_window.reopen()
+            app.update()
             checks["no callback errors"]=not app.callback_errors
             report=json.dumps({"app_version":__version__,"status":"PASS" if all(checks.values()) else "FAIL","checks":checks},indent=2)
             if "--report" in sys.argv:

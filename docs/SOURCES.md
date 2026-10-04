@@ -76,3 +76,31 @@ are bundled from commit 1824da5c0e41dc3e13ffc7f3a636dcaf695d61b7.
 The SIL Open Font License is included in assets/fonts/OFL.txt. Fonts are loaded
 privately for this process, without installing a system font. The reading mode
 offers a preference; no medical effectiveness claim is made.
+
+
+## Version-4 read-only save reader
+
+The bounded PC prefix reader in save_reader.py is implemented locally, without
+shipping or invoking a save editor. It has no write-back, repair, process-memory
+or game-input API. Binary layout research used these primary projects:
+
+- [Hapfel's Elden Ring Save Parser](https://github.com/Hapfel1/elden-ring-save-parser-lib),
+  commit dcb01ed74d7cbad83ed1e756fb2cdef2dd73780b. MIT attribution is included at
+  assets/licenses/save-parser-MIT.txt. The complete parser is not bundled.
+- [SaveForge header specification](https://github.com/oisis/EldenRing-SaveForge/blob/main/spec/01-header.md),
+  [GA item records](https://github.com/oisis/EldenRing-SaveForge/blob/main/spec/03-gaitem-map.md),
+  [player data](https://github.com/oisis/EldenRing-SaveForge/blob/main/spec/04-player-game-data.md),
+  [inventory](https://github.com/oisis/EldenRing-SaveForge/blob/main/spec/07-inventory.md)
+  and [storage](https://github.com/oisis/EldenRing-SaveForge/blob/main/spec/10-storage.md).
+  Consulted on 2026-10-03. These are references, not bundled editor components.
+- [Ariescyn item ID reference](https://github.com/Ariescyn/EldenRing-Save-Manager/blob/main/ALL_ITEM_IDS.md)
+  for ordinary stone goods IDs. Weapon IDs resolve against the supplied catalogue.
+
+The reader checks BND4, bounded file/sections, ten slot MD5 checksums, class
+minimums and level = attribute sum - 79. It reads variable weapon/armor instance
+records, permanent player data and both held/storage common inventories.
+Goods can resolve directly from their handle when no instance map entry exists.
+Affinity variants use the same catalogue base weapon while retaining upgrades;
+affinity and Ash of War are not tracked by this planner.
+The local real-save check covered slot versions 210 and 250. Console/encrypted
+formats and modified/new layouts have no support guarantee.

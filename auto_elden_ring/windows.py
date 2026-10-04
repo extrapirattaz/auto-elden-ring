@@ -1,9 +1,31 @@
 """Small Windows helpers; never remove caption styles or synthesize move loops."""
 import ctypes
 import os
+from contextlib import contextmanager
 from .core import resource_path
 
 _fonts_loaded=False
+
+
+@contextmanager
+def suspend_redraw(window):
+    """Batch presentation changes without hiding or recreating the window."""
+    if os.name!="nt" or not window.winfo_viewable():
+        yield
+        return
+    user=ctypes.windll.user32
+    user.GetParent.argtypes=[ctypes.c_void_p]
+    user.GetParent.restype=ctypes.c_void_p
+    hwnd=user.GetParent(window.winfo_id())
+    user.SendMessageW.argtypes=[ctypes.c_void_p,ctypes.c_uint,ctypes.c_size_t,ctypes.c_ssize_t]
+    user.SendMessageW(hwnd,0xB,0,0)
+    try:
+        yield
+        window.update_idletasks()
+    finally:
+        user.SendMessageW(hwnd,0xB,1,0)
+        user.RedrawWindow.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_uint]
+        user.RedrawWindow(hwnd,None,None,0x185)
 
 
 def load_reading_font():

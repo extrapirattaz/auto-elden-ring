@@ -46,7 +46,10 @@ def fmt(value):
     return f"{value:,.0f}".replace(",", " ")
 
 
-class App(ctk.CTk):
+from .ui_v4 import Features
+
+
+class App(Features,ctk.CTk):
     _deactivate_windows_window_header_manipulation=True
 
     def __init__(self, db=None, persist=True, state=None):
@@ -97,6 +100,7 @@ class App(ctk.CTk):
         except tk.TclError:
             pass
         self.build_shell()
+        self.start_rgb()
         self.after_idle(self.blend_titlebar)
 
     @property
@@ -130,8 +134,10 @@ class App(ctk.CTk):
         return widget
 
     def card(self,parent):
-        return ctk.CTkFrame(parent,fg_color=self.paper,corner_radius=self.style_spec["radius"],
-                           border_width=1 if self.data["style"] in ("elden","xp") else 0,border_color=self.soft)
+        frame=ctk.CTkFrame(parent,fg_color=self.paper,corner_radius=self.style_spec["radius"],
+                           border_width=2 if self.data["style"]=="xp" else 1 if self.data["style"]=="elden" else 0,border_color=self.soft)
+        frame._surface_role="paper"
+        return frame
 
     def action(self, command):
         try:
@@ -155,6 +161,7 @@ class App(ctk.CTk):
         self.grid_columnconfigure(1,weight=1)
         self.grid_rowconfigure(0,weight=1)
         self.sidebar=ctk.CTkFrame(self,width=self.style_spec["sidebar"],fg_color=self.paper,corner_radius=0)
+        self.sidebar._surface_role="paper"
         self.sidebar.grid(row=0,column=0,sticky="ns")
         self.sidebar.grid_propagate(False)
         self.brand=self.label(self.sidebar,"AUTO\nELDEN RING",24)
@@ -166,11 +173,13 @@ class App(ctk.CTk):
         self.version_label=self.label(self.sidebar,f"v{__version__} · {self.t('offline')}",12,True)
         self.side_art=self.label(self.sidebar,"")
         self.host=ctk.CTkFrame(self,fg_color=self.bg,corner_radius=0)
+        self.host._surface_role="bg"
         self.host.grid(row=0,column=1,sticky="nsew",padx=24,pady=20)
         self.layout_style()
         self.show(self.page)
 
     def layout_style(self):
+        self._layout_signature=(self.data["style"],self.data["dyslexic"])
         self.sidebar.configure(width=self.style_spec["sidebar"],fg_color=self.paper)
         for widget in self.sidebar.winfo_children():
             widget.pack_forget()
@@ -186,6 +195,7 @@ class App(ctk.CTk):
             self.host.grid_configure(row=1,column=0,columnspan=2,sticky="nsew",padx=18,pady=14)
             self.brand.configure(text="AUTO ELDEN RING",font=self.font(13,True))
             self.brand.pack(side="left",padx=12,pady=14)
+            self.profile_button.pack(side="left",padx=4,pady=10)
             for button in self.nav.values():
                 button.configure(width=120,height=32)
                 button.pack(side="left",padx=3,pady=10)
@@ -203,7 +213,7 @@ class App(ctk.CTk):
                 if image:
                     self.side_art.configure(image=image)
                     self.side_art.pack(pady=(0,16))
-            self.profile_button.configure(text=self.data["character_name"]+" · "+self.data["journey_name"])
+            self.profile_button.configure(text=self.data["character_name"] if self.data["profile_created"] else self.t("switch_character"))
             self.profile_button.pack(pady=(0,12),padx=16)
             for key,button in self.nav.items():
                 button.configure(width=180,height=38)
@@ -226,7 +236,8 @@ class App(ctk.CTk):
     def blend_titlebar(self):
         # Native caption, movement and resize loops are deliberately retained.
         if not self._closing:
-            caption_color(self,self.bg,self.ink)
+            classic=self.data["style"]=="xp" and not self.data["dyslexic"]
+            caption_color(self,self.accent if classic else self.bg,"#FFFFFF" if classic else self.ink)
 
     def toggle_maximize(self):
         self.state("normal" if self.state()=="zoomed" else "zoomed")
@@ -235,6 +246,9 @@ class App(ctk.CTk):
         if self._closing:
             return
         self.page=page
+        if page=="farm" and getattr(self,"farm_spot_dirty",False):
+            refresh=True
+            self.farm_spot_dirty=False
         for record in self.views.values():
             record["frame"].pack_forget()
         if refresh and page in self.views:
@@ -242,6 +256,7 @@ class App(ctk.CTk):
             self.views.pop(page)["frame"].destroy()
         if page not in self.views:
             frame=ctk.CTkFrame(self.host,fg_color=self.bg,corner_radius=0)
+            frame._surface_role="bg"
             record={"frame":frame}
             self.views[page]=record
             art=self.label(frame,"")
@@ -268,26 +283,19 @@ class App(ctk.CTk):
         self.refresh_character()
         self.refresh_weapons()
         self.refresh_farm_results()
+        self.refresh_goal_spots()
         if "weapons" in self.views and self.data["weapon_mode"]=="catalogue" and self.selected_vars:
             self.selected_editor.configure(values=[self.translator.weapon(i["name"]) for i in self.data["selected"]])
             self.selected_editor.set(self.translator.weapon(self.selected_vars[0][0]["name"]))
         if "weapons" in self.views and self.data["manual"]["input_mode"]=="next" and self.data["weapon_mode"]=="manual":
             self.update_price_prompt()
         self.refresh_nav()
-        self.refresh_art()
+        self.normalize_surfaces(self.views[page]["frame"])
+        if page=="journal":
+            self.draw_timeline()
         if page=="farm":
             self.update_timer_display()
 
-    def refresh_art(self):
-        for record in self.views.values():
-            art=record["art"]
-            if self.data["style"]=="elden" and not self.data["dyslexic"]:
-                image=self.art_image((880,118))
-                if image:
-                    art.configure(image=image,height=118)
-                    art.pack(before=record["frame"].winfo_children()[1],fill="x",pady=(0,14))
-            else:
-                art.pack_forget()
 
     def refresh_nav(self):
         icons={"character":"◇","weapons":"⚔","stones":"◈","farm":"◷","journal":"✦","settings":"⚙"}
@@ -378,7 +386,11 @@ class App(ctk.CTk):
         top=self.card(self.body)
         top.pack(fill="x",pady=(0,12))
         self.class_option=self.option(top,"starting_class",tuple(CLASS_DATA),self.data["class_name"],self.set_class,0)
+        if self.data["profile_created"]:
+            self.class_option.configure(state="disabled")
         self.wallet(top,1)
+        if self.data["save_link"]:
+            self.button(top,"refresh_save",self.refresh_import,True).grid(row=1,column=2,padx=14)
         self.level_label=self.label(top,"",18)
         self.level_label.grid(row=2,column=0,columnspan=2,sticky="w",padx=18,pady=14)
         self.stats_frame=self.card(self.body)
@@ -390,6 +402,7 @@ class App(ctk.CTk):
         self.character_budget.pack(anchor="w",pady=8)
         self.respec_label=self.label(self.body,"",muted=True,wraplength=900)
         self.respec_label.pack(anchor="w")
+        self.character_time=self.goal_farm_summary(self.body,"character")
         self.refresh_character()
 
     def rebuild_stats_table(self):
@@ -429,6 +442,8 @@ class App(ctk.CTk):
         self.character_budget.configure(text=self.t("budget_route",current=c["current"],target=c["reachable"],
                                           count=c["reachable"]-c["current"],left=fmt(c["left"])))
         self.respec_label.configure(text=self.t("respec") if c["respec"] else "")
+        if hasattr(self,"character_time"):
+            self.character_time()
 
     def preview_levels(self):
         try:
@@ -448,6 +463,8 @@ class App(ctk.CTk):
         self.autosave()
 
     def set_class(self,name):
+        if self.data["profile_created"]:
+            return
         previous=CLASS_DATA[self.data["class_name"]]["stats"]
         self.data["class_name"]=name
         for section in ("stats_current","stats_target"):
@@ -458,6 +475,7 @@ class App(ctk.CTk):
                     self.data[section][attribute]=max(self.data[section][attribute],CLASS_DATA[name]["stats"][attribute])
         self.rebuild_stats_table()
         self.refresh_character()
+        self.normalize_surfaces()
         self.autosave()
 
     def build_weapons(self):
@@ -485,6 +503,7 @@ class App(ctk.CTk):
         self.button(actions,"calculate_weapons",self.calculate_weapons).pack(side="left",padx=(0,10))
         self.button(actions,"max_without_dragon",self.max_without_dragon,True).pack(side="left")
         self.weapon_summary()
+        self.weapon_time=self.goal_farm_summary(self.body,"weapons")
 
     def rebuild_weapon_form(self):
         if not hasattr(self,"weapon_form"):
@@ -647,6 +666,8 @@ class App(ctk.CTk):
         self.weapon_affordable.configure(text=self.t("affordable_weapon",route=route,left=fmt(left)))
         self.weapon_dragon.configure(text=self.t("dragon_notice") if plan["dragon_needed"] else "")
         self.refresh_selected_overview()
+        if hasattr(self,"weapon_time"):
+            self.weapon_time()
 
     def popup(self,title,size="960x740"):
         window=ManagedWindow(self)
@@ -658,7 +679,13 @@ class App(ctk.CTk):
         window.transient(self)
         window.protocol("WM_DELETE_WINDOW",window.destroy)
         window.lift()
-        window.after_idle(lambda:caption_color(window,self.bg,self.ink))
+        def present():
+            self.normalize_surfaces(window)
+            classic=self.data["style"]=="xp" and not self.data["dyslexic"]
+            caption_color(window,self.accent if classic else self.bg,"#FFFFFF" if classic else self.ink)
+        # Some CTk constructors process idle work before their child scrollbars
+        # exist. Present on the next event cycle, after construction is complete.
+        window.after(0,present)
         return window
 
     def catalogue(self):
@@ -706,6 +733,7 @@ class App(ctk.CTk):
         for key in ("normal:dragon","somber:dragon"):
             self.label(self.body,self.translator.stone(key)+"   ·   "+self.t("unit_price")+": ?   ·   "+self.t("required")+": ?   ·   "+self.t("owned")+": ?",muted=True,wraplength=950).pack(anchor="w",pady=10)
         self.button(self.body,"restore_prices",self.restore_prices,True).pack(anchor="w",pady=14)
+        self.normalize_surfaces()
 
     def restore_prices(self):
         self.data["prices"]={}
@@ -798,7 +826,27 @@ class App(ctk.CTk):
     def complete_upgrades(self):
         self.read_weapons()
         if messagebox.askyesno(self.t("complete_upgrades"),self.t("confirm_upgrade_record"),parent=self):
+            completed=deepcopy(self.data["selected"]) if self.data["weapon_mode"]=="catalogue" else []
+            before=deepcopy(self.data)
             self.planner.complete_upgrades()
+            for item in completed:
+                owned=self.data["inventory_weapons"]
+                remaining=item["quantity"]
+                for record in owned:
+                    if record["name"]==item["name"] and record["current"]==item["current"]:
+                        count=min(remaining,record["quantity"])
+                        record["quantity"]-=count
+                        remaining-=count
+                owned[:]=[i for i in owned if i["quantity"]>0]
+                existing=next((i for i in owned if i["name"]==item["name"] and i["current"]==item["target"]),None)
+                if existing:
+                    existing["quantity"]+=item["quantity"]
+                else:
+                    owned.append({"name":item["name"],"current":item["target"],"quantity":item["quantity"]})
+            if self.data["profile_created"]:
+                from .history import differences
+                point=self.profiles.checkpoint(self.data,"upgrade_event")
+                next(p for p in self.profiles.active["checkpoints"] if p["id"]==point["id"])["changes"]=differences(before,self.data)
             for window in tuple(self.popups):
                 if hasattr(window,"purchase_rows") or hasattr(window,"stock_vars"):
                     window.destroy()
@@ -824,6 +872,13 @@ class App(ctk.CTk):
         form.pack(fill="x")
         self.wallet(form)
         f=self.data["farm"]
+        spots=ctk.CTkFrame(self.body,fg_color="transparent")
+        spots.pack(fill="x",pady=12)
+        self.spot_option=ctk.CTkOptionMenu(spots,values=[self.t("new_measurement")]+[s["name"] for s in self.data["farm_spots"]],
+                         command=lambda name:self.action(lambda:self.select_farm_spot(name)),
+                         fg_color=self.soft,button_color=self.accent,text_color=self.ink,font=self.font())
+        self.spot_option.pack(side="left",padx=6)
+        self.button(spots,"save_spot",self.save_farm_spot,True).pack(side="left",padx=6)
         self.farm_vars={}
         for row,(field,key) in enumerate((("runes","measured_runes"),("seconds","duration"),("efficiency","efficiency")),1):
             self.farm_vars[field]=self.entry(form,key,f[field],row)
@@ -1042,9 +1097,9 @@ class App(ctk.CTk):
         label=self.label(audio,self.t("music_hint"),muted=True,wraplength=830,justify="left")
         label._translation_key="music_hint"
         label.pack(anchor="w",padx=18,pady=(0,16))
-        for key,command in (("save_project",self.save),("open_project",self.load),("reset_session",self.reset_session)):
-            self.button(self.body,key,command,True).pack(anchor="w",pady=8)
-        for key in ("autosave_note","help_body"):
+        self.button(self.body,"small_mode",self.compact_mode,True).pack(anchor="w",pady=8)
+        self.button(self.body,"import_save",self.import_dialog,True).pack(anchor="w",pady=8)
+        for key in ("autosave_note",):
             label=self.label(self.body,self.t(key),muted=True,wraplength=900,justify="left")
             label._translation_key=key
             label.pack(anchor="w",pady=16)
@@ -1077,7 +1132,7 @@ class App(ctk.CTk):
         self.data["dyslexic"]=self.dyslexic_var.get()
         self.apply_appearance()
 
-    def apply_appearance(self):
+    def _legacy_apply_appearance(self):
         old=(self.bg,self.paper,self.soft,self.ink,self.muted,self.accent)
         previous=self.translator
         self.translator=Translator(self.data["language"])
@@ -1115,9 +1170,11 @@ class App(ctk.CTk):
                     font=widget.cget("font")
                     size=getattr(widget,"_reading_size",None)
                     if size is None:
-                        size=font.cget("size")-(2 if getattr(widget,"_was_reading",False) else 0)
+                        size=font.cget("size")-(2 if font.cget("family")=="OpenDyslexic" else 0)
                         widget._reading_size=size
-                    widget.configure(font=self.font(size))
+                    desired=self.font(size,font.cget("weight")=="bold")
+                    if font is not desired:
+                        widget.configure(font=desired)
                     widget._was_reading=self.data["dyslexic"]
                 except (ValueError,AttributeError):
                     pass
@@ -1153,7 +1210,10 @@ class App(ctk.CTk):
             self.language_var.set(LANGUAGE_NAMES[self.data["language"]])
             self.style_description.configure(text=self.t("style_hint_"+self.data["style"]))
             self.dyslexic_var.set(self.data["dyslexic"])
-        self.layout_style()
+        if getattr(self,"_layout_signature",None)!=(self.data["style"],self.data["dyslexic"]):
+            self.layout_style()
+        else:
+            self.refresh_nav()
         self.refresh_art()
         self.refresh_character()
         self.refresh_weapons()
@@ -1230,6 +1290,8 @@ class App(ctk.CTk):
 
     def destroy(self):
         self._closing=True
+        if hasattr(self,"reader_pool"):
+            self.reader_pool.shutdown(wait=False,cancel_futures=True)
         try:
             self.music.close()
         except (ValueError,AttributeError):
@@ -1250,72 +1312,29 @@ class App(ctk.CTk):
             super().report_callback_exception(exc,value,trace)
 
 
-    def build_journal(self):
-        controls=self.card(self.body)
-        controls.pack(fill="x")
-        self.profile_choices={}
-        for ident,profile in self.profiles.data["profiles"].items():
-            state=profile["state"]
-            name=state["character_name"]+" · "+state["journey_name"]
-            self.profile_choices[name+" · "+ident[:6]]=ident
-        self.profile_choices[self.data["character_name"]+" · "+self.data["journey_name"]+
-                             " · "+self.profiles.data["active"][:6]]=self.profiles.data["active"]
-        current=next(k for k,v in self.profile_choices.items() if v==self.profiles.data["active"])
-        self.label(controls,self.t("switch_character")).pack(anchor="w",padx=18,pady=(16,8))
-        ctk.CTkOptionMenu(controls,values=list(self.profile_choices),width=480,font=self.font(),
-                         command=lambda name:self.action(lambda:self.switch_profile(self.profile_choices[name]))).pack(anchor="w",padx=18,pady=8)
-        # Setting the initial selection must not invoke the profile switch callback.
-        controls.winfo_children()[-1].set(current)
-        actions=ctk.CTkFrame(controls,fg_color="transparent")
-        actions.pack(anchor="w",padx=14,pady=12)
-        self.button(actions,"new_character",self.new_profile).pack(side="left",padx=4)
-        self.button(actions,"rename_profile",self.rename_profile,True).pack(side="left",padx=4)
-        form=self.card(self.body)
-        form.pack(fill="x",pady=16)
-        self.checkpoint_date=self.entry(form,"checkpoint_date",timestamp(),0,width=300)
-        self.checkpoint_note=self.entry(form,"checkpoint_note","",1,width=400)
-        self.button(form,"use_now",lambda:self.checkpoint_date.set(timestamp()),True).grid(row=0,column=2,padx=10)
-        self.button(form,"checkpoint",self.save_checkpoint).grid(row=2,column=1,pady=16)
-        self.timeline=ctk.CTkFrame(self.body,fg_color="transparent")
-        self.timeline.pack(fill="x")
-        self.refresh_timeline()
 
-    def refresh_timeline(self):
-        if "journal" not in self.views or not hasattr(self,"timeline"):
-            return
-        for child in self.timeline.winfo_children():
-            cancel_widget_jobs(child)
-            child.destroy()
-        points=self.profiles.active["checkpoints"]
-        if not points:
-            self.label(self.timeline,self.t("timeline_empty"),muted=True).pack(anchor="w",pady=14)
-        for point in reversed(points):
-            panel=self.card(self.timeline)
-            panel.pack(fill="x",pady=7)
-            state=point["state"]
-            level=self.db.level_from_stats(state["stats_current"]) if hasattr(self.db,"level_from_stats") else sum(state["stats_current"].values())-79
-            self.label(panel,"●  "+point["date"].replace("T","   ")+
-                       "   ·   "+self.t("level")+f" {level}",16).pack(anchor="w",padx=18,pady=(15,5))
-            self.label(panel,state["character_name"]+" · "+state["journey_name"]+" · "+point["note"],
-                       muted=True,wraplength=820,justify="left").pack(anchor="w",padx=18,pady=6)
-            self.button(panel,"view_checkpoint",lambda p=point:self.checkpoint_detail(p),True).pack(anchor="w",padx=18,pady=(5,15))
 
-    def save_checkpoint(self):
-        self.profiles.checkpoint(self.data,self.checkpoint_note.get(),self.checkpoint_date.get())
-        self.profiles.sync(self.data)
-        self.refresh_timeline()
-        self.autosave()
 
     def checkpoint_detail(self,point):
         state=point["state"]
         window=self.popup(self.t("view_checkpoint"),"780x650")
-        self.label(window,state["character_name"]+" · "+state["journey_name"],24).pack(pady=18)
-        self.label(window,point["date"]+" · "+self.t(state["class_name"])).pack(pady=8)
+        from .ui_v4 import display_date
+        self.label(window,state["character_name"],24).pack(pady=18)
+        self.label(window,display_date(point["date"])+" · "+self.t(state["class_name"])).pack(pady=8)
         body=ctk.CTkTextbox(window,font=self.font(),fg_color=self.paper,text_color=self.ink,wrap="word")
         body.pack(fill="both",expand=True,padx=24,pady=18)
-        lines=[point["note"],self.t("level")+": "+str(sum(state["stats_current"].values())-79)]
+        note=self.t(point["note"]) if point["note"] in self.translator.text else point["note"]
+        lines=[note,self.t("level")+": "+str(sum(state["stats_current"].values())-79)]
         lines.extend(self.t(k)+": "+str(v) for k,v in state["stats_current"].items())
         lines.append("")
+        lines.append(self.t("owned_weapons"))
+        lines.extend(self.translator.weapon(i["name"])+f'   +{i["current"]} ×{i["quantity"]}' for i in state["inventory_weapons"])
+        if point.get("changes"):
+            lines.extend(("",self.t("changes")))
+            for change in point["changes"]:
+                key=change["field"]
+                title=self.translator.weapon(change["name"])+f' +{change["upgrade"]}' if key=="weapon" else self.translator.stone(key) if ":" in key else self.t(key)
+                lines.append(f'{title}: {change["before"]} → {change["after"]}')
         lines.extend(self.translator.weapon(i["name"])+f'   +{i["current"]} → +{i["target"]}' for i in state["selected"])
         if state["weapon_mode"]=="manual":
             m=state["manual"]
@@ -1323,31 +1342,6 @@ class App(ctk.CTk):
         body.insert("1.0","\n".join(lines))
         body.configure(state="disabled")
 
-    def profile_form(self,creating):
-        window=self.popup(self.t("new_character" if creating else "rename_profile"),"760x460")
-        form=self.card(window)
-        form.pack(fill="x",padx=20,pady=20)
-        name=self.entry(form,"character_name","" if creating else self.data["character_name"],0,width=340)
-        journey=self.entry(form,"journey_name","Journey 1" if creating else self.data["journey_name"],1,width=340)
-        classes=self.option(form,"starting_class",tuple(CLASS_DATA),self.data["class_name"],None,2) if creating else None
-        def accept():
-            if not name.get().strip() or not journey.get().strip():
-                raise ValueError(self.t("creation_class_hint"))
-            self.commit_current()
-            self.profiles.sync(self.data)
-            if creating:
-                state=self.profiles.create(name.get(),journey.get(),classes._enum_current,self.data)
-                window.destroy()
-                self.activate_profile(state)
-            else:
-                self.data.update(character_name=name.get().strip(),journey_name=journey.get().strip())
-                window.destroy()
-                self.profiles.sync(self.data)
-                self.show("journal",refresh=True)
-                self.layout_style()
-                self.autosave()
-        self.button(window,"done",accept).pack(pady=16)
-        return window
 
     def new_profile(self):
         return self.profile_form(True)
@@ -1363,6 +1357,7 @@ class App(ctk.CTk):
         self.activate_profile(self.profiles.select(ident))
 
     def activate_profile(self,state):
+        self.timeline_offset=0
         self.reset_timer()
         self.music.close()
         for window in tuple(self.popups):

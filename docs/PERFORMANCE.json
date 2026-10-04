@@ -1,22 +1,5 @@
 {
   "previous": {
-    "version": "2.0.2",
-    "startup_seconds": 0.789,
-    "startup_memory": {
-      "working_mib": 46.87,
-      "private_mib": 28.77
-    },
-    "catalogue_seconds": 24.694,
-    "catalogue_memory": {
-      "working_mib": 216.03,
-      "private_mib": 194.36
-    },
-    "image_cache": 487,
-    "idle_cpu_seconds_per_3_seconds": 0.0,
-    "callback_errors": [],
-    "notes": "Same Windows host and Python environment; no Elden Ring process or minimum-spec PC tested."
-  },
-  "current": {
     "version": "3.0.0",
     "startup_seconds": 0.631,
     "startup_memory": {
@@ -34,8 +17,70 @@
     "callback_errors": [],
     "notes": "Same Windows host and Python environment; no Elden Ring process or minimum-spec PC tested."
   },
+  "current": {
+    "version": "4.0.0",
+    "startup_seconds": 0.726,
+    "startup_memory": {
+      "working_mib": 50.29,
+      "private_mib": 29.07
+    },
+    "catalogue_seconds": 0.159,
+    "catalogue_memory": {
+      "working_mib": 57.72,
+      "private_mib": 36.25
+    },
+    "visible_cards": 18,
+    "image_cache": 18,
+    "idle_cpu_seconds_per_3_seconds": 0.0312,
+    "callback_errors": [],
+    "notes": "Same Windows host and Python environment; no Elden Ring process or minimum-spec PC tested."
+  },
   "music": {
     "status": "PASS",
     "check": "Native MCI open/play/pause/close using a generated silent WAV; MP3 and audible output not tested."
+  },
+  "baseline_2_0_2": {
+    "version": "2.0.2",
+    "startup_seconds": 0.789,
+    "startup_memory": {
+      "working_mib": 46.87,
+      "private_mib": 28.77
+    },
+    "catalogue_seconds": 24.694,
+    "catalogue_memory": {
+      "working_mib": 216.03,
+      "private_mib": 194.36
+    },
+    "image_cache": 487,
+    "idle_cpu_seconds_per_3_seconds": 0.0,
+    "callback_errors": [],
+    "notes": "Same Windows host and Python environment; no Elden Ring process or minimum-spec PC tested."
+  },
+  "presentation_modes": {
+    "all_pages_modern": {
+      "cpu_seconds_per_3_seconds": 0.0156,
+      "memory": {
+        "working_mib": 55.35,
+        "private_mib": 33.93
+      },
+      "cached_pages": 6
+    },
+    "animated_rgb": {
+      "cpu_seconds_per_3_seconds": 1.0469,
+      "memory": {
+        "working_mib": 56.95,
+        "private_mib": 35.5
+      },
+      "cached_pages": 6
+    },
+    "compact_rgb_paused": {
+      "cpu_seconds_per_3_seconds": 0.0625,
+      "memory": {
+        "working_mib": 57.86,
+        "private_mib": 36.33
+      },
+      "cached_pages": 1
+    },
+    "callback_errors": []
   }
 }

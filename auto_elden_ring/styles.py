@@ -1,8 +1,8 @@
-"""Style geometry and independent color palettes; no animated redraw loops."""
+"""Style geometry and independent palettes; RGB animation is opt-in."""
 STYLES = {
     "modern": {"themes": ("calm","slate","mint"), "radius": 14, "button_radius": 9, "font": "Segoe UI", "sidebar": 220},
     "elden": {"themes": ("elden","ember","moon"), "radius": 3, "button_radius": 2, "font": "Georgia", "sidebar": 250},
-    "xp": {"themes": ("xp_blue","xp_silver","xp_olive"), "radius": 0, "button_radius": 0, "font": "Tahoma", "sidebar": 195},
+    "xp": {"themes": ("xp_blue",), "radius": 0, "button_radius": 0, "font": "Tahoma", "sidebar": 195},
     "rainbow": {"themes": ("spectrum","pastel","prism"), "radius": 16, "button_radius": 12, "font": "Segoe UI", "sidebar": 230},
 }
 PALETTES = {
@@ -12,7 +12,7 @@ PALETTES = {
     "elden": ("#161B19","#202824","#303C33","#EEE9D8","#A7B1A4","#A18B55"),
     "ember": ("#211A18","#302320","#50342A","#F6EAD8","#C1A38E","#A95732"),
     "moon": ("#151D2A","#232D42","#354564","#F0EDE4","#A8B9D0","#5B77A6"),
-    "xp_blue": ("#ECE9D8","#FFFFFF","#D5DFF2","#172C55","#52627D","#245DDA"),
+    "xp_blue": ("#C0C0C0","#D4D0C8","#B9B9B9","#000000","#333333","#0000FF"),
     "xp_silver": ("#EAEAF0","#FFFFFF","#D5D7E1","#26263A","#63637A","#666898"),
     "xp_olive": ("#ECEBD9","#FFFFF8","#D3D9B2","#354020","#73785B","#738742"),
     "spectrum": ("#17182A","#25283E","#39334F","#F6F0FF","#B8AAC9","#8558B8"),

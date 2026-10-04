@@ -17,8 +17,7 @@ def load_project(path, db):
         if data["data_sha256"] != hashlib.sha256(db.path.read_bytes()).hexdigest():
             raise ValueError("This project uses a different game cost database.")
         state=data["state"]
-        if data["schema"]==2:
-            state=upgrade_state(state)
+        state=upgrade_state(state)
         return validate_state(state, db)
     except (KeyError, TypeError, AttributeError) as exc:
         raise ValueError("Incomplete or invalid project.") from exc
@@ -45,4 +44,6 @@ def upgrade_state(state):
     result.update(state)
     if "style" not in state:
         result["style"]="elden" if state.get("theme")=="elden" else "modern"
+    if result["style"]=="xp":
+        result["theme"]="xp_blue"
     return result
