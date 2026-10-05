@@ -3,8 +3,10 @@
 Official imported strings take precedence. Editorial strings are explicitly
 identified in SOURCES.md; this is not an official Czech game localization.
 """
+
 import json
 from pathlib import Path
+
 ROOT = Path(__file__).resolve().parent.parent
 CZECH = """
 dagger|Dýka|Černý nůž|Odrazová dýka|Misericordia|Reduvia|Křišťálový nůž|Srp oslavence|Kris třpytivého kamene|Štíří žihadlo|Velký nůž|Wakizaši|Cinquedea|Slonovinový srp|Zkrvavená dýka|Dýka ze stromové oceli|Čepel přivolání|Levoruční dýka|Krátký meč ohnivého rytíře
@@ -166,37 +168,50 @@ Beast Claw|Griffe bestiale|Bestienklaue|Garra de bestia
 Red Bear's Claw|Griffe de l'ours rouge|Klaue des roten Bären|Garra de oso rojo
 """
 JAPANESE_NEW = {
-    "Leontiel's Greatsword":"レオンティエルの大剣", "Silver Grooved Shield":"銀の溝付き盾",
-    "Golden Order Flail":"黄金律のフレイル", "Forked-Tongue Hatchet":"二股舌の手斧",
-    "Spiraltree Seal":"螺旋樹の聖印", "Ritual Thrusting Shield":"儀式の刺突盾",
-    "Reverse-Bladed Sword":"逆刃の剣", "Reed Great Katana":"葦の大刀",
-    "Idus Sword":"イダスの剣", "Hefty Scimitar":"重いシミター",
+    "Leontiel's Greatsword": "レオンティエルの大剣",
+    "Silver Grooved Shield": "銀の溝付き盾",
+    "Golden Order Flail": "黄金律のフレイル",
+    "Forked-Tongue Hatchet": "二股舌の手斧",
+    "Spiraltree Seal": "螺旋樹の聖印",
+    "Ritual Thrusting Shield": "儀式の刺突盾",
+    "Reverse-Bladed Sword": "逆刃の剣",
+    "Reed Great Katana": "葦の大刀",
+    "Idus Sword": "イダスの剣",
+    "Hefty Scimitar": "重いシミター",
 }
 
 
 def main():
-    database = json.loads((ROOT/"elden_ring_costs.json").read_text(encoding="utf-8"))
-    path = ROOT/"assets/weapon_names.json"
+    database = json.loads((ROOT / "elden_ring_costs.json").read_text(encoding="utf-8"))
+    path = ROOT / "assets/weapon_names.json"
     names = json.loads(path.read_text(encoding="utf-8"))
     for line in CZECH.strip().splitlines():
-        category,*translations = line.split("|")
+        category, *translations = line.split("|")
         canonical = list(database["weapons_by_category"][category])
         if len(canonical) != len(translations):
             raise ValueError(f"Czech category length mismatch: {category}")
-        names["cs"].update(zip(canonical,translations))
+        names["cs"].update(zip(canonical, translations))
     for line in DLC.strip().splitlines():
-        name,*translations = line.split("|")
-        for locale,translation in zip(("fr","de","es"),translations):
-            names[locale].setdefault(name,translation)
-    names["ja"].update({k:v for k,v in JAPANESE_NEW.items() if k not in names["ja"]})
+        name, *translations = line.split("|")
+        for locale, translation in zip(("fr", "de", "es"), translations):
+            names[locale].setdefault(name, translation)
+    names["ja"].update({k: v for k, v in JAPANESE_NEW.items() if k not in names["ja"]})
     for entries in database["weapons_by_category"].values():
         for name in entries:
-            names["en"].setdefault(name,name)
-    missing = {locale:[n for entries in database["weapons_by_category"].values() for n in entries if n not in table] for locale,table in names.items()}
+            names["en"].setdefault(name, name)
+    missing = {
+        locale: [
+            n
+            for entries in database["weapons_by_category"].values()
+            for n in entries
+            if n not in table
+        ]
+        for locale, table in names.items()
+    }
     if any(missing.values()):
         raise ValueError(missing)
-    path.write_text(json.dumps(names,ensure_ascii=False,indent=2),encoding="utf-8")
-    print({locale:len(table) for locale,table in names.items()})
+    path.write_text(json.dumps(names, ensure_ascii=False, indent=2), encoding="utf-8")
+    print({locale: len(table) for locale, table in names.items()})
 
 
 if __name__ == "__main__":

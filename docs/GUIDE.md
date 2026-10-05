@@ -1,4 +1,4 @@
-# User guide â€” 6.0.0
+# User guide - 6.0.1
 
 ## Start with a character
 

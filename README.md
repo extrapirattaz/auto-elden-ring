@@ -5,9 +5,9 @@ rune farming and character timelines. Written in Python with a standalone x64 EX
 
 ![Character planner](docs/screenshots/character.png)
 
-## Run version 6.0.0
+## Run version 6.0.1
 
-- Without Python: run Auto-Elden-Ring-6.0.0-win-x64.exe from the Windows ZIP.
+- Without Python: run Auto-Elden-Ring-6.0.1-win-x64.exe from the Windows ZIP.
   Images, translations, fonts and cost tables are included.
 - From source: install Python 3.14 x64 and run START_AUTO_ELDEN_RING.bat, or install
   requirements.txt with pip and run main.py. First-time dependency installation
@@ -28,6 +28,11 @@ The application opens maximized with an in-window character chooser. A fresh
 installation contains no demo profiles. New characters remain saved locally on
 future launches. Forms, imports, the catalogue, equipment and checkpoint details
 use the same main window, with Back navigation.
+
+Dropdowns use native menus. Settings update retained controls without hiding or
+recreating the main window. The project layout and maintenance workflow are
+documented in [Architecture](docs/ARCHITECTURE.md). To publish the source and each
+matching Windows release, follow [GitHub publishing](docs/GITHUB_PUBLISHING.md).
 
 The journal starts empty. Create a character using its in-game name and original
 class, or import a PC save. Character cards open individual timelines.
@@ -97,16 +102,18 @@ See the [guide](docs/GUIDE.md), [verification](docs/VERIFICATION.md) and
 Run BUILD_RELEASE.ps1 on Windows x64. The builder tests real widgets/calculations,
 builds the EXE, checks embedded resources and produces:
 
-- auto-elden-ring-6.0.0-source.zip: architecture-independent Python source.
-- auto-elden-ring-6.0.0-windows-x64.zip: standalone Windows x64 package.
-- Auto-Elden-Ring-6.0.0-win-x64.exe: executable for release downloads.
+- auto-elden-ring-6.0.1-source.zip: architecture-independent Python source.
+- auto-elden-ring-6.0.1-windows-x64.zip: standalone Windows x64 package.
+- Auto-Elden-Ring-6.0.1-win-x64.exe: executable for release downloads.
 - RELEASE_MANIFEST.json and SHA256SUMS.txt: artifact/source correspondence.
 
 Each version lives in releases/version; existing versions are never overwritten.
 The version in auto_elden_ring/__init__.py controls all three artifact names.
 Source, comments and documentation are in English. Upload the files to your own
 GitHub repository; no publishing is performed here. The optional Actions workflow
-can build and publish a matching tag when you choose to use it.
+is manual and uploads build artifacts; it does not create GitHub Releases.
+Native-menu input tests require an interactive Windows desktop; hosted Actions
+execution has not been verified in this release.
 
 Profiles and immutable snapshots save atomically to
 %LOCALAPPDATA%/AutoEldenRing/profiles-v3.json. Back up that library for the full
@@ -121,12 +128,12 @@ python main.py --ui-smoke --report verification-ui.json
 
 ## Source layout and performance
 
-core.py owns exact costs; planner.py owns calculations/state; ui.py and ui_v4.py
-render the desktop; save_reader.py reads bounded PC save sections; history.py
+core.py owns exact costs; planner.py owns calculations/state; ui.py, presentation.py
+and journey_ui.py render the desktop; save_reader.py reads bounded PC save sections; history.py
 imports changes; profiles.py saves timelines; i18n.py localizes controls.
 The virtualized weapon gallery draws visible cards with a 64-image cache.
-Theme/language updates preserve pages and batch repainting through the native
-Windows window. Catalogue opening measured 0.159 seconds and 57.72 MiB working
+Theme/language updates preserve the visible native window and retained controls.
+Catalogue opening measured 0.164 seconds and 57.16 MiB working
 memory on this host. See verification for measurement limits.
 
 ![Elden Ring background](docs/screenshots/style-elden.png)

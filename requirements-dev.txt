@@ -1,0 +1,2 @@
+# Optional source formatter; not installed or bundled by the application.
+black==26.1.0

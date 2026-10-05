@@ -1,5 +1,6 @@
 """Additional interface messages, maintained across all six languages."""
-ROWS="""
+
+ROWS = """
 ownership_hint|Blue checks show owned weapons and their saved upgrades/copies. The other check marks weapons selected for your goal.|Les coches bleues indiquent les armes possédées, leurs niveaux enregistrés et les exemplaires. L’autre coche marque les armes choisies pour ton objectif.|Modré značky ukazují vlastněné zbraně, uložená vylepšení a počty. Druhá značka označuje zbraně vybrané pro cíl.|Blaue Häkchen zeigen vorhandene Waffen, gespeicherte Stufen und Stückzahlen. Das andere Häkchen markiert für dein Ziel ausgewählte Waffen.|Las marcas azules muestran armas en posesión, mejoras guardadas y copias. La otra marca señala las elegidas para tu objetivo.|青いチェックは所持武器、保存済みの強化段階と本数を示します。もう一方のチェックは目標に選択した武器を示します。
 mini_start|Start|Démarrer|Spustit|Start|Iniciar|開始
 mini_reset|Reset|Réinitialiser|Resetovat|Zurücksetzen|Reiniciar|リセット

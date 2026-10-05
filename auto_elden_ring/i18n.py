@@ -1,8 +1,16 @@
 """Six authored UI translations; saved identifiers never depend on language."""
+
 import json
 from .core import resource_path
 
-LANGUAGE_NAMES = {"en":"English","fr":"Français","cs":"Čeština","de":"Deutsch","es":"Español","ja":"日本語"}
+LANGUAGE_NAMES = {
+    "en": "English",
+    "fr": "Français",
+    "cs": "Čeština",
+    "de": "Deutsch",
+    "es": "Español",
+    "ja": "日本語",
+}
 # Each row has one identifier and six translations. Tests check placeholders.
 ROWS = """
 character|Character|Personnage|Postava|Charakter|Personaje|キャラクター
@@ -220,18 +228,19 @@ light_greatsword|Light greatswords|Espadons légers|Lehké velké meče|Leichte 
 great_katana|Great katanas|Grands katanas|Velké katany|Großkatanas|Grandes katanas|大刀
 beast_claw|Beast claws|Griffes bestiales|Zvířecí drápy|Bestienklauen|Garras de bestia|獣爪
 """
-from .i18n_v3 import ROWS as EXTRA_ROWS
-from .i18n_v4 import ROWS as NEW_ROWS
-ROWS=ROWS.strip()+"\n"+EXTRA_ROWS.strip()+"\n"+NEW_ROWS.strip()
-TEXT = {language:{} for language in LANGUAGE_NAMES}
+from .style_text import ROWS as EXTRA_ROWS
+from .journey_text import ROWS as NEW_ROWS
+
+ROWS = ROWS.strip() + "\n" + EXTRA_ROWS.strip() + "\n" + NEW_ROWS.strip()
+TEXT = {language: {} for language in LANGUAGE_NAMES}
 for row in ROWS.strip().splitlines():
-    key,*values = row.split("|")
-    if len(values)!=6:
+    key, *values = row.split("|")
+    if len(values) != 6:
         raise RuntimeError(f"Invalid translation row: {key}")
-    for language,value in zip(TEXT,values):
+    for language, value in zip(TEXT, values):
         TEXT[language][key] = value
 for language in TEXT:
-    TEXT[language]["style_xp"]="Windows XP"
+    TEXT[language]["style_xp"] = "Windows XP"
 
 
 from functools import lru_cache
@@ -243,27 +252,27 @@ def weapon_names():
 
 
 class Translator:
-    def __init__(self,language="en"):
+    def __init__(self, language="en"):
         self.language = language
         self.text = TEXT[language]
         self.names = weapon_names()
 
-    def __call__(self,key,**values):
-        return TEXT[self.language].get(key,key).format(**values)
+    def __call__(self, key, **values):
+        return TEXT[self.language].get(key, key).format(**values)
 
-    def t(self,key,**values):
-        return self(key,**values)
+    def t(self, key, **values):
+        return self(key, **values)
 
-    def weapon(self,name):
-        return self.names.get(self.language,{}).get(name,name)
+    def weapon(self, name):
+        return self.names.get(self.language, {}).get(name, name)
 
-    def stone(self,key):
-        kind,tier = key.split(":")
-        return self(kind+"_dragon") if tier=="dragon" else self(kind+"_stone",tier=tier)
+    def stone(self, key):
+        kind, tier = key.split(":")
+        return self(kind + "_dragon") if tier == "dragon" else self(kind + "_stone", tier=tier)
 
-    def duration(self,seconds):
-        days,seconds = divmod(seconds,86400)
-        hours,seconds = divmod(seconds,3600)
-        minutes,seconds = divmod(seconds,60)
+    def duration(self, seconds):
+        days, seconds = divmod(seconds, 86400)
+        hours, seconds = divmod(seconds, 3600)
+        minutes, seconds = divmod(seconds, 60)
         prefix = f"{days} {self('days')} " if days else ""
         return f"{prefix}{hours:02d} {self('hours')} {minutes:02d} {self('minutes')} {seconds:02d} {self('seconds')}"

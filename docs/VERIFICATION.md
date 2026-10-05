@@ -1,6 +1,21 @@
-# Verification â€” 6.0.0
+# Verification - 6.0.1
 
-The release builder runs 79 tests covering exact rune costs, every supplied
+Version 6.0.1 restores native menus and verifies actual Windows menu clicks,
+keyboard selection, Escape cancellation and wheel isolation from the page.
+Reading-mode/style changes retain the root HWND and IsWindowVisible stays true
+inside the appearance transaction. Hidden pages retain their controls and apply
+deferred reading fonts when revisited. The local-reset test preserves unrelated
+files and the game-save directory. Public historical archive hashes were audited;
+1.0.0 is replaced for publication by a rebuilt, sanitized 1.0.1 (29 tests passed).
+
+On this host, with all six pages cached, the same 12 palette/reading transitions
+took a median 1.2859 seconds in 6.0.0 and 0.5469 seconds in 6.0.1; maximums were
+1.4794 and 0.6641 seconds. The former temporarily removed native visibility,
+while the latter retained it. These are measurements, not promises of instant
+updates or artifact-free output on every GPU. No new runtime dependencies or
+bitmap assets were added for these menus/themes.
+
+The release builder runs 84 tests covering exact rune costs, every supplied
 catalogue passage, inverse math, shared stock, budgets, atomic storage, migrations,
 weighted farming and real Tk workflows.
 
@@ -55,7 +70,8 @@ Measurements do not include one-file extraction or antivirus scanning.
 
 Native caption/resize/close handling is retained. CustomTkinter's disruptive
 withdraw/update/reveal caption sequence remains disabled. Theme/language/reading
-updates suspend native repaint, mutate retained controls, then repaint children.
+updates mutate retained controls in place. No root WM_SETREDRAW visibility change
+is used; hidden-page font metrics are deferred until that page becomes active.
 Native inner scroll-frame backgrounds now follow semantic colors as well. Artwork is reused during window movement. Version 6 removes scroll-dependent layers entirely; opaque panels scroll over fixed decorative artwork.
 These checks do not prove the absence of compositor artifacts on every GPU.
 

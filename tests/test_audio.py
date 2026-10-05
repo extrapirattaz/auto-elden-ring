@@ -1,4 +1,5 @@
 """Decode generated silence across formats without touching user music."""
+
 import os
 from pathlib import Path
 import shutil
@@ -12,27 +13,27 @@ from auto_elden_ring.core import resource_path
 
 class StreamingAudio(unittest.TestCase):
     def test_formats_unicode_pause_resume_and_release(self):
-        with patch.dict(os.environ,{"SDL_AUDIODRIVER":"dummy"}):
-            music=Music()
+        with patch.dict(os.environ, {"SDL_AUDIODRIVER": "dummy"}):
+            music = Music()
             try:
                 for fixture in resource_path("assets/audio-check").iterdir():
-                    if fixture.suffix not in (".mp3",".wav",".flac",".ogg",".opus"):
+                    if fixture.suffix not in (".mp3", ".wav", ".flac", ".ogg", ".opus"):
                         continue
                     with self.subTest(format=fixture.name):
                         music.play(fixture)
                         self.assertTrue(music.backend.music.get_busy())
-                        time.sleep(.025)
+                        time.sleep(0.025)
                         music.pause()
-                        position=music.backend.music.get_pos()
+                        position = music.backend.music.get_pos()
                         self.assertTrue(music.paused)
                         music.play(fixture)
                         self.assertFalse(music.paused)
-                        self.assertGreaterEqual(music.backend.music.get_pos(),position)
+                        self.assertGreaterEqual(music.backend.music.get_pos(), position)
                         music.close()
                         self.assertIsNone(music.backend.get_init())
                 with tempfile.TemporaryDirectory() as folder:
-                    path=Path(folder)/"Musique été 月.mp3"
-                    shutil.copyfile(resource_path("assets/audio-check/variable.mp3"),path)
+                    path = Path(folder) / "Musique été 月.mp3"
+                    shutil.copyfile(resource_path("assets/audio-check/variable.mp3"), path)
                     music.play(path)
                     self.assertTrue(music.opened)
                     music.close()
@@ -40,11 +41,11 @@ class StreamingAudio(unittest.TestCase):
                 music.close()
 
     def test_decode_failure_releases_device_and_allows_next_file(self):
-        with patch.dict(os.environ,{"SDL_AUDIODRIVER":"dummy"}):
-            music=Music()
+        with patch.dict(os.environ, {"SDL_AUDIODRIVER": "dummy"}):
+            music = Music()
             try:
                 with tempfile.TemporaryDirectory() as folder:
-                    path=Path(folder)/"invalid.mp3"
+                    path = Path(folder) / "invalid.mp3"
                     path.write_bytes(b"Not an audio stream.")
                     with self.assertRaises(ValueError):
                         music.play(path)

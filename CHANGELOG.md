@@ -1,5 +1,27 @@
 # Changelog
 
+## 6.0.1 — 2026-10-05
+
+- Replace imitation dropdown lists with native Tk menus throughout the application.
+- Apply menu selections after native tracking ends; support ordinary click, keyboard and Escape behavior.
+- Keep the same visible native window during language, style, palette and reading-mode changes.
+- Remove top-level WM_SETREDRAW visibility changes and unnecessary sidebar repacking.
+- Batch changed widget properties and defer hidden-page font metrics until the page becomes active.
+- Stop redrawing hidden timeline text and reduce RGB polling while the main window is hidden.
+- Organize UI/localization modules by responsibility, format Python consistently and add maintenance comments.
+- Reset local development profiles; verify public archives exclude personal profiles, saves and paths.
+- Add exact per-version GitHub release notes and manual publishing instructions.
+- Keep source, x64 EXE and Windows ZIP paired with hashes and packaged verification.
+
+## 1.0.1 — 2026-10-05 (historical maintenance)
+
+- Provide a sanitized successor to the original 1.0.0 calculator for public sharing.
+- Remove a personal example-path comment and unused configuration.
+- Move original formula compatibility references into the historical test folder.
+- Format the maintained Python source and provide an English usage guide.
+- Preserve original calculator behavior and rebuild the matching x64 EXE and both ZIPs.
+- Keep the original 1.0.0 archive local-only; publish 1.0.1 instead.
+
 ## 6.0.0 — 2026-10-04
 
 - Open maximized with character selection inside the main window.

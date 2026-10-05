@@ -4,6 +4,13 @@ __pycache__/
 .build/
 dist/
 build/
-releases/
+/releases/
+/archive/local-only/
+/publishing/
 *.auto-elden.json
 *.log
+profiles-v3.json
+session-v2.json
+session.json
+*.sl2
+*.co2

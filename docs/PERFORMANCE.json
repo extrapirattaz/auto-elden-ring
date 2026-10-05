@@ -18,20 +18,20 @@
     "notes": "Same Windows host and Python environment; no Elden Ring process or minimum-spec PC tested."
   },
   "current": {
-    "version": "6.0.0",
-    "startup_seconds": 0.847,
+    "version": "6.0.1",
+    "startup_seconds": 0.826,
     "startup_memory": {
-      "working_mib": 50.73,
-      "private_mib": 29.09
+      "working_mib": 49.97,
+      "private_mib": 28.98
     },
-    "catalogue_seconds": 0.15,
+    "catalogue_seconds": 0.164,
     "catalogue_memory": {
-      "working_mib": 57.89,
-      "private_mib": 36.1
+      "working_mib": 57.16,
+      "private_mib": 35.93
     },
     "visible_cards": 15,
     "image_cache": 15,
-    "idle_cpu_seconds_per_3_seconds": 0.0312,
+    "idle_cpu_seconds_per_3_seconds": 0.0,
     "callback_errors": [],
     "notes": "Same Windows host and Python environment; no Elden Ring process or minimum-spec PC tested."
   },
@@ -172,5 +172,89 @@
       "cached_pages": 1
     },
     "callback_errors": []
+  },
+  "prior_6_0_0": {
+    "version": "6.0.0",
+    "startup_seconds": 0.847,
+    "startup_memory": {
+      "working_mib": 50.73,
+      "private_mib": 29.09
+    },
+    "catalogue_seconds": 0.15,
+    "catalogue_memory": {
+      "working_mib": 57.89,
+      "private_mib": 36.1
+    },
+    "visible_cards": 15,
+    "image_cache": 15,
+    "idle_cpu_seconds_per_3_seconds": 0.0312,
+    "callback_errors": [],
+    "notes": "Same Windows host and Python environment; no Elden Ring process or minimum-spec PC tested."
+  },
+  "appearance_comparison": {
+    "baseline": {
+      "version": "6.0.0",
+      "all_pages_cached": true,
+      "median_transition_seconds": 1.2859,
+      "maximum_transition_seconds": 1.4794,
+      "samples_seconds": [
+        1.1711,
+        0.9174,
+        0.9115,
+        1.0745,
+        0.9445,
+        0.9379,
+        1.4032,
+        1.4396,
+        1.4007,
+        1.4479,
+        1.44,
+        1.4794
+      ],
+      "native_window_always_visible_during_changes": false,
+      "native_window_identity_retained": true,
+      "initial_memory": {
+        "working_mib": 57.82,
+        "private_mib": 37.14
+      },
+      "final_memory": {
+        "working_mib": 60.96,
+        "private_mib": 40.15
+      },
+      "callback_errors": [],
+      "notes": "Same local Windows desktop; all six pages cached. Source runtime measurement, not a game-concurrency or minimum-hardware claim."
+    },
+    "current": {
+      "version": "6.0.1",
+      "all_pages_cached": true,
+      "median_transition_seconds": 0.5469,
+      "maximum_transition_seconds": 0.6641,
+      "samples_seconds": [
+        0.4489,
+        0.4171,
+        0.4045,
+        0.2942,
+        0.4175,
+        0.4083,
+        0.6605,
+        0.6582,
+        0.6515,
+        0.6449,
+        0.6641,
+        0.6497
+      ],
+      "native_window_always_visible_during_changes": true,
+      "native_window_identity_retained": true,
+      "initial_memory": {
+        "working_mib": 57.22,
+        "private_mib": 36.06
+      },
+      "final_memory": {
+        "working_mib": 58.69,
+        "private_mib": 37.64
+      },
+      "callback_errors": [],
+      "notes": "Same local Windows desktop; all six pages cached. Source runtime measurement, not a game-concurrency or minimum-hardware claim."
+    }
   }
 }
