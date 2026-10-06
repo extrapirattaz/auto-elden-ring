@@ -1,6 +1,6 @@
-# Verification - 6.1.0
+# Verification - 6.1.1
 
-The release builder runs 90 tests: exact integer level/weapon costs, every
+The release builder runs 94 tests: exact integer level/weapon costs, every
 supplied catalogue passage, inverse math, shared stock/budgets, atomic state,
 six complete translations, save parsing and real Windows/Tk workflows.
 The supplied cost JSON remains unchanged (Smithing Stone [4] costs 900 runes).
@@ -24,6 +24,10 @@ The supplied cost JSON remains unchanged (Smithing Stone [4] costs 900 runes).
   preserves the previous library and enables retry. File hashes/mtime do not
   change. Identical scans and opaque-only slot changes add no events; rune,
   attribute, inventory and equipment changes create meaningful snapshots.
+- Every accepted read refreshes the saved fingerprint and imported game baseline,
+  even without a timeline event. This persists across restarts. Local edits and
+  timeline dates do not replace the last accepted game baseline. A real binary
+  fixture with changed opaque bytes and a recomputed checksum verifies this path.
 - Journal/profile independence, fixed starting class, checkpoint icons,
   owned weapon upgrades/counts, equipped-only overview, paginated inventory,
   zero-wallet stone checklists, upgrade acknowledgement and farm estimates.
@@ -48,7 +52,7 @@ anonymous character counts only. This is not a gameplay-side inventory audit.
 ## Measurements
 
 Single source-process samples on this Windows host, with Python 3.14 x64.
-PERFORMANCE.json retains explicitly versioned older measurements; historical
+Historical release reports retain measurements for their own versions;
 RGB/background results describe those old builds, not the current styles.
 
 | Measurement | 6.0.1 | 6.1.0 |
@@ -102,13 +106,10 @@ python -m black --check auto_elden_ring tests scripts main.py classes_data.py
 python main.py --self-test --report verification.json
 python main.py --ui-smoke --report verification-ui.json
 python main.py --rescan-check YOUR_SAVE.sl2 --report verification-rescan.json
-python scripts/benchmark_ui.py --report performance.json
-python scripts/benchmark_appearance.py --report appearance.json
 ```
 
 All acceptance switches also work in the Windows EXE. Rescan-check uses an
 isolated temporary profile library and never resets the user's real profiles.
 Source/EXE/Windows ZIP are paired by RELEASE_MANIFEST.json and SHA256SUMS.txt.
-Screenshot fixtures contain synthetic demo data only. Public historical archives
-are audited independently; original 1.0.0 stays local-only and is replaced for
-publication by the sanitized 1.0.1 source/EXE pair.
+Screenshot fixtures contain synthetic demo data only. Historical archives remain
+unchanged in the sibling Release directory, including their verification reports.

@@ -1,7 +1,23 @@
 """Import snapshots, stable save-slot matching and human-readable changes."""
 
 from copy import deepcopy
-from .planner import default_state
+
+# Keep the last accepted game data separate from editable plans and dated events.
+GAME_FIELDS = (
+    "class_name",
+    "character_name",
+    "runes",
+    "stats_current",
+    "stock",
+    "inventory_weapons",
+    "inventory_armor",
+    "inventory_items",
+    "equipment",
+)
+
+
+def game_snapshot(state):
+    return {key: deepcopy(state[key]) for key in GAME_FIELDS}
 
 
 def differences(before, after):
@@ -87,9 +103,8 @@ def _apply_import(profiles, characters, preferences):
         )
         if ident:
             old = deepcopy(profiles.data["profiles"][ident]["state"])
-            changed = old["save_link"].get("fingerprint") != character["fingerprint"]
             state = deepcopy(old)
-            previous = next(
+            previous = profiles.data["profiles"][ident].get("last_import") or next(
                 (
                     p["state"]
                     for p in reversed(profiles.data["profiles"][ident]["checkpoints"])
@@ -104,7 +119,6 @@ def _apply_import(profiles, characters, preferences):
             ident = profiles.data["active"]
             old = deepcopy(state)
             previous = old
-            changed = True
         state.update(
             character_name=character["name"],
             journey_name=character["name"],
@@ -134,14 +148,15 @@ def _apply_import(profiles, characters, preferences):
                 selected["target"] = max(selected["current"], selected["target"])
         profiles.data["active"] = ident
         changes = differences(previous, state)
-        # Play time and other opaque slot bytes change without planner progress.
-        # Remember the new fingerprint, but do not flood the timeline with empty events.
-        if changed and (not old["save_link"] or changes):
+        # Always accept the latest read, including its fingerprint. A timeline
+        # event depends on game data, not on opaque bytes or editable local values.
+        if not old["save_link"] or changes:
             point = profiles.checkpoint(state, "save_import")
             next(p for p in profiles.active["checkpoints"] if p["id"] == point["id"])[
                 "changes"
             ] = changes
         profiles.sync(state)
+        profiles.active["last_import"] = game_snapshot(state)
         results.append(ident)
     profiles.data["active"] = active if active in profiles.data["profiles"] else results[0]
     return results

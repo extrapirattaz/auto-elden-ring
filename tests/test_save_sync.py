@@ -12,7 +12,7 @@ from auto_elden_ring.core import Database
 from auto_elden_ring.history import import_characters
 from auto_elden_ring.planner import default_state
 from auto_elden_ring.profiles import Profiles
-from auto_elden_ring.save_reader import read_save
+from auto_elden_ring.save_reader import read_save, STRIDE
 from auto_elden_ring.save_sync import read_remembered, saved_paths
 from auto_elden_ring.ui import App
 from test_save_reader import fixture
@@ -92,6 +92,70 @@ class SaveSyncTests(unittest.TestCase):
         self.assertEqual(
             self.profiles.active["checkpoints"][-1]["changes"][0]["field"], "equipment"
         )
+
+    def test_identical_rescan_accepts_disk_values_without_an_event(self):
+        state = deepcopy(self.profiles.active["state"])
+        state["runes"] = 999999
+        state["stock"] = {key: 0 for key in state["stock"]}
+        state["stats_target"]["vigor"] = 60
+        self.profiles.sync(state)
+        import_characters(self.profiles, self.characters, state)
+        refreshed = self.profiles.active["state"]
+        self.assertEqual(refreshed["runes"], self.characters[0]["runes"])
+        self.assertEqual(refreshed["stock"], self.characters[0]["stock"])
+        self.assertEqual(refreshed["stats_target"]["vigor"], 60)
+        self.assertEqual(len(self.profiles.active["checkpoints"]), 1)
+
+    def test_binary_only_change_is_accepted_without_a_timeline_event(self):
+        binary = bytearray(self.path.read_bytes())
+        binary[0x300 + STRIDE - 1] = 1
+        slot = binary[0x310 : 0x300 + STRIDE]
+        binary[0x300:0x310] = hashlib.md5(slot).digest()
+        self.path.write_bytes(binary)
+        latest = read_save(self.path, self.db)
+        self.assertNotEqual(latest[0]["fingerprint"], self.characters[0]["fingerprint"])
+        import_characters(self.profiles, latest, self.profiles.active["state"])
+        self.assertEqual(len(self.profiles.active["checkpoints"]), 1)
+        self.assertEqual(
+            self.profiles.active["state"]["save_link"]["fingerprint"], latest[0]["fingerprint"]
+        )
+
+    def test_latest_accepted_save_survives_restart_without_empty_events(self):
+        latest = deepcopy(self.characters)
+        latest[0]["fingerprint"] = "latest-opaque-bytes"
+        import_characters(self.profiles, latest, self.profiles.active["state"])
+        store = Path(self.folder.name) / "profiles.json"
+        self.profiles.save(store, self.profiles.active["state"])
+        loaded = Profiles.load(store, self.db)
+        self.assertEqual(loaded.active["state"]["save_link"]["fingerprint"], "latest-opaque-bytes")
+        self.assertEqual(loaded.active["last_import"]["runes"], latest[0]["runes"])
+        import_characters(loaded, latest, loaded.active["state"])
+        self.assertEqual(len(loaded.active["checkpoints"]), 1)
+        # Progress comparisons remain independent of the binary identity marker.
+        latest[0]["runes"] += 100
+        import_characters(loaded, latest, loaded.active["state"])
+        self.assertEqual(len(loaded.active["checkpoints"]), 2)
+        self.assertEqual(
+            loaded.active["checkpoints"][-1]["changes"],
+            [
+                {
+                    "field": "runes",
+                    "before": self.characters[0]["runes"],
+                    "after": latest[0]["runes"],
+                }
+            ],
+        )
+
+    def test_latest_import_baseline_is_independent_of_timeline_dates(self):
+        latest = deepcopy(self.characters)
+        latest[0].update(runes=40000, fingerprint="progress")
+        import_characters(self.profiles, latest, self.profiles.active["state"])
+        point = self.profiles.active["checkpoints"][-1]
+        point["date"] = "2000-01-01T00:00:00+00:00"
+        self.profiles.active["checkpoints"].sort(key=lambda item: item["date"])
+        latest[0]["fingerprint"] = "playtime-only"
+        import_characters(self.profiles, latest, self.profiles.active["state"])
+        self.assertEqual(len(self.profiles.active["checkpoints"]), 2)
 
     def wait_scan(self, app):
         end = time.monotonic() + 12

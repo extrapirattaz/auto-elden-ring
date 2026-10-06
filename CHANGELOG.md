@@ -1,5 +1,13 @@
 # Changelog
 
+## 6.1.1 — 2026-10-06
+
+- Always accept the latest valid save during a rescan, even when its game data is unchanged.
+- Persist the last accepted game snapshot independently of plans and dated timeline events.
+- Add timeline events only for progression changes, independently of binary fingerprints.
+- Verify unchanged binaries, opaque-only binary changes, restart persistence and repeated scans.
+- Keep archived releases unchanged and retain the two-folder workspace layout.
+
 ## 6.1.0 — 2026-10-06
 
 - Remove the Rainbow style, RGB animation, decorative backgrounds and background controls.

@@ -4,9 +4,6 @@ __pycache__/
 .build/
 dist/
 build/
-/releases/
-/archive/local-only/
-/publishing/
 *.auto-elden.json
 *.log
 profiles-v3.json

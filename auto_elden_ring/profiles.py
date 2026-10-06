@@ -122,6 +122,15 @@ class Profiles:
                 profile["state"]["profile_created"] = not placeholder
             profile["state"] = upgrade_state(profile["state"])
             validate_state(profile["state"], self.db)
+            if "last_import" in profile:
+                from .history import GAME_FIELDS
+
+                baseline = profile["last_import"]
+                if not isinstance(baseline, dict) or set(baseline) != set(GAME_FIELDS):
+                    raise ValueError("Invalid last imported game snapshot.")
+                imported = deepcopy(profile["state"])
+                imported.update(baseline)
+                validate_state(imported, self.db)
             if not isinstance(profile["checkpoints"], list) or len(profile["checkpoints"]) > 10000:
                 raise ValueError("Invalid checkpoint timeline.")
             for point in profile["checkpoints"]:

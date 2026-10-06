@@ -29,7 +29,8 @@ def run(*args):
 def main():
     if sys.platform != "win32":
         raise SystemExit("The EXE must be built on Windows x64.")
-    release = ROOT / "releases" / __version__
+    # Keep immutable distribution artifacts beside the working source folder.
+    release = ROOT.parent / "Release" / __version__
     if release.exists():
         raise SystemExit(
             f"Release already exists: {release}. Increment the version instead of overwriting it."
@@ -129,7 +130,7 @@ def main():
     ]
     source_files.append(ROOT / ".gitignore")
     source_files.append(ROOT / "pyproject.toml")
-    for directory in ("auto_elden_ring", "tests", "scripts", "docs", "assets", ".github"):
+    for directory in ("auto_elden_ring", "tests", "scripts", "docs", "assets"):
         source_files.extend(
             p for p in (ROOT / directory).rglob("*") if p.is_file() and "__pycache__" not in p.parts
         )

@@ -23,9 +23,9 @@ by responsibility. Formatting is a development operation, not a runtime feature.
 | auto_elden_ring/styles.py / audio.py | Lightweight appearance data and lazy optional audio |
 | assets/ | Offline icons, fonts, translations and provenance/licences |
 | tests/ | Calculation boundaries, fixtures and real-widget/native-menu workflows |
-| scripts/ | Release building, screenshots, benchmarks, archive audit and explicit local reset |
-| docs/ | User guide, evidence, architecture and per-version GitHub publishing copy |
-| releases/<version>/ | Matched local EXE, source/Windows ZIPs, manifests and reports; not committed |
+| scripts/ | Local release building and explicit local reset |
+| docs/ | User guide, evidence, architecture and asset provenance |
+| ../Release/<version>/ | Matched local EXE, source/Windows ZIPs, manifests and reports |
 
 Use `python -m unittest discover -s tests -v` for the required suite. Native-input
 tests require an interactive Windows desktop and operate only on their own app.
@@ -43,12 +43,10 @@ sidebar layout changes only when entering or leaving XP's horizontal toolbar.
 
 Historical releases are independent snapshots, not folders to merge into current
 source. Each source ZIP is hashed against its own manifest and paired EXE. Existing
-public historical snapshots remain unchanged; cleaning their implementation
-retroactively would invalidate that pairing. The initial 1.0.0 archive contained
-a personal example-path comment, so the sanitized 1.0.1 successor was rebuilt.
-The original is kept in the ignored, local-only archive and excluded from uploads.
-Per-version descriptions explain the behavior that each historical build actually
-contains. The current refactor is delivered as 6.1.0, with its own matched artifacts.
+historical snapshots remain unchanged; cleaning their implementation
+retroactively would invalidate that pairing. The working source is maintained
+separately in Code source actuel. The builder creates new version folders in the
+sibling Release directory and refuses to overwrite existing releases.
 
 Local state lives outside the source under `%LOCALAPPDATA%/AutoEldenRing`.
 `python scripts/reset_local_data.py --confirm` explicitly removes known app-state
