@@ -182,6 +182,27 @@
         "auto-elden-ring-6.0.0-source.zip",
         "auto-elden-ring-6.0.0-windows-x64.zip"
       ]
+    },
+    {
+      "version": "6.0.1",
+      "status": "PASS",
+      "source_files": 2541,
+      "source_and_binary_hashes_match": true,
+      "portable_binary_matches": true,
+      "no_local_profiles_saves_or_personal_path": true,
+      "personal_path_files": [],
+      "assets": [
+        "Auto-Elden-Ring-6.0.1-win-x64.exe",
+        "RELEASE_MANIFEST.json",
+        "SHA256SUMS.txt",
+        "VERIFICATION_AUDIO.json",
+        "VERIFICATION_EXE.json",
+        "VERIFICATION_NATIVE.json",
+        "VERIFICATION_SAVE.json",
+        "VERIFICATION_UI.json",
+        "auto-elden-ring-6.0.1-source.zip",
+        "auto-elden-ring-6.0.1-windows-x64.zip"
+      ]
     }
   ],
   "notes": "Historical artifacts were verified, not rebuilt or silently rewritten. Images are development screenshots; game-media licensing is documented separately."

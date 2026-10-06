@@ -139,9 +139,10 @@ Character and weapon pages can also select saved spots for their own goals.
 
 ## Appearance, music and small mode
 
-Modern uses rounded panels. Elden Ring uses a full fantasy landscape background,
-serif text and dark palettes. Windows XP uses square controls, blue accents and
-grey surfaces with one palette. RGB animates colors smoothly; it has no strobe.
+Modern uses rounded panels and two palettes: Porcelain White and Charcoal Black.
+Gothic retains its compact serif layout and Antique Gold, Ember and Moonlight
+colors, with solid backgrounds. Windows XP uses square controls, blue accents
+and grey surfaces with one palette. All styles are static.
 Reading mode applies larger OpenDyslexic text and a calm cream palette, then
 restores the selected style when disabled. Changes retain existing page widgets
 and batch presentation updates without reopening the main window.
@@ -218,13 +219,7 @@ file or changing character releases the previous stream. There is no music Stop
 button. Corrupt streams or unavailable audio devices display an error and release
 resources; another file can then be selected.
 
-RGB keeps backgrounds fixed and animates cached native text with a three-second
-hue cycle, at most 15 updates/s. Its styled beta notice explains the playful troll
-mode. It is optional and contains no strobe flashes. All dropdown menus capture
-wheel input inside their list rather than scrolling the parent page.
-
-
-## Window behavior and personal backgrounds
+## Window behavior and saved progression
 
 Forms, imports, weapon selection and snapshot details are owned panels inside
 the main window. Back closes the current panel. Selecting a calculator closes
@@ -237,9 +232,30 @@ list leaves the calculator scroll position unchanged. Moving/resizing the main
 window, navigating away, clicking outside, Escape or switching applications
 closes a list without changing its selection. Only a click or Enter commits.
 
-Elden Ring Settings offers Choose Background and Restore Default. PNG, JPEG
-and WebP are supported. The chosen path is stored per character; if the file
-is missing later, generated theme artwork is used. Personal files are not copied
-into release artifacts. Content panels have opaque palette backgrounds to avoid
-Tk transparency artifacts during scrolling. Artwork is updated for resizing or
-palette/background changes, never for scrolling.
+The current version does not load decorative images or animate text. Old
+background preferences are removed during migration, without touching the
+personal image file. Old Rainbow profiles migrate to Modern / Charcoal Black;
+Modern Mint profiles migrate to Porcelain White. Goals and timelines remain.
+
+## Startup and manual rescans
+
+Import a supported PC save or choose its installation folder once. The app
+remembers those locations in its local profile library. Later launches rescan
+in a worker while the in-window character chooser stays available. The bottom
+**Rescan game saves** button performs the same check during play. In the XP
+layout it sits on the toolbar. The chooser also provides the rescan button.
+Fresh installations do not scan/import the game without your initial choice.
+
+Rescans check remembered files, related save folders and roaming accounts,
+including newly discovered files. Original game files are never changed. The
+latest completed disk save is the source; progress still only in game memory
+is unavailable. A file being written is retried up to three reads on the worker.
+If it remains unavailable or unsupported, the old profiles remain and an inline
+message offers another attempt after the game saves. No windows are reopened.
+
+Existing characters keep their goals, selected weapons, farming spots and
+manual profiles. Current attributes, runes, inventory and equipment refresh
+from the save; targets never fall below the imported permanent attributes.
+Each meaningful changed snapshot adds one timeline event. Identical scans and
+opaque-only byte changes add none. Switching characters while a scan is in
+progress keeps the character you selected.

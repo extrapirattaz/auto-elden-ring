@@ -67,9 +67,8 @@ requirements files.
 
 Catalogue PNGs were resized to at most 136px and encoded as WebP quality 84.
 The manifest retains source URLs, source SHA-256 hashes and processed hashes.
-The Elden-style landscape is original AI-generated fantasy artwork, created
-for this project through the imagegen skill; it is not an official game screenshot
-or logo. Runtime file: assets/elden-landscape.webp.
+Decorative generated landscapes from earlier releases were removed in 6.1.0.
+The current Gothic style uses solid colors and ships no background artwork.
 
 [OpenDyslexic](https://github.com/antijingoist/opendyslexic) Regular and Bold
 are bundled from commit 1824da5c0e41dc3e13ffc7f3a636dcaf695d61b7.
@@ -106,7 +105,7 @@ The local real-save check covered slot versions 210 and 250. Console/encrypted
 formats and modified/new layouts have no support guarantee.
 
 
-## Version 5 audio and backgrounds
+## Audio runtime
 
 - pygame-ce 2.5.8 / SDL_mixer streaming: https://pyga.me/docs/ref/music.html
   and https://pyga.me/docs/ref/mixer.html. The runtime wheel is pinned; pygame's
@@ -115,11 +114,6 @@ formats and modified/new layouts have no support guarantee.
 - Decoder fixtures are one second of generated silence, encoded locally with
   FFmpeg via imageio-ffmpeg 0.6.0. That fixture-generation tool is not a runtime
   dependency and its binary is not distributed in the application.
-- Three original fantasy backgrounds were produced using the built-in image
-  generation tool. They are inspirations, not extracted Elden Ring scenes.
-  Exact prompts and saved paths: GENERATED_BACKGROUNDS.md.
-
-
 ## Version 6 inventory data
 
 assets/item_catalogue.json records the pinned SaveForge commit, source URLs,

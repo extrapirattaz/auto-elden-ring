@@ -4,6 +4,16 @@ import sys
 
 
 def main():
+    if "--rescan-check" in sys.argv:
+        from auto_elden_ring.selfcheck import rescan_check
+        from pathlib import Path
+
+        report = rescan_check(sys.argv[sys.argv.index("--rescan-check") + 1])
+        if "--report" in sys.argv:
+            Path(sys.argv[sys.argv.index("--report") + 1]).write_text(report, encoding="utf-8")
+        elif sys.stdout is not None:
+            print(report)
+        return
     if "--audio-check" in sys.argv:
         from auto_elden_ring.selfcheck import audio_check
         from pathlib import Path
@@ -50,8 +60,8 @@ def main():
             app.update()
             checks["bundled images"] = len(app.gallery.cache) > 0
             checks["selected catalogue costs"] = app.planner.weapons()["total"] > 0
-            checks["four styles"] = True
-            for style in ("modern", "elden", "xp", "rainbow"):
+            checks["three static styles"] = True
+            for style in ("modern", "elden", "xp"):
                 app.set_visual_style("style_" + style)
                 app.update()
             app.data["dyslexic"] = True

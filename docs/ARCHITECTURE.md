@@ -10,17 +10,18 @@ by responsibility. Formatting is a development operation, not a runtime feature.
 | auto_elden_ring/core.py | Integer level/weapon costs, inverse costs and stone requirements |
 | auto_elden_ring/planner.py | Shared character, weapon, budget, stock and farming state |
 | auto_elden_ring/ui.py | Main window, retained calculator pages and settings controls |
-| auto_elden_ring/presentation.py | Semantic themes, backgrounds, journal/import UI and animation lifecycle |
+| auto_elden_ring/presentation.py | Static semantic themes and journal/import UI |
 | auto_elden_ring/journey_ui.py | Profile chooser, inventory details, native-menu ownership and compact companion |
 | auto_elden_ring/dropdown.py | Native Tk menu selection with deferred application callbacks |
 | auto_elden_ring/panels.py | Navigation panels owned by the main window |
 | auto_elden_ring/windows.py | Caption/font/monitor helpers and retained-widget layout transactions |
 | auto_elden_ring/gallery.py | Virtualized illustrated weapon selection and bounded image cache |
+| auto_elden_ring/save_sync.py | Remembered paths, bounded worker retries and in-place rescan updates |
 | auto_elden_ring/save_reader.py | Bounded, checksum-validated, read-only PC save parsing |
 | auto_elden_ring/profiles.py / history.py / storage.py | Atomic persistence, migration, import transactions and immutable snapshots |
 | auto_elden_ring/i18n.py / style_text.py / journey_text.py | Stable identifiers and six-language text catalogues |
 | auto_elden_ring/styles.py / audio.py | Lightweight appearance data and lazy optional audio |
-| assets/ | Offline icons, fonts, translations, backgrounds and provenance/licences |
+| assets/ | Offline icons, fonts, translations and provenance/licences |
 | tests/ | Calculation boundaries, fixtures and real-widget/native-menu workflows |
 | scripts/ | Release building, screenshots, benchmarks, archive audit and explicit local reset |
 | docs/ | User guide, evidence, architecture and per-version GitHub publishing copy |
@@ -35,8 +36,8 @@ to check formatting. Black is absent from requirements.txt and the runtime build
 Appearance changes retain controls and the native window. Only changed properties
 are configured. Native menus own their normal selection/cancellation behavior;
 application callbacks run after posting ends. Root visibility is never suspended
-with WM_SETREDRAW. RGB animates text on the active page at up to 15 Hz and polls
-more slowly while the main window is hidden. Modern/XP colors have no animation.
+with WM_SETREDRAW. All palettes are static; decorative background decoding,
+resize rendering and RGB scheduling are absent.
 Hidden pages keep their controls, but update font metrics only when shown. The
 sidebar layout changes only when entering or leaving XP's horizontal toolbar.
 
@@ -47,9 +48,19 @@ retroactively would invalidate that pairing. The initial 1.0.0 archive contained
 a personal example-path comment, so the sanitized 1.0.1 successor was rebuilt.
 The original is kept in the ignored, local-only archive and excluded from uploads.
 Per-version descriptions explain the behavior that each historical build actually
-contains. The current refactor is delivered as 6.0.1, with its own matched artifacts.
+contains. The current refactor is delivered as 6.1.0, with its own matched artifacts.
 
 Local state lives outside the source under `%LOCALAPPDATA%/AutoEldenRing`.
 `python scripts/reset_local_data.py --confirm` explicitly removes known app-state
 files. It does not delete game saves, audio, custom images or arbitrary files.
 Tests use temporary directories; the application never resets future users on launch.
+
+The profile library stores save_sources and installation_folder outside shared
+source. Legacy libraries derive linked paths from each save_link; migration
+also normalizes retired palettes and removes obsolete background preferences.
+Rescans submit one worker and do not overlap imports. Parsing checks file size,
+mtime and slot checksums before accepting any data. The UI commits valid edits
+at submission and completion, then merges into the current active library.
+Import transactions preserve user targets and farming spots. Only game-facing
+values refresh; page instances, panels and timers remain owned by the same root.
+Fingerprint changes with no observable progression do not create empty events.

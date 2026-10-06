@@ -4,19 +4,12 @@ ROWS = """
 level|Level|Niveau|Úroveň|Stufe|Nivel|レベル
 style|Visual style|Style visuel|Vizuální styl|Oberflächenstil|Estilo visual|表示スタイル
 style_modern|Modern|Moderne|Moderní|Modern|Moderno|モダン
-style_elden|Elden Ring|Elden Ring|Elden Ring|Elden Ring|Elden Ring|Elden Ring
-style_xp|Windows XP nostalgia|Nostalgie Windows XP|Nostalgie Windows XP|Windows-XP-Nostalgie|Nostalgia de Windows XP|Windows XP風
-style_rainbow|Rainbow|Arc-en-ciel|Duha|Regenbogen|Arcoíris|虹色
+style_elden|Gothic|Gothique|Gotický|Gotisch|Gótico|ゴシック
+style_xp|Windows XP|Windows XP|Windows XP|Windows XP|Windows XP|Windows XP
 color_palette|Color palette|Palette de couleurs|Barevná paleta|Farbpalette|Paleta de colores|カラーパレット
-mint|Mint|Menthe|Máta|Minze|Menta|ミント
 ember|Ember|Braise|Žhavé uhlíky|Glut|Brasa|残り火
 moon|Moonlight|Clair de lune|Měsíční svit|Mondlicht|Luz de luna|月光
 xp_blue|Luna blue|Bleu Luna|Modrá Luna|Luna-Blau|Azul Luna|Lunaブルー
-xp_silver|Silver|Argent|Stříbrná|Silber|Plata|シルバー
-xp_olive|Olive green|Vert olive|Olivově zelená|Olivgrün|Verde oliva|オリーブ
-spectrum|Night spectrum|Spectre nocturne|Noční spektrum|Nachtspektrum|Espectro nocturno|夜のスペクトル
-pastel|Pastel rainbow|Arc-en-ciel pastel|Pastelová duha|Pastellregenbogen|Arcoíris pastel|パステル
-prism|Prism|Prisme|Prizma|Prisma|Prisma|プリズム
 dyslexic|Dyslexia reading mode|Mode de lecture dyslexique|Režim čtení pro dyslexii|Lesemodus bei Legasthenie|Modo de lectura para dislexia|読みやすさモード
 reading_hint|OpenDyslexic, larger text and a quiet cream palette. Turn off to restore your chosen style colors.|OpenDyslexic, texte plus grand et palette crème apaisée. Désactive pour retrouver les couleurs de ton style.|OpenDyslexic, větší text a klidná krémová paleta. Vypnutím obnovíš barvy svého stylu.|OpenDyslexic, größere Schrift und eine ruhige Cremepalette. Ausschalten stellt deine Stilfarben wieder her.|OpenDyslexic, texto más grande y tonos crema suaves. Al desactivarlo vuelven los colores de tu estilo.|OpenDyslexic、大きめの文字、落ち着いたクリーム色。オフにすると選択したスタイルの色に戻ります。
 music|Background music|Musique de fond|Hudba na pozadí|Hintergrundmusik|Música de fondo|BGM
@@ -50,9 +43,8 @@ offline|Offline|Hors ligne|Offline|Offline|Sin conexión|オフライン
 close|Close|Fermer|Zavřít|Schließen|Cerrar|閉じる
 settings_hint|Styles define shapes and layout. Palettes define colors. Changes keep the current window and your progress.|Les styles définissent les formes et la disposition ; les palettes, les couleurs. Les changements conservent la fenêtre et ta progression.|Styly určují tvary a rozložení, palety barvy. Změny zachovají okno i tvůj postup.|Stile bestimmen Formen und Layout, Paletten die Farben. Fenster und Fortschritt bleiben erhalten.|Los estilos definen formas y distribución; las paletas, colores. Los cambios conservan la ventana y el progreso.|スタイルは形と配置、パレットは色を変えます。ウィンドウと進捗は維持されます。
 no_profile_weapons|No catalogue weapon recorded. Manual weapon: +{current} → +{target}.|Aucune arme du catalogue enregistrée. Arme manuelle : +{current} → +{target}.|Žádná katalogová zbraň. Ručně zadaná: +{current} → +{target}.|Keine Katalogwaffe erfasst. Manuelle Waffe: +{current} → +{target}.|Sin armas del catálogo. Arma manual: +{current} → +{target}.|カタログ武器なし。手入力の武器：+{current} → +{target}。
-style_hint_elden|Golden borders, a fantasy landscape and a compact ritual-like layout.|Bordures dorées, paysage fantastique et disposition plus compacte.|Zlaté okraje, fantasy krajina a kompaktní rozložení.|Goldene Rahmen, Fantasy-Landschaft und kompaktes Layout.|Bordes dorados, paisaje fantástico y diseño compacto.|金色の縁取り、幻想的な風景、コンパクトな配置。
+style_hint_elden|Antique gold, serif lettering and a compact gothic layout, with solid colors.|Or ancien, lettres à empattements et disposition gothique compacte, sur fond uni.|Starozlaté tóny, patkové písmo a kompaktní gotické rozložení na jednobarevném pozadí.|Antikgold, Serifenschrift und kompaktes gotisches Layout mit einfarbigen Flächen.|Oro antiguo, letras con serifas y diseño gótico compacto sobre fondos lisos.|古金色、セリフ体、コンパクトなゴシック調の配置と単色の背景。
 style_hint_xp|Square buttons, classic blue panels and a retro toolbar.|Boutons carrés, panneaux bleus classiques et barre d’outils rétro.|Hranatá tlačítka, klasické modré panely a retro lišta.|Eckige Schaltflächen, klassische blaue Flächen und Retro-Werkzeugleiste.|Botones cuadrados, paneles azules clásicos y barra retro.|四角いボタン、クラシックな青いパネル、レトロなツールバー。
-style_hint_rainbow|Multicolor headings and navigation, without flashing or animation.|Titres et navigation multicolores, sans clignotement ni animation.|Vícebarevné nadpisy a navigace bez blikání a animací.|Mehrfarbige Überschriften und Navigation ohne Blinken oder Animation.|Títulos y navegación multicolor, sin parpadeos ni animación.|見出しとナビを多色に。点滅やアニメーションはありません。
 style_hint_modern|Rounded cards, calm spacing and a clear sidebar.|Cartes arrondies, espaces apaisés et navigation claire.|Zaoblené karty, klidné rozestupy a přehledná navigace.|Abgerundete Karten, ruhige Abstände und klare Navigation.|Tarjetas redondeadas, espacios tranquilos y navegación clara.|角丸のカード、ゆったりした余白、見やすいナビ。
 music_hint|Optional local MP3/WAV playback. Files stay on your computer; closing the app stops playback.|Lecture locale MP3/WAV facultative. Les fichiers restent sur ton ordinateur ; fermer l’application arrête la lecture.|Volitelné místní MP3/WAV. Soubory zůstanou v počítači; zavření aplikace zastaví přehrávání.|Optionale lokale MP3/WAV-Wiedergabe. Dateien bleiben auf deinem PC; Schließen beendet die Musik.|Reproducción local opcional de MP3/WAV. Los archivos quedan en tu PC y la música se detiene al cerrar.|ローカルのMP3／WAVを再生できます。ファイルは送信されず、終了時に再生を停止します。
 reset_stock_hint|After confirming upgrades, record any new rune balance or stone stock when needed.|Après confirmation des améliorations, renseigne ton nouveau solde de runes ou ton nouveau stock si nécessaire.|Po potvrzení vylepšení můžeš zadat nové runy a kameny.|Nach bestätigten Upgrades kannst du neue Runen und Vorräte eintragen.|Tras confirmar mejoras, puedes registrar nuevas runas y piedras.|強化完了後、必要に応じて新しい残高や在庫を入力してください。

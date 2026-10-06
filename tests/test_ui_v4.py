@@ -179,7 +179,7 @@ class ProgressInterface(unittest.TestCase):
         self.assertEqual({key: value["frame"] for key, value in a.views.items()}, frames)
         self.assertEqual(a.callback_errors, [])
 
-    def test_reading_font_does_not_grow_and_rgb_stops(self):
+    def test_reading_font_does_not_grow_or_rebuild_the_page(self):
         a = self.app
         a.show("settings")
         frame = a.views["settings"]["frame"]
@@ -190,27 +190,21 @@ class ProgressInterface(unittest.TestCase):
             a.dyslexic_var.set(False)
             a.set_reading_mode()
             self.assertEqual(a.brand.cget("font").cget("size"), 24)
-        a.set_visual_style("style_rainbow")
-        self.assertIsNotNone(a.rgb_job)
-        a.set_visual_style("style_modern")
-        self.assertIsNone(a.rgb_job)
+        self.assertFalse(hasattr(a, "rgb_job"))
         self.assertIs(a.views["settings"]["frame"], frame)
 
-    def test_elden_background_is_reused_on_move_and_stays_at_scroll_viewport(self):
+    def test_gothic_scroll_and_move_keep_solid_surfaces(self):
         a = self.app
         a.deiconify()
         a.show("stones")
         a.set_visual_style("style_elden")
         a.update()
-        a.paint_background()
-        layers = tuple(a.background_layers)
+        frame = a.views["stones"]["frame"]
         a.geometry("1280x860+350+80")
         a.update()
-        a.paint_background()
-        self.assertEqual(tuple(a.background_layers), layers)
         body = a.views["stones"]["body"]
         body._parent_canvas.yview_moveto(0.4)
         a.update()
-        self.assertFalse(hasattr(body, "_background_layer"))
-        self.assertEqual(a.background_layers[0].place_info()["y"], "0")
-        self.assertEqual(tuple(a.background_layers), layers)
+        self.assertEqual(frame.cget("fg_color"), a.bg)
+        self.assertIs(a.views["stones"]["frame"], frame)
+        self.assertFalse(hasattr(a, "background_layers"))

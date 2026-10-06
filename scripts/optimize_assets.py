@@ -32,11 +32,6 @@ def main():
         "136px maximum; WebP quality 84; source URLs and original hashes retained."
     )
     path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    artwork = ROOT / "assets/elden-landscape.png"
-    if artwork.exists():
-        with Image.open(artwork) as image:
-            image.save(artwork.with_suffix(".webp"), "WEBP", quality=85, method=6)
-        artwork.unlink()
     print({"catalogue_original_bytes": before, "catalogue_webp_bytes": after})
 
 

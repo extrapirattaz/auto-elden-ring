@@ -1,149 +1,114 @@
-# Verification - 6.0.1
+# Verification - 6.1.0
 
-Version 6.0.1 restores native menus and verifies actual Windows menu clicks,
-keyboard selection, Escape cancellation and wheel isolation from the page.
-Reading-mode/style changes retain the root HWND and IsWindowVisible stays true
-inside the appearance transaction. Hidden pages retain their controls and apply
-deferred reading fonts when revisited. The local-reset test preserves unrelated
-files and the game-save directory. Public historical archive hashes were audited;
-1.0.0 is replaced for publication by a rebuilt, sanitized 1.0.1 (29 tests passed).
+The release builder runs 90 tests: exact integer level/weapon costs, every
+supplied catalogue passage, inverse math, shared stock/budgets, atomic state,
+six complete translations, save parsing and real Windows/Tk workflows.
+The supplied cost JSON remains unchanged (Smithing Stone [4] costs 900 runes).
 
-On this host, with all six pages cached, the same 12 palette/reading transitions
-took a median 1.2859 seconds in 6.0.0 and 0.5469 seconds in 6.0.1; maximums were
-1.4794 and 0.6641 seconds. The former temporarily removed native visibility,
-while the latter retained it. These are measurements, not promises of instant
-updates or artifact-free output on every GPU. No new runtime dependencies or
-bitmap assets were added for these menus/themes.
+## Current regression coverage
 
-The release builder runs 84 tests covering exact rune costs, every supplied
-catalogue passage, inverse math, shared stock, budgets, atomic storage, migrations,
-weighted farming and real Tk workflows.
+- Native settings menus: real mouse clicks, keyboard selection, Escape and
+  wheel isolation. The same visible root HWND and control instances survive
+  language, palette, style and reading-mode changes.
+- Three static styles: Modern has two palettes, Windows XP one, Gothic three.
+  No RGB scheduler, decorative image renderer or background settings remain.
+  Retired preferences migrate without losing progress. Scrolling/movement
+  keep opaque, correctly colored native/CTk surfaces.
+- Persisted save paths and installation folder survive restart. Linked custom
+  directories can acquire another save file. Fresh apps require an initial
+  explicit import before any game scan.
+- Startup scans keep the same character chooser and manual scans keep calculator
+  pages, goals and the active character. Multi-attribute updates do not trigger
+  partial-state recalculation. Imports and scans do not overlap.
+- Three bounded worker reads recover from transient writes; a rejected read
+  preserves the previous library and enables retry. File hashes/mtime do not
+  change. Identical scans and opaque-only slot changes add no events; rune,
+  attribute, inventory and equipment changes create meaningful snapshots.
+- Journal/profile independence, fixed starting class, checkpoint icons,
+  owned weapon upgrades/counts, equipped-only overview, paginated inventory,
+  zero-wallet stone checklists, upgrade acknowledgement and farm estimates.
+- Compact companion, timer/sample handling, inactive-page resource release,
+  native resize/movement and ordinary window close.
 
-New save fixtures verify original class, permanent stats, runes, upgrades,
-instance references, directly encoded goods, held/storage stones, checksums,
-truncation, unchanged-file hashes, deduplicated refresh and atomic batch failure.
-Real widgets verify the initially empty journal, fixed class, custom event stats
-and weapons, auto-upgrade events, preservation of other owned copies, selected-slot
-refresh, named farm spots, compact wallet updates, inactive-page release, page
-identity through language/palette changes, all semantic palette surfaces,
-stable reading-font sizes and RGB start/stop.
+## Packaged checks
 
-Earlier widget tests retain six-language/four-style page coverage, zero-wallet
-purchase acknowledgement, upgrade resets, individual weapon editing, repeated
-catalogue open/scroll/close cycles, bounded caching and 30 native resize/move/
-popup-close cycles during a farm timer. Timed 60/60/180 trials use simulated
-deadlines with real callbacks rather than a claimed in-game farming session.
+The builder repeats embedded-resource/calculation checks, six-language GUI smoke
+checks, audio decoder checks and a checksum-valid synthetic save import using
+the compiled executable. VERIFICATION_RESCAN.json additionally exercises startup
+from a remembered save and a manual rescan during a running farm timer. It checks
+retained windows/pages/goals, deduplicated history and unchanged save bytes/mtime.
+Reports contain anonymous counts and booleans, never game names or save paths.
 
-One local PC save containing four characters was read and imported twice.
-The file's SHA-256 and modification timestamp remained identical, current
-character values populated planners and unchanged refresh added no events.
-No names, account identifiers, save paths or save contents are shipped.
-This verifies the reader's workflow, not a side-by-side gameplay inventory audit.
+Independent native verification checks AMD64, all artifact/source hashes,
+identical EXEs inside the Windows ZIP, extracted-source self-test, one visible
+maximized startup window, 40 move/resize cycles and normal WM_CLOSE exit.
+A real local PC save is checked read-only where available; the report gives
+anonymous character counts only. This is not a gameplay-side inventory audit.
 
-The EXE runs calculation/resource and GUI smoke checks, including six languages,
-four styles, fonts, images, empty/event timelines, named spots and the compact
-wallet. VERIFICATION_EXE.json and VERIFICATION_UI.json record those results. A synthetic PC save also runs through the packaged reader; VERIFICATION_SAVE.json records deduplication, unchanged-file checks and held/storage stone totals.
-RELEASE_MANIFEST.json hashes the precise source snapshot and all three artifacts.
-Screenshots show actual rendered application windows with synthetic demo data.
+## Measurements
 
-Version 4.0.1 introduced checks for the level-713 input, a single goal duration, starting-class investment, its farm-time equivalent, wallet separation, efficiency, boundary levels and legacy measurements. Version 5.0.0 remeasured startup, catalogue and presentation modes on the same host.
+Single source-process samples on this Windows host, with Python 3.14 x64.
+PERFORMANCE.json retains explicitly versioned older measurements; historical
+RGB/background results describe those old builds, not the current styles.
 
-## Performance
+| Measurement | 6.0.1 | 6.1.0 |
+| --- | ---: | ---: |
+| Startup including imports | 0.826 s | 0.723 s |
+| First catalogue paint | 0.164 s | 0.149 s |
+| Catalogue working/private memory | 57.16 / 35.93 MiB | 58.89 / 36.39 MiB |
+| CPU in a 3-second catalogue idle sample | 0 s | 0 s |
+| Median palette/reading transition, six pages cached | 0.5469 s | 0.4984 s |
+| Maximum measured transition | 0.6641 s | 0.6015 s |
 
-Single source-process samples on this Windows host, with the pinned Python
-environment. PERFORMANCE.json retains earlier comparison data.
+Both current runs retain native visibility/identity and report zero callback
+errors. The removed four decorative WebP files total 978,434 bytes. No new
+runtime dependency was added. Catalogue image caches remain bounded (64 weapons),
+with only visible cards decoded. The 2,950 non-weapon records share 1,915 small
+icons, totaling 7,251,220 bytes. Startup rescan uses one worker and sends locations,
+not the entire checkpoint library, to that worker. All style colors are static.
 
-| Measurement | 2.0.2 | 3.0.0 | 4.0.0 | 5.0.0 |
-| --- | ---: | ---: | ---: | ---: |
-| Startup including imports | 0.789 s | 0.631 s | 0.726 s | 0.689 s |
-| First catalogue paint | 24.694 s | 0.144 s | 0.159 s | 0.159 s |
-| Working memory with catalogue | 216.03 MiB | 56.16 MiB | 57.72 MiB | 55.50 MiB |
-| Private memory with catalogue | 194.36 MiB | 35.11 MiB | 36.25 MiB | 35.77 MiB |
-| CPU in a 3-second idle sample | 0 s | 0.0312 s | 0.0312 s | 0.0469 s |
+These measurements exclude EXE extraction/antivirus and are individual samples,
+not universal memory, timing or compositor guarantees. Concurrent Elden Ring
+play and minimum-spec hardware were not tested on this host.
 
-Only visible cards are drawn; the image cache is capped at 64. Catalogue assets
-remain 2,265,200 bytes. RGB is opt-in and draws native text at most 15 times per second
-with a three-second hue cycle and fixed surfaces; it pauses drawing while the main window is hidden.
-Background art is static and resize rendering is debounced. Save parsing runs
-in one background worker. The compact view releases inactive cached pages and remains visible independently of the hidden main window. The 4.0.0 source sample measured 1.0469 CPU seconds in three seconds with RGB animation. The 5.0.0 sample measured 0.0312 seconds with six modern pages, 0.1875 seconds with animated RGB text, and 0.0625 seconds in compact mode with RGB drawing paused. RGB is more expensive than the static styles; these are single host samples, not hardware guarantees.
-Measurements do not include one-file extraction or antivirus scanning.
+## Save-reader and other limits
 
-Native caption/resize/close handling is retained. CustomTkinter's disruptive
-withdraw/update/reveal caption sequence remains disabled. Theme/language/reading
-updates mutate retained controls in place. No root WM_SETREDRAW visibility change
-is used; hidden-page font metrics are deferred until that page becomes active.
-Native inner scroll-frame backgrounds now follow semantic colors as well. Artwork is reused during window movement. Version 6 removes scroll-dependent layers entirely; opaque panels scroll over fixed decorative artwork.
-These checks do not prove the absence of compositor artifacts on every GPU.
+The reader accepts bounded checksum-valid plaintext PC BND4 .sl2/.co2 files.
+Actual local slot versions 210 and 250 were checked in earlier and current native
+reader workflows. Future layouts, modified/console/encrypted saves are not
+promised. File-size/mtime comparisons and ten slot MD5 checks detect concurrent
+writes. Rescans read the latest completed disk save, never live game memory;
+unsaved progress cannot appear until the game writes it. There is no save
+editing, game-input automation or memory injection.
 
-Six generated silence fixtures exercise WAV PCM16, WAV float32, MP3 constant/variable bitrate with metadata, FLAC and OGG. Tests verify decoder loading, pause/resume without rewind, Unicode paths, resource release and recovery after an invalid stream. The packaged EXE repeats decoding with SDL's dummy device and reports VERIFICATION_AUDIO.json. Silence/device-state checks do not prove audible output or compatibility with every malformed/music file.
+Save-slot identity uses path, slot and original class. Reusing the same slot
+with the same class cannot reliably distinguish a new journey. Owned bell
+bearings are shown; absent inventory does not establish whether a bearing was
+already handed in. Costs use the supplied tables; not every tariff/translated
+weapon name was audited in-game by an independent reviewer. Farming durations
+remain estimates from measured rates, and OpenDyslexic is a reading preference.
 
-## Limits
-
-- No input automation, memory injection, save editing or live game polling.
-- Reader coverage is checksum-valid plaintext PC BND4 .sl2/.co2 structure.
-  Actual local slot versions 210 and 250 were verified; all save versions,
-  modified saves, console formats and future changes are not guaranteed.
-- Only supported catalogue weapons and ordinary stones feed the calculators.
-  Other inventory categories are not an exhaustive collectible tracker.
-- A save slot is matched by file path, slot and original class. Reusing the same
-  slot with the same class cannot reliably identify an entirely new journey.
-- No simultaneous Elden Ring/minimum-spec PC test or universal GPU guarantee.
-- No independent in-game audit of every supplied tariff or native-speaker review
-  of every editorial weapon translation.
-- OpenDyslexic is a reading preference, not a clinical effectiveness claim.
-- Buff rates and future farming times remain estimates.
-- No unrestricted game-media redistribution license is asserted.
+Audio uses lazy pygame-ce/SDL_mixer streaming. Six generated silent fixtures
+exercise PCM16/float32 WAV, constant/variable bitrate MP3, FLAC and OGG,
+pause/resume, Unicode paths, release and recovery after invalid files. Packaged
+checks use the SDL dummy device; audible output and every malformed file are
+not verified. Music stays local.
 
 ## Reproduce
 
-~~~powershell
+```powershell
 python -m unittest discover -s tests -v
+python -m black --check auto_elden_ring tests scripts main.py classes_data.py
 python main.py --self-test --report verification.json
 python main.py --ui-smoke --report verification-ui.json
+python main.py --rescan-check YOUR_SAVE.sl2 --report verification-rescan.json
 python scripts/benchmark_ui.py --report performance.json
-python scripts/verify_save_readonly.py --save YOUR_SAVE.sl2 --report save-check.json
-~~~
+python scripts/benchmark_appearance.py --report appearance.json
+```
 
-The self-test and GUI switches also work in the standalone EXE.
-
-
-## Version 5 profile and UI checks
-
-New real-widget cases verify empty startup selection and modal ownership,
-explicit character activation, keep/replace decisions, replacement rollback,
-installation/roaming discovery, catalogue ownership and checkpoint icons,
-wheel capture without parent movement, compact zero-wallet stone checks,
-compact timer/result capture, native-text RGB with fixed surfaces, per-palette
-artwork replacement and restoration of plain surfaces.
-
-Normal app screenshots use synthetic Demo Tarnished data only. Generated
-background sources/prompts are documented in GENERATED_BACKGROUNDS.md. The
-window background and transparent labels/containers share crops from the same
-scene, with a fixed readability tint; cards remain opaque by design.
-
-
-## Version 6 window and inventory regression coverage
-
-Real widgets verify a single maximized startup window, empty fresh profiles,
-future profile persistence, nested Back navigation, in-window catalogue/details,
-menu dismissal on movement/navigation without selecting a value, and stable
-native window identity. Background images retain the same PhotoImage through
-repeated scroll operations. A chosen personal PNG path survives persistence.
-
-An additional checksum-valid binary fixture contains armor instances, held key
-items and equipped weapon/armor IDs. The reader preserves their IDs, quantities,
-weapon upgrade, profile state and immutable checkpoint data without file writes.
-Checkpoint overview shows equipped weapons rather than every acquired weapon;
-separate inventory tabs render icons with bounded caches. Local save validation
-checks anonymous counts only; gameplay-side accuracy of every inventory icon,
-equipment slot and shop-unlock flag is not claimed.
-
-
-Version 6 measurements on the same host: source startup 0.847 s, first catalogue
-paint 0.150 s, catalogue working/private memory 57.89 / 36.10 MiB, and 0.0312 CPU
-seconds in a three-second catalogue idle sample. Six cached modern pages used
-0.0156 CPU seconds in three seconds; RGB used 0.2188 and compact RGB-paused used
-0.0625. New inventory assets contain 2,950 metadata entries and 1,915 shared
-96-pixel WebP icons totaling 7,251,220 bytes. Icons are paginated and decoded
-lazily, rather than loaded wholesale at startup. These are individual samples,
-not a statistical performance guarantee.
+All acceptance switches also work in the Windows EXE. Rescan-check uses an
+isolated temporary profile library and never resets the user's real profiles.
+Source/EXE/Windows ZIP are paired by RELEASE_MANIFEST.json and SHA256SUMS.txt.
+Screenshot fixtures contain synthetic demo data only. Public historical archives
+are audited independently; original 1.0.0 stays local-only and is replaced for
+publication by the sanitized 1.0.1 source/EXE pair.

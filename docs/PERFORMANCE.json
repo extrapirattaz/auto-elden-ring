@@ -18,16 +18,16 @@
     "notes": "Same Windows host and Python environment; no Elden Ring process or minimum-spec PC tested."
   },
   "current": {
-    "version": "6.0.1",
-    "startup_seconds": 0.826,
+    "version": "6.1.0",
+    "startup_seconds": 0.723,
     "startup_memory": {
-      "working_mib": 49.97,
-      "private_mib": 28.98
+      "working_mib": 51.4,
+      "private_mib": 29.0
     },
-    "catalogue_seconds": 0.164,
+    "catalogue_seconds": 0.149,
     "catalogue_memory": {
-      "working_mib": 57.16,
-      "private_mib": 35.93
+      "working_mib": 58.89,
+      "private_mib": 36.39
     },
     "visible_cards": 15,
     "image_cache": 15,
@@ -225,6 +225,38 @@
       "notes": "Same local Windows desktop; all six pages cached. Source runtime measurement, not a game-concurrency or minimum-hardware claim."
     },
     "current": {
+      "version": "6.1.0",
+      "all_pages_cached": true,
+      "median_transition_seconds": 0.4984,
+      "maximum_transition_seconds": 0.6015,
+      "samples_seconds": [
+        0.4068,
+        0.3871,
+        0.3838,
+        0.3913,
+        0.3863,
+        0.3898,
+        0.5951,
+        0.59,
+        0.5993,
+        0.5912,
+        0.5941,
+        0.6015
+      ],
+      "native_window_always_visible_during_changes": true,
+      "native_window_identity_retained": true,
+      "initial_memory": {
+        "working_mib": 58.22,
+        "private_mib": 35.91
+      },
+      "final_memory": {
+        "working_mib": 59.77,
+        "private_mib": 37.49
+      },
+      "callback_errors": [],
+      "notes": "Same local Windows desktop; all six pages cached. Source runtime measurement, not a game-concurrency or minimum-hardware claim."
+    },
+    "previous_6_0_1": {
       "version": "6.0.1",
       "all_pages_cached": true,
       "median_transition_seconds": 0.5469,
@@ -256,5 +288,28 @@
       "callback_errors": [],
       "notes": "Same local Windows desktop; all six pages cached. Source runtime measurement, not a game-concurrency or minimum-hardware claim."
     }
+  },
+  "previous_6_0_1": {
+    "version": "6.0.1",
+    "startup_seconds": 0.826,
+    "startup_memory": {
+      "working_mib": 49.97,
+      "private_mib": 28.98
+    },
+    "catalogue_seconds": 0.164,
+    "catalogue_memory": {
+      "working_mib": 57.16,
+      "private_mib": 35.93
+    },
+    "visible_cards": 15,
+    "image_cache": 15,
+    "idle_cpu_seconds_per_3_seconds": 0.0,
+    "callback_errors": [],
+    "notes": "Same Windows host and Python environment; no Elden Ring process or minimum-spec PC tested."
+  },
+  "presentation_modes_6_1": {
+    "static_styles": true,
+    "rgb_animation_removed": true,
+    "decorative_background_bytes_removed": 978434
   }
 }

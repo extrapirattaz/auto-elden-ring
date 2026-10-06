@@ -40,7 +40,6 @@ def default_state():
         "character_name": "Tarnished",
         "journey_name": "Journey 1",
         "music_file": "",
-        "custom_background": "",
         "inventory_armor": [],
         "inventory_items": [],
         "equipment": [],
@@ -101,7 +100,7 @@ def validate_state(state, db):
         raise ValueError("The selected color palette does not belong to this style.")
     if not isinstance(state["dyslexic"], bool):
         raise ValueError("Invalid reading preference.")
-    for key in ("character_name", "journey_name", "music_file", "custom_background"):
+    for key in ("character_name", "journey_name", "music_file"):
         if not isinstance(state[key], str) or len(state[key]) > 4096:
             raise ValueError("Invalid profile text.")
     if not isinstance(state["profile_created"], bool) or not isinstance(state["save_link"], dict):

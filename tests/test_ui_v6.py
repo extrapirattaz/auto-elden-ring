@@ -1,10 +1,9 @@
-"""Verify the one-window navigation contract and fixed background lifecycle."""
+"""Verify the one-window navigation contract and retired preference migration."""
 
 from pathlib import Path
 import tempfile
 import unittest
 from unittest.mock import patch
-from PIL import Image
 from auto_elden_ring.ui import App
 from auto_elden_ring.profiles import Profiles
 
@@ -61,39 +60,21 @@ class InWindowFlows(unittest.TestCase):
         self.assertTrue(menu.winfo_exists())
         self.assertEqual(changes, [])
 
-    def test_custom_background_is_persistent_and_scroll_never_rebuilds_it(self):
+    def test_retired_background_is_removed_without_losing_profile_data(self):
+        from auto_elden_ring.storage import upgrade_state
+
         a = self.app
-        with tempfile.TemporaryDirectory() as directory:
-            path = Path(directory) / "screenshot.png"
-            Image.new("RGB", (600, 400), "#21487A").save(path)
-            a.show("farm")
-            a.set_visual_style("style_elden")
-            with patch(
-                "auto_elden_ring.presentation.filedialog.askopenfilename", return_value=str(path)
-            ):
-                a.choose_background()
-            a.update()
-            a.paint_background()
-            image = a.background_layers[0].photo
-            for amount in (0.2, 0.6, 1, 0):
-                a.body._parent_canvas.yview_moveto(amount)
-                a.update()
-                a.paint_background()
-                self.assertIs(a.background_layers[0].photo, image)
-            store = Path(directory) / "profiles.json"
-            a.profiles.save(store, a.data)
-            self.assertEqual(
-                Profiles.load(store, a.db).active["state"]["custom_background"], str(path)
-            )
-            state = a.profiles.select(a.profiles.data["active"])
-            a.activate_profile(state)
-            a.update()
-            a.paint_background()
-            self.assertEqual(len(a.background_layers), 2)
-            self.assertTrue(all(layer.winfo_exists() for layer in a.background_layers))
-            self.assertIs(a.background_layers[1].master, a.views[a.page]["frame"])
-            a.reset_background()
-            self.assertEqual(a.data["custom_background"], "")
+        old = dict(a.data, custom_background="old-decoration.png", style="rainbow", theme="prism")
+        a.profiles.active["state"] = old
+        a.profiles.validate()
+        migrated = a.profiles.active["state"]
+        self.assertEqual((migrated["style"], migrated["theme"]), ("modern", "slate"))
+        self.assertNotIn("custom_background", migrated)
+        self.assertEqual(migrated["character_name"], "Demo")
+        self.assertEqual(upgrade_state(dict(a.data, theme="mint"))["theme"], "calm")
+        a.show("settings")
+        self.assertFalse(hasattr(a, "background_actions"))
+        self.assertEqual(len(a.theme_option.cget("values")), 2)
 
     def test_equipment_overview_does_not_list_all_upgraded_weapons(self):
         a = self.app

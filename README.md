@@ -5,21 +5,20 @@ rune farming and character timelines. Written in Python with a standalone x64 EX
 
 ![Character planner](docs/screenshots/character.png)
 
-## Run version 6.0.1
+## Run version 6.1.0
 
-- Without Python: run Auto-Elden-Ring-6.0.1-win-x64.exe from the Windows ZIP.
+- Without Python: run Auto-Elden-Ring-6.1.0-win-x64.exe from the Windows ZIP.
   Images, translations, fonts and cost tables are included.
 - From source: install Python 3.14 x64 and run START_AUTO_ELDEN_RING.bat, or install
   requirements.txt with pip and run main.py. First-time dependency installation
   needs internet; using the application does not.
 
 English is the default language. French, Czech, German, Spanish and Japanese
-are available in Settings. Modern, Elden Ring and RGB have three palettes;
-Windows XP has one classic blue/grey palette with square controls.
-Elden Ring uses fixed background artwork and readable opaque content panels.
-Choose your own PNG/JPEG/WebP screenshot in Settings while this style is active;
-the image remains on your computer and is never included in shared releases. RGB colors animate continuously with
-smooth transitions, without strobe flashes. Optional reading mode uses bundled
+are available in Settings. Modern has two palettes: Porcelain White and Charcoal
+Black. Gothic keeps its serif lettering, compact layout and Antique Gold,
+Ember and Moonlight colors on solid surfaces. Windows XP has one classic
+blue/grey palette with square controls. No decorative backgrounds or animated
+colors are loaded. Optional reading mode uses bundled
 OpenDyslexic, larger text and a cream palette. Local MP3/WAV/FLAC/OGG playback is optional.
 
 ## Your characters and progress
@@ -33,6 +32,15 @@ Dropdowns use native menus. Settings update retained controls without hiding or
 recreating the main window. The project layout and maintenance workflow are
 documented in [Architecture](docs/ARCHITECTURE.md). To publish the source and each
 matching Windows release, follow [GitHub publishing](docs/GITHUB_PUBLISHING.md).
+
+Imported save files and the installation folder are remembered locally. Startup
+checks the latest disk saves in a background worker. The **Rescan game saves**
+button updates progression while keeping the current window and goals. It also
+finds newly available saves in linked folders/roaming accounts. Only meaningful
+changes add timeline events; repeated scans do not duplicate them. Manual
+characters are kept. If an autosave is being written, reading retries briefly;
+on failure the previous snapshot remains available. Unsaved game progress is
+not available until the game writes it to disk.
 
 The journal starts empty. Create a character using its in-game name and original
 class, or import a PC save. Character cards open individual timelines.
@@ -102,9 +110,9 @@ See the [guide](docs/GUIDE.md), [verification](docs/VERIFICATION.md) and
 Run BUILD_RELEASE.ps1 on Windows x64. The builder tests real widgets/calculations,
 builds the EXE, checks embedded resources and produces:
 
-- auto-elden-ring-6.0.1-source.zip: architecture-independent Python source.
-- auto-elden-ring-6.0.1-windows-x64.zip: standalone Windows x64 package.
-- Auto-Elden-Ring-6.0.1-win-x64.exe: executable for release downloads.
+- auto-elden-ring-6.1.0-source.zip: architecture-independent Python source.
+- auto-elden-ring-6.1.0-windows-x64.zip: standalone Windows x64 package.
+- Auto-Elden-Ring-6.1.0-win-x64.exe: executable for release downloads.
 - RELEASE_MANIFEST.json and SHA256SUMS.txt: artifact/source correspondence.
 
 Each version lives in releases/version; existing versions are never overwritten.
@@ -129,12 +137,12 @@ python main.py --ui-smoke --report verification-ui.json
 ## Source layout and performance
 
 core.py owns exact costs; planner.py owns calculations/state; ui.py, presentation.py
-and journey_ui.py render the desktop; save_reader.py reads bounded PC save sections; history.py
+and journey_ui.py render the desktop; save_reader.py reads bounded PC save sections; save_sync.py rescans remembered files; history.py
 imports changes; profiles.py saves timelines; i18n.py localizes controls.
 The virtualized weapon gallery draws visible cards with a 64-image cache.
 Theme/language updates preserve the visible native window and retained controls.
-Catalogue opening measured 0.164 seconds and 57.16 MiB working
+Catalogue opening measured 0.149 seconds and 58.89 MiB working
 memory on this host. See verification for measurement limits.
 
-![Elden Ring background](docs/screenshots/style-elden.png)
+![Gothic solid-color style](docs/screenshots/style-gothic.png)
 ![Small companion](docs/screenshots/compact.png)

@@ -103,6 +103,11 @@ def main():
         or save_result["ordinary_stones_total"] != 22
     ):
         raise SystemExit("Packaged save-reader fixture check failed.")
+    rescan_report = work / "exe-rescan-check.json"
+    run(exe, "--rescan-check", save_fixture, "--report", rescan_report)
+    rescan_result = json.loads(rescan_report.read_text(encoding="utf-8"))
+    if rescan_result["status"] != "PASS" or rescan_result["app_version"] != __version__:
+        raise SystemExit("Packaged startup/manual rescan check failed.")
     result = json.loads(report.read_text(encoding="utf-8"))
     if result["status"] != "PASS" or result["app_version"] != __version__:
         raise SystemExit("Packaged executable self-check failed.")
@@ -116,6 +121,7 @@ def main():
     shutil.copy2(ui_report, release / "VERIFICATION_UI.json")
     shutil.copy2(audio_report, release / "VERIFICATION_AUDIO.json")
     shutil.copy2(save_report, release / "VERIFICATION_SAVE.json")
+    shutil.copy2(rescan_report, release / "VERIFICATION_RESCAN.json")
     source_files = [
         p
         for p in ROOT.iterdir()
@@ -150,6 +156,7 @@ def main():
         archive.write(ui_report, "VERIFICATION_UI.json")
         archive.write(audio_report, "VERIFICATION_AUDIO.json")
         archive.write(save_report, "VERIFICATION_SAVE.json")
+        archive.write(rescan_report, "VERIFICATION_RESCAN.json")
     manifest = {
         "version": __version__,
         "python": sys.version,
@@ -164,6 +171,7 @@ def main():
         "gui_verification": ui_result,
         "save_verification": save_result,
         "audio_verification": audio_result,
+        "rescan_verification": rescan_result,
     }
     (release / "RELEASE_MANIFEST.json").write_text(
         json.dumps(manifest, indent=2, ensure_ascii=False), encoding="utf-8"

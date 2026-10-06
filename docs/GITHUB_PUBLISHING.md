@@ -20,12 +20,12 @@ and GitHub Packages are optional and unnecessary for distributing this app.
 
 ## Put the current source in Code
 
-Extract auto-elden-ring-6.0.1-source.zip. Copy the **contents** of its
-auto-elden-ring-6.0.1 folder to the repository root, so README.md, main.py,
+Extract auto-elden-ring-6.1.0-source.zip. Copy the **contents** of its
+auto-elden-ring-6.1.0 folder to the repository root, so README.md, main.py,
 auto_elden_ring/, assets/, tests/, scripts/ and docs/ are immediately visible.
 Do not put the source ZIP itself in Code. Use GitHub Desktop to clone your empty
 repository, copy these files into the clone, commit as `Import Auto Elden Ring
-6.0.1`, then push. The source contains thousands of small offline icons, so this
+6.1.0`, then push. The source contains thousands of small offline icons, so this
 avoids the browser's 100-file upload batches. The web alternative is Code →
 Add file → Upload files for each batch.
 
@@ -37,13 +37,13 @@ inside the verified source ZIP.
 ## Preserve source history for every public version
 
 For a new empty repository, the optional prepared history bundle imports exact
-snapshots with one commit/tag per public version and main at 6.0.1. Its author is
+snapshots with one commit/tag per public version and main at 6.1.0. Its author is
 explicitly an archive-import identity, not a claim about original authorship.
-See [History instructions](HISTORY_INSTRUCTIONS.md) for the local clone and push
+See the included publishing/HISTORY_INSTRUCTIONS.md for the local clone and push
 commands. Nothing is uploaded by preparing this bundle.
 
 If importing manually instead, import each source ZIP in this order:
-1.0.1, 2.0.0, 2.0.1, 2.0.2, 3.0.0, 4.0.0, 4.0.1, 5.0.0, 6.0.0, 6.0.1.
+1.0.1, 2.0.0, 2.0.1, 2.0.2, 3.0.0, 4.0.0, 4.0.1, 5.0.0, 6.0.0, 6.0.1, 6.1.0.
 For each snapshot replace the preceding source files completely, keep .git,
 commit `Import Auto Elden Ring VERSION`, and create tag `vVERSION` on that commit.
 GitHub Desktop supports History → right-click commit → Create Tag.
@@ -53,7 +53,7 @@ and only builds/downloads artifacts; it does not publish releases.
 
 If you upload only the current Code now, publish the current release first and
 add historical releases after importing their source commits/tags. Do not label
-the 6.0.1 commit as v2.0.0: GitHub's automatic source archive would then be wrong.
+the 6.1.0 commit as v2.0.0: GitHub's automatic source archive would then be wrong.
 
 ## Create Releases
 
@@ -65,7 +65,7 @@ The source ZIP is platform-independent Python; the Windows ZIP/EXE are x64.
 The attached source ZIP is the exact build snapshot; GitHub also creates source
 downloads automatically from the tag's source commit.
 
-Historical releases: leave **Set as the latest release** off. Current 6.0.1:
+Historical releases: leave **Set as the latest release** off. Current 6.1.0:
 turn it on. Leave **Set as a pre-release** off for this release plan; use drafts
 until all attachments are present. Historical versions retain their historical
 behavior and bugs; their existing evidence is audited, not claimed as newly run.
@@ -81,7 +81,8 @@ behavior and bugs; their existing evidence is audited, not claimed as newly run.
 | 4.0.1 | v4.0.1 | Auto Elden Ring 4.0.1 | Historical release | [Notes](releases/4.0.1.md) |
 | 5.0.0 | v5.0.0 | Auto Elden Ring 5.0.0 | Historical release | [Notes](releases/5.0.0.md) |
 | 6.0.0 | v6.0.0 | Auto Elden Ring 6.0.0 | Historical release | [Notes](releases/6.0.0.md) |
-| 6.0.1 | v6.0.1 | Auto Elden Ring 6.0.1 | Latest maintenance release | [Notes](releases/6.0.1.md) |
+| 6.0.1 | v6.0.1 | Auto Elden Ring 6.0.1 | Historical release | [Notes](releases/6.0.1.md) |
+| 6.1.0 | v6.1.0 | Auto Elden Ring 6.1.0 | Latest release | [Notes](releases/6.1.0.md) |
 
 Do not upload the original 1.0.0. Its personal example-path comment has been
 removed in the rebuilt 1.0.1 edition; the original is retained only in the ignored
@@ -213,6 +214,20 @@ Upload the files rather than dragging the release folder itself.
 - VERIFICATION_UI.json
 - auto-elden-ring-6.0.1-source.zip
 - auto-elden-ring-6.0.1-windows-x64.zip
+
+### 6.1.0 — releases/6.1.0
+
+- Auto-Elden-Ring-6.1.0-win-x64.exe
+- RELEASE_MANIFEST.json
+- SHA256SUMS.txt
+- VERIFICATION_AUDIO.json
+- VERIFICATION_EXE.json
+- VERIFICATION_NATIVE.json
+- VERIFICATION_RESCAN.json
+- VERIFICATION_SAVE.json
+- VERIFICATION_UI.json
+- auto-elden-ring-6.1.0-source.zip
+- auto-elden-ring-6.1.0-windows-x64.zip
 
 ## Verified GitHub references
 

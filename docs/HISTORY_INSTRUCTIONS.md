@@ -1,8 +1,8 @@
 # Optional complete source history
 
 The prepared auto-elden-ring-history.bundle contains one exact source commit and
-tag for each of the ten public versions: 1.0.1, 2.0.0, 2.0.1, 2.0.2, 3.0.0,
-4.0.0, 4.0.1, 5.0.0, 6.0.0 and 6.0.1. Main contains 6.0.1. Each tracked Git blob
+tag for each of the eleven public versions: 1.0.1, 2.0.0, 2.0.1, 2.0.2, 3.0.0,
+4.0.0, 4.0.1, 5.0.0, 6.0.0, 6.0.1 and 6.1.0. Main contains 6.1.0. Each tracked Git blob
 is checked against the corresponding archive bytes. No EXEs, profiles or saves
 are committed. Git commit authors identify the archive import, not original
 authorship; import timestamps describe when this history was assembled.
@@ -34,9 +34,9 @@ read into the source, reports or bundle.
 
 4. Create Releases on the matching tags, following GITHUB_PUBLISHING.md. Upload
    the matching EXE, both ZIPs, manifest, hashes and verification reports for
-   each version. Only 6.0.1 should be marked latest.
+   each version. Only 6.1.0 should be marked latest.
 5. Keep Actions disabled unless you deliberately want the optional build jobs.
-   The current 6.0.1 workflow is manual and does not create GitHub Releases.
+   The current 6.1.0 workflow is manual and does not create GitHub Releases.
 
 To regenerate a bundle locally after preparing all release folders:
 

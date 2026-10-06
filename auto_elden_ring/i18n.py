@@ -136,9 +136,9 @@ no_measurement|Record a positive rune gain to see your estimate.|Enregistre un g
 settings_title|Make it yours|À ta façon|Podle tvého gusta|Ganz nach deinem Geschmack|A tu manera|自分に合った設定に
 language|Language|Langue|Jazyk|Sprache|Idioma|言語
 theme|Appearance|Apparence|Vzhled|Darstellung|Apariencia|外観
-calm|Calm light|Clair apaisé|Klidné světlé|Ruhig und hell|Claro y sereno|落ち着いたライト
-elden|Elden night|Nuit Elden|Eldenská noc|Elden-Nacht|Noche de Elden|エルデン・ナイト
-slate|Soft slate|Ardoise douce|Jemná břidlice|Sanftes Schiefergrau|Pizarra suave|柔らかなスレート
+calm|Porcelain white|Blanc porcelaine|Porcelánová bílá|Porzellanweiß|Blanco porcelana|ポーセリンホワイト
+elden|Antique gold|Or ancien|Staré zlato|Antikgold|Oro antiguo|アンティークゴールド
+slate|Charcoal black|Noir charbon|Uhlová černá|Kohleschwarz|Negro carbón|チャコールブラック
 apply_settings|Apply language and appearance|Appliquer la langue et l’apparence|Použít jazyk a vzhled|Sprache und Darstellung anwenden|Aplicar idioma y apariencia|言語と外観を適用
 save_project|Save build project…|Enregistrer le projet de build…|Uložit projekt sestavy…|Build-Projekt speichern…|Guardar proyecto de build…|ビルドを保存…
 open_project|Open build project…|Ouvrir un projet de build…|Otevřít projekt sestavy…|Build-Projekt öffnen…|Abrir proyecto de build…|ビルドを開く…

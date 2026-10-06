@@ -77,7 +77,7 @@ def main():
         app.update()
         time.sleep(0.3)
         app.update()
-        capture(app, directory / "elden-fr.png")
+        capture(app, directory / "gothic-fr.png")
         app.catalogue()
         until = time.monotonic() + 0.3
         while time.monotonic() < until:
@@ -116,17 +116,17 @@ def main():
             app.update()
             time.sleep(0.2)
             app.update()
-            capture(app, directory / ("elden-" + palette + ".png"))
-        for style in ("modern", "elden", "xp", "rainbow"):
+            capture(app, directory / ("gothic-" + palette + ".png"))
+        for style in ("modern", "elden", "xp"):
             app.set_visual_style("style_" + style)
             app.show("settings")
             app.update()
             time.sleep(0.2)
             app.update()
-            capture(app, directory / ("style-" + style + ".png"))
-        notice = getattr(app, "rgb_notice_panel", None)
-        if notice is not None and notice.winfo_exists():
-            notice.destroy()
+            capture(
+                app, directory / ("style-" + ("gothic" if style == "elden" else style) + ".png")
+            )
+
         app.data["dyslexic"] = True
         app.apply_appearance()
         app.update()

@@ -51,4 +51,12 @@ def upgrade_state(state):
         result["style"] = "elden" if state.get("theme") == "elden" else "modern"
     if result["style"] == "xp":
         result["theme"] = "xp_blue"
+    from .styles import STYLES
+
+    # Retired styles migrate without discarding goals, inventory or timelines.
+    if result["style"] == "rainbow":
+        result.update(style="modern", theme="slate")
+    if result["style"] in STYLES and result["theme"] not in STYLES[result["style"]]["themes"]:
+        result["theme"] = STYLES[result["style"]]["themes"][0]
+    result.pop("custom_background", None)
     return result

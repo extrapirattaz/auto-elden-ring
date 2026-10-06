@@ -27,18 +27,6 @@ class JourneyFeatures:
         window._previous_grab = self.grab_current()
         window.grab_set()
 
-    def rgb_notice(self):
-        if self._closing or self.data["style"] != "rainbow":
-            return
-        window = self.popup(self.t("rgb_beta"), "650x300")
-        self.rgb_notice_panel = window
-        self.label(window, "RGB", 30).pack(pady=(22, 8))
-        self.label(window, self.t("rgb_beta_hint"), 16, wraplength=580, justify="left").pack(
-            padx=24, pady=18
-        )
-        self.button(window, "done", window.destroy).pack(pady=12)
-        return window
-
     def show_profile_picker(self, startup=False):
         current = getattr(self, "profile_picker", None)
         if current is not None and current.winfo_exists():
@@ -64,6 +52,30 @@ class JourneyFeatures:
         self.button(actions, "import_save", self.import_dialog, True).pack(side="left", padx=6)
         scroll = ctk.CTkScrollableFrame(window, fg_color=self.bg)
         scroll.pack(fill="both", expand=True, padx=22, pady=18)
+        window.profile_scroll = scroll
+        window.rescan_status = self.label(
+            window, getattr(self, "scan_message", ""), 12, muted=True, wraplength=700
+        )
+        window.rescan_status.pack(pady=(0, 8))
+        self.button(actions, "rescan_game", self.rescan_game, True).pack(side="left", padx=6)
+        self.populate_profile_cards(window)
+        window.back.configure(
+            state="disabled" if startup or not self.data["profile_created"] else "normal"
+        )
+
+        def back():
+            self.profile_selection_pending = False
+            window.destroy()
+
+        window.protocol("WM_DELETE_WINDOW", back)
+        self.modal(window)
+        self.normalize_surfaces(window)
+        return window
+
+    def populate_profile_cards(self, window):
+        scroll = window.profile_scroll
+        for child in scroll.winfo_children():
+            child.destroy()
         window.profile_cards = {}
         for ident, profile in self.profiles.data["profiles"].items():
             state = profile["state"]
@@ -102,18 +114,6 @@ class JourneyFeatures:
             window.profile_cards[ident] = button
         if not window.profile_cards:
             self.label(scroll, self.t("empty_profiles"), muted=True, wraplength=650).pack(pady=35)
-        window.back.configure(
-            state="disabled" if startup or not self.data["profile_created"] else "normal"
-        )
-
-        def back():
-            self.profile_selection_pending = False
-            window.destroy()
-
-        window.protocol("WM_DELETE_WINDOW", back)
-        self.modal(window)
-        self.normalize_surfaces(window)
-        return window
 
     def ask_import_policy(self, path, window, status):
         prompt = self.popup(self.t("import_profiles"), "700x350")

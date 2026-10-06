@@ -44,6 +44,14 @@ def differences(before, after):
                         "after": new.get(ident, 0),
                     }
                 )
+    if before.get("equipment", []) != after.get("equipment", []):
+        changes.append(
+            {
+                "field": "equipment",
+                "before": len(before.get("equipment", [])),
+                "after": len(after.get("equipment", [])),
+            }
+        )
     return changes
 
 
@@ -86,8 +94,6 @@ def _apply_import(profiles, characters, preferences):
                     p["state"]
                     for p in reversed(profiles.data["profiles"][ident]["checkpoints"])
                     if p["note"] == "save_import"
-                    and p["state"]["save_link"].get("fingerprint")
-                    == old["save_link"].get("fingerprint")
                 ),
                 old,
             )
@@ -127,11 +133,14 @@ def _apply_import(profiles, characters, preferences):
                 selected["current"] = min(w["current"] for w in found)
                 selected["target"] = max(selected["current"], selected["target"])
         profiles.data["active"] = ident
-        if changed:
+        changes = differences(previous, state)
+        # Play time and other opaque slot bytes change without planner progress.
+        # Remember the new fingerprint, but do not flood the timeline with empty events.
+        if changed and (not old["save_link"] or changes):
             point = profiles.checkpoint(state, "save_import")
-            next(p for p in profiles.active["checkpoints"] if p["id"] == point["id"])["changes"] = (
-                differences(previous, state)
-            )
+            next(p for p in profiles.active["checkpoints"] if p["id"] == point["id"])[
+                "changes"
+            ] = changes
         profiles.sync(state)
         results.append(ident)
     profiles.data["active"] = active if active in profiles.data["profiles"] else results[0]

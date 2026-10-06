@@ -28,6 +28,8 @@ class Profiles:
         ident = uuid4().hex
         self.data = {
             "schema": 1,
+            "save_sources": [],
+            "installation_folder": "",
             "active": ident,
             "profiles": {ident: {"state": deepcopy(state or default_state()), "checkpoints": []}},
         }
@@ -61,7 +63,6 @@ class Profiles:
                 "language",
                 "dyslexic",
                 "music_file",
-                "custom_background",
             ):
                 state[key] = preferences[key]
         ident = uuid4().hex
@@ -99,6 +100,17 @@ class Profiles:
             raise ValueError("Invalid profile library.")
         from .storage import upgrade_state
 
+        data.setdefault("save_sources", [])
+        data.setdefault("installation_folder", "")
+        sources = data["save_sources"]
+        if (
+            not isinstance(sources, list)
+            or len(sources) > 20
+            or any(not isinstance(p, str) or len(p) > 4096 for p in sources)
+            or not isinstance(data["installation_folder"], str)
+            or len(data["installation_folder"]) > 4096
+        ):
+            raise ValueError("Invalid saved game locations.")
         for profile in data["profiles"].values():
             if "profile_created" not in profile["state"]:
                 placeholder = (
@@ -108,6 +120,7 @@ class Profiles:
                 )
                 profile["state"] = upgrade_state(profile["state"])
                 profile["state"]["profile_created"] = not placeholder
+            profile["state"] = upgrade_state(profile["state"])
             validate_state(profile["state"], self.db)
             if not isinstance(profile["checkpoints"], list) or len(profile["checkpoints"]) > 10000:
                 raise ValueError("Invalid checkpoint timeline.")

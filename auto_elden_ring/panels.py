@@ -42,7 +42,6 @@ class Panel(ctk.CTkFrame):
         self.app.popups.discard(self)
         super().destroy()
         self.shell.destroy()
-        self.app.rgb_targets = None
 
     def grab_set(self):
         # No native grab: navigation panels share the main application window.

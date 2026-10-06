@@ -177,40 +177,28 @@ class CompanionFlows(unittest.TestCase):
         window.reopen()
         self.assertEqual(a.data["farm"]["samples"][-1]["runes"], 2400)
 
-    def test_rgb_changes_native_text_without_surface_redraw(self):
-        a = self.create()
-        a.deiconify()
-        a.set_visual_style("style_rainbow")
-        a.update()
-        panel = a.views[a.page]["frame"]
-        background = panel.cget("fg_color")
-        before = a.brand._label.cget("fg")
-        a.rgb_started -= 1
-        a.rgb_tick()
-        self.assertEqual(panel.cget("fg_color"), background)
-        self.assertNotEqual(a.brand._label.cget("fg"), before)
-        a.set_visual_style("style_modern")
-        self.assertIsNone(a.rgb_job)
+    def test_only_three_static_styles_are_available(self):
+        from auto_elden_ring.styles import STYLES
 
-    def test_elden_palettes_replace_art_and_restore_plain_surfaces(self):
+        a = self.create()
+        a.show("settings")
+        self.assertEqual(tuple(STYLES), ("modern", "elden", "xp"))
+        self.assertEqual(a.style_option.cget("values"), [a.t("style_" + k) for k in STYLES])
+        self.assertFalse(hasattr(a, "rgb_tick"))
+
+    def test_gothic_palettes_keep_pages_without_artwork(self):
         a = self.create()
         a.deiconify()
         a.set_visual_style("style_elden")
-        pictures = []
+        frame = a.views[a.page]["frame"]
         for palette in ("elden", "moon", "ember"):
             a.set_palette(palette)
             a.update()
-            a.paint_background()
-            self.assertEqual(a.background_key[2], palette)
-            before = a.background_layers[0].photo
             a.body._parent_canvas.yview_moveto(0.5)
             a.update()
-            a.paint_background()
-            self.assertIs(a.background_layers[0].photo, before)
-            pictures.append(a.background_layers[0].photo)
-        self.assertEqual(len(set(pictures)), 3)
-        a.set_visual_style("style_modern")
-        self.assertEqual(a.background_layers, [])
+            self.assertEqual(frame.cget("fg_color"), a.bg)
+            self.assertIs(a.views[a.page]["frame"], frame)
+        self.assertFalse(hasattr(a, "background_layers"))
 
 
 class StartupSelection(unittest.TestCase):

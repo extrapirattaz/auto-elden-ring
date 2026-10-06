@@ -57,7 +57,13 @@ def self_check():
     checks["bundled reading font"] = resource_path(
         "assets/fonts/OpenDyslexic-Regular.otf"
     ).is_file()
-    checks["bundled landscape"] = resource_path("assets/elden-landscape.webp").is_file()
+    from .styles import STYLES
+
+    checks["static style palettes"] = (
+        len(STYLES) == 3
+        and len(STYLES["modern"]["themes"]) == 2
+        and len(STYLES["xp"]["themes"]) == 1
+    )
     p = Planner(db)
     p.add_sample(1000, 60)
     p.add_sample(2000, 60)
@@ -153,6 +159,107 @@ def save_check(path):
             "characters": len(characters),
             "weapon_variants": sum(len(c["weapons"]) for c in characters),
             "ordinary_stones_total": sum(sum(c["stock"].values()) for c in characters),
+            "checks": checks,
+        },
+        indent=2,
+    )
+
+
+def rescan_check(path):
+    """Exercise startup and manual rescans with an isolated local profile library."""
+    import os
+    from pathlib import Path
+    import tempfile
+    import time
+    from .profiles import Profiles
+    from .history import import_characters
+    from .planner import default_state
+    from .save_reader import read_save
+    from .ui import App
+
+    path = Path(path).resolve()
+    before = (hashlib.sha256(path.read_bytes()).hexdigest(), path.stat().st_mtime_ns)
+    db = Database()
+    characters = read_save(path, db)
+    profiles = Profiles(db)
+    ids = import_characters(profiles, characters, default_state())
+    state = profiles.select(ids[0])
+    state["stats_target"]["vigor"] = min(99, state["stats_current"]["vigor"] + 1)
+    profiles.data["save_sources"] = [str(path)]
+    previous_env = {k: os.environ.get(k) for k in ("LOCALAPPDATA", "APPDATA")}
+    checks = {}
+    with tempfile.TemporaryDirectory(prefix="auto-elden-rescan-") as temporary:
+        os.environ["LOCALAPPDATA"] = temporary
+        os.environ["APPDATA"] = temporary
+        app = None
+        try:
+            profiles.save(Path(temporary) / "AutoEldenRing/profiles-v3.json", state)
+            app = App(persist=True, db=db)
+            native = app.winfo_id()
+            picker = app.profile_picker
+            end = time.monotonic() + 15
+            while (
+                getattr(app, "scan_message_key", (None,))[0] != "scan_done"
+                and time.monotonic() < end
+            ):
+                app.update()
+                time.sleep(0.01)
+            checks["startup remembered save"] = (
+                getattr(app, "scan_message_key", (None,))[0] == "scan_done"
+            )
+            checks["chooser retained"] = (
+                app.profile_picker is picker
+                and picker.winfo_exists()
+                and app.profile_selection_pending
+            )
+            app.activate_profile(app.profiles.select(ids[0]))
+            app.show("farm")
+            app.start_timer()
+            deadline = app.deadline
+            frames = {k: v["frame"] for k, v in app.views.items()}
+            app.rescan_game()
+            end = time.monotonic() + 15
+            while getattr(app, "import_in_progress", False) and time.monotonic() < end:
+                app.update()
+                time.sleep(0.01)
+            checks["manual background scan"] = (
+                not getattr(app, "import_in_progress", False)
+                and app.scan_message_key[0] == "scan_done"
+            )
+            checks["native window and pages retained"] = native == app.winfo_id() and frames == {
+                k: v["frame"] for k, v in app.views.items()
+            }
+            checks["running farm timer retained"] = app.deadline == deadline
+            checks["goal retained"] = app.data["stats_target"] == state["stats_target"]
+            checks["identical scan has no new event"] = all(
+                len(app.profiles.data["profiles"][ident]["checkpoints"]) == 1 for ident in ids
+            )
+            checks["saved current progression"] = (
+                app.data["stats_current"] == characters[0]["stats"]
+                and app.data["runes"] == characters[0]["runes"]
+            )
+            checks["no callback errors"] = not app.callback_errors
+        finally:
+            if app is not None:
+                app.close()
+            for key, value in previous_env.items():
+                if value is None:
+                    os.environ.pop(key, None)
+                else:
+                    os.environ[key] = value
+    checks["save content and timestamp unchanged"] = before == (
+        hashlib.sha256(path.read_bytes()).hexdigest(),
+        path.stat().st_mtime_ns,
+    )
+    if not all(checks.values()):
+        raise RuntimeError(
+            "Rescan self-check failed: " + ", ".join(k for k, v in checks.items() if not v)
+        )
+    return json.dumps(
+        {
+            "app_version": __version__,
+            "status": "PASS",
+            "characters": len(characters),
             "checks": checks,
         },
         indent=2,

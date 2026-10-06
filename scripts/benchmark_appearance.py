@@ -49,7 +49,7 @@ def main():
         for i in range(12):
             start = time.perf_counter()
             if i < 6:
-                app.set_palette(STYLES["modern"]["themes"][i % 3])
+                app.set_palette(STYLES["modern"]["themes"][i % len(STYLES["modern"]["themes"])])
             else:
                 app.dyslexic_var.set(not app.data["dyslexic"])
                 app.set_reading_mode()

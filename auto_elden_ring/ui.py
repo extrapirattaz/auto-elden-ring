@@ -19,7 +19,7 @@ from .i18n import Translator, LANGUAGE_NAMES
 from .storage import save_project, load_project
 
 
-from .styles import STYLES, PALETTES, RAINBOW, appearance
+from .styles import STYLES, PALETTES, appearance
 from .gallery import Gallery
 from .profiles import Profiles, timestamp
 from .audio import Music
@@ -112,8 +112,9 @@ class App(Features, ctk.CTk):
             self.show_profile_picker(startup=True)
             self.profile_picker.present()
             self.state("zoomed")
-        self.start_rgb()
         self.after_idle(self.blend_titlebar)
+        if persist:
+            self.after(150, lambda: self.rescan_game(startup=True))
 
     @property
     def data(self):
@@ -250,7 +251,10 @@ class App(Features, ctk.CTk):
         self.version_label = self.label(
             self.sidebar, f"v{__version__} · {self.t('offline')}", 12, True
         )
-        self.side_art = self.label(self.sidebar, "")
+        self.rescan_button = self.button(
+            self.sidebar, "rescan_game", self.rescan_game, True, width=180
+        )
+        self.rescan_status = self.label(self.sidebar, "", 11, muted=True, wraplength=180)
         self.host = ctk.CTkFrame(self, fg_color=self.bg, corner_radius=0)
         self.host._surface_role = "bg"
         self.host.grid(row=0, column=1, sticky="nsew", padx=24, pady=20)
@@ -300,22 +304,16 @@ class App(Features, ctk.CTk):
                 button.configure(width=180, height=38)
                 button.pack(pady=5, padx=20)
             self.version_label.pack(side="bottom", pady=18)
+            self.rescan_status.pack(side="bottom", padx=16, pady=6)
+            self.rescan_button.pack(side="bottom", padx=16, pady=6)
+        if classic:
+            self.rescan_button.configure(width=100, height=32)
+            self.rescan_button.pack(side="right", padx=8, pady=10)
+        else:
+            self.rescan_button.configure(width=180, height=38)
         self.equipment_button.configure(width=110 if classic else 180)
         self.equipment_button.pack(side="left" if classic else "top", padx=12, pady=8)
         self.refresh_nav()
-
-    def art_image(self, size):
-        key = ("art", size)
-        if key not in self.images:
-            path = resource_path("assets/elden-landscape.webp")
-            if not path.exists():
-                return None
-            with Image.open(path) as source:
-                from PIL import ImageOps
-
-                image = ImageOps.fit(source.convert("RGB"), size)
-                self.images[key] = ctk.CTkImage(image, size=size)
-        return self.images[key]
 
     def blend_titlebar(self):
         # Native caption, movement and resize loops are deliberately retained.
@@ -345,8 +343,6 @@ class App(Features, ctk.CTk):
             frame._surface_role = "bg"
             record = {"frame": frame}
             self.views[page] = record
-            art = self.label(frame, "")
-            record["art"] = art
             title = self.label(frame, self.t(page + "_title"), 28)
             title.pack(anchor="w", pady=(0, 5))
             title._translation_key = page + "_title"
@@ -412,24 +408,12 @@ class App(Features, ctk.CTk):
             "settings": "⚙",
         }
         for index, (key, button) in enumerate(self.nav.items()):
-            color = (
-                RAINBOW[index % len(RAINBOW)]
-                if self.data["style"] == "rainbow" and not self.data["dyslexic"]
-                else self.accent
-            )
+            color = self.accent
             prefix = icons[key] + "  " if self.data["style"] == "elden" else ""
             button.configure(
                 text=prefix + self.t(key),
                 fg_color=color if key == self.page else self.soft,
-                text_color=(
-                    "#FFFFFF"
-                    if key == self.page
-                    else (
-                        color
-                        if self.data["style"] == "rainbow" and not self.data["dyslexic"]
-                        else self.ink
-                    )
-                ),
+                text_color="#FFFFFF" if key == self.page else self.ink,
             )
 
     def navigate(self, page):
@@ -632,6 +616,8 @@ class App(Features, ctk.CTk):
             self.character_time()
 
     def preview_levels(self):
+        if getattr(self, "_refreshing_scan", False):
+            return
         try:
             clone = deepcopy(self.data)
             for (section, attribute), variable in self.stat_vars.items():
@@ -1644,15 +1630,6 @@ class App(Features, ctk.CTk):
             justify="left",
         )
         self.style_description.pack(anchor="w", pady=16)
-        self.background_actions = ctk.CTkFrame(self.body, fg_color="transparent")
-        self.button(
-            self.background_actions, "custom_background", self.choose_background, True
-        ).pack(side="left", padx=6)
-        self.button(
-            self.background_actions, "default_background", self.reset_background, True
-        ).pack(side="left", padx=6)
-        if self.data["style"] == "elden":
-            self.background_actions.pack(anchor="w", pady=10)
         audio = self.card(self.body)
         audio.pack(fill="x", pady=12)
         self.music_label = self.label(
@@ -1672,7 +1649,7 @@ class App(Features, ctk.CTk):
         label.pack(anchor="w", padx=18, pady=(0, 16))
         self.button(self.body, "small_mode", self.compact_mode, True).pack(anchor="w", pady=8)
         self.button(self.body, "import_save", self.import_dialog, True).pack(anchor="w", pady=8)
-        for key in ("autosave_note",):
+        for key in ("autosave_note", "scan_hint"):
             label = self.label(self.body, self.t(key), muted=True, wraplength=900, justify="left")
             label._translation_key = key
             label.pack(anchor="w", pady=16)
@@ -1691,16 +1668,10 @@ class App(Features, ctk.CTk):
 
     def set_visual_style(self, value):
         style = value.removeprefix("style_")
-        notice = getattr(self, "rgb_notice_panel", None)
-        if style != "rainbow" and notice is not None and notice.winfo_exists():
-            notice.destroy()
-        entering_rgb = style == "rainbow" and self.data["style"] != "rainbow"
         self.data["style"] = style
         if self.data["theme"] not in STYLES[style]["themes"]:
             self.data["theme"] = STYLES[style]["themes"][0]
         self.apply_appearance()
-        if entering_rgb:
-            self.after(0, self.rgb_notice)
 
     def set_palette(self, value):
         self.data["theme"] = value
@@ -1796,12 +1767,6 @@ class App(Features, ctk.CTk):
                     pass
                 if isinstance(widget, ctk.CTkLabel) and getattr(widget, "_text_role", None):
                     color = self.muted if widget._text_role == "muted" else self.ink
-                    if (
-                        self.data["style"] == "rainbow"
-                        and not self.data["dyslexic"]
-                        and widget._text_role == "ink"
-                    ):
-                        color = RAINBOW[index % len(RAINBOW)]
                     if widget.cget("text_color") != color:
                         pending["text_color"] = color
                 if hasattr(widget, "_enum_ids"):
@@ -1843,7 +1808,6 @@ class App(Features, ctk.CTk):
             self.layout_style()
         else:
             self.refresh_nav()
-        self.refresh_art()
         self.refresh_character()
         self.refresh_weapons()
         self.refresh_farm_results()
@@ -1864,6 +1828,9 @@ class App(Features, ctk.CTk):
             and self.data["manual"]["input_mode"] == "next"
         ):
             self.update_price_prompt()
+        if hasattr(self, "scan_message_key"):
+            key, values = self.scan_message_key
+            self.scan_status(key, **values)
         self.blend_titlebar()
         self.autosave()
 

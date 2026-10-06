@@ -3,28 +3,26 @@
 from concurrent.futures import ThreadPoolExecutor
 from copy import deepcopy
 from datetime import datetime
-import colorsys
 import tkinter as tk
 from tkinter import filedialog
 from pathlib import Path
-import time
 import customtkinter as ctk
 from .dropdown import NativeOptionMenu
-from PIL import Image, ImageOps, ImageTk
 from classes_data import CLASS_DATA, ATTRIBUTES
-from .core import integer, resource_path
+from .core import integer
 from .profiles import timestamp
-from .save_reader import read_save, read_saves, discover
+from .save_reader import read_saves, discover
 from .history import import_characters, differences
 from .windows import presentation_transaction, cancel_widget_jobs
 from .journey_ui import JourneyFeatures
+from .save_sync import SaveSync
 
 
 def display_date(value):
     return datetime.fromisoformat(value).astimezone().strftime("%d/%m/%Y %H:%M")
 
 
-class Features(JourneyFeatures):
+class Features(SaveSync, JourneyFeatures):
     def apply_appearance(self):
         self.dismiss_menu()
         with presentation_transaction(self):
@@ -34,12 +32,9 @@ class Features(JourneyFeatures):
             if self.page == "journal":
                 self.draw_timeline()
             self.update_idletasks()
-            self.paint_background()
-        self.start_rgb()
 
     def normalize_surfaces(self, root=None):
         """Use semantic roles, never compare the previous palette's hex values."""
-        self.rgb_targets = None
 
         def parent_color(widget):
             parent = widget.master
@@ -168,188 +163,6 @@ class Features(JourneyFeatures):
                 else self.t("switch_character")
             )
         )
-        self.refresh_art()
-
-    def refresh_art(self):
-        # The artwork is part of the window background, never a thumbnail/banner.
-        for record in self.views.values():
-            record["art"].pack_forget()
-        if hasattr(self, "side_art"):
-            self.side_art.pack_forget()
-        if not hasattr(self, "background_layers"):
-            self.background_layers = []
-            self.background_job = None
-            self.bind("<Configure>", self.queue_background, add="+")
-        self.queue_background()
-
-    def queue_background(self, event=None):
-        if event and event.widget is not self:
-            return
-        if self.background_job:
-            self.after_cancel(self.background_job)
-        self.background_job = self.after(120, self.paint_background)
-
-    def choose_background(self):
-        if self.data["style"] != "elden":
-            return
-        path = filedialog.askopenfilename(
-            parent=self, filetypes=[("Images", "*.png *.jpg *.jpeg *.webp")]
-        )
-        if path:
-            with Image.open(path) as image:
-                image.verify()
-            self.data["custom_background"] = path
-            self.background_key = None
-            self.paint_background()
-            self.autosave()
-
-    def reset_background(self):
-        self.data["custom_background"] = ""
-        self.background_key = None
-        self.paint_background()
-        self.autosave()
-
-    def paint_background(self):
-        self.background_job = None
-        if self._closing:
-            return
-        if hasattr(self, "background_actions") and self.background_actions.winfo_exists():
-            if self.data["style"] == "elden":
-                if self.background_actions.winfo_manager() != "pack":
-                    self.background_actions.pack(after=self.style_description, anchor="w", pady=10)
-            else:
-                self.background_actions.pack_forget()
-        enabled = self.data["style"] == "elden" and not self.data["dyslexic"]
-        if not enabled:
-            for layer in self.background_layers:
-                if layer.winfo_exists():
-                    layer.destroy()
-            self.background_layers = []
-            self.background_key = None
-            return
-        if not self.winfo_viewable():
-            return
-        width, height = max(1, self.winfo_width()), max(1, self.winfo_height())
-        default = {
-            "moon": "elden-moon.webp",
-            "ember": "elden-ember.webp",
-            "elden": "elden-night.webp",
-        }[self.data["theme"]]
-        path = (
-            Path(self.data["custom_background"])
-            if self.data["custom_background"]
-            else resource_path("assets/" + default)
-        )
-        if not path.is_file():
-            path = resource_path("assets/" + default)
-        key = (width, height, self.data["theme"], str(path), path.stat().st_mtime_ns, self.page)
-        if (
-            key == getattr(self, "background_key", None)
-            and len(self.background_layers) == 2
-            and all(layer.winfo_exists() for layer in self.background_layers)
-        ):
-            return
-        # Only the fixed window surface owns artwork. Scrolling content is
-        # drawn on opaque, readable panels: no scrolling crops or fake alpha.
-        with Image.open(path) as source:
-            source.draft("RGB", (width, height))
-            picture = ImageOps.fit(source.convert("RGB"), (width, height))
-        picture = Image.blend(picture, Image.new("RGB", (width, height), self.bg), 0.38)
-        photo = ImageTk.PhotoImage(picture, master=self)
-        if self.background_layers and self.background_layers[0].winfo_exists():
-            layer = self.background_layers[0]
-            layer.configure(image=photo)
-        else:
-            layer = tk.Label(self, image=photo, bd=0, highlightthickness=0)
-            self.background_layers = [layer]
-        layer.photo = photo
-        layer.place(x=0, y=0, relwidth=1, relheight=1)
-        layer.lower()
-        for old in self.background_layers[1:]:
-            if old.winfo_exists():
-                old.destroy()
-        self.background_layers = self.background_layers[:1]
-        frame = self.views[self.page]["frame"]
-        if frame.winfo_ismapped():
-            x, y = (
-                frame.winfo_rootx() - self.winfo_rootx(),
-                frame.winfo_rooty() - self.winfo_rooty(),
-            )
-            w, h = frame.winfo_width(), frame.winfo_height()
-            crop = ImageTk.PhotoImage(picture.crop((x, y, x + w, y + h)), master=self)
-            panel = tk.Label(frame, image=crop, bd=0, highlightthickness=0)
-            panel.photo = crop
-            panel.place(x=0, y=0, relwidth=1, relheight=1)
-            panel.tk.call("raise", panel._w, frame._canvas._w)
-            self.background_layers.append(panel)
-        self.background_key = key
-
-    def start_rgb(self):
-        if getattr(self, "rgb_job", None):
-            self.after_cancel(self.rgb_job)
-            self.rgb_job = None
-        if self.data["style"] != "rainbow" or self.data["dyslexic"]:
-            return
-        self.rgb_started = time.monotonic()
-        self.rgb_tick()
-
-    def rgb_tick(self):
-        self.rgb_job = None
-        if self._closing or self.data["style"] != "rainbow" or self.data["dyslexic"]:
-            return
-        if self.winfo_viewable():
-            hue = ((time.monotonic() - self.rgb_started) / 3) % 1
-
-            def color(offset, value=0.85):
-                rgb = colorsys.hsv_to_rgb((hue + offset) % 1, 0.75, value)
-                return "#" + "".join(f"{int(c*255):02x}" for c in rgb)
-
-            targets = getattr(self, "rgb_targets", None)
-            if targets is None:
-                targets = []
-
-                def collect(widget):
-                    # Native text color changes do not redraw rounded CTk surfaces.
-                    for attribute in ("_text_label", "_label", "_entry", "_textbox"):
-                        native = getattr(widget, attribute, None)
-                        if (
-                            isinstance(native, (tk.Label, tk.Entry, tk.Text))
-                            and native not in targets
-                        ):
-                            targets.append(native)
-                    for child in widget.winfo_children():
-                        collect(child)
-
-                collect(self.sidebar)
-                collect(self.views[self.page]["frame"])
-                for popup in tuple(self.popups):
-                    if popup.winfo_exists():
-                        collect(popup)
-                self.rgb_targets = targets
-            light = self.data["theme"] in ("pastel", "prism")
-            for index, native in enumerate(targets):
-                if native.winfo_exists():
-                    native.configure(fg=color(index * 0.07, 0.48 if light else 0.95))
-            canvases = []
-            if (
-                getattr(self, "timeline", None) is not None
-                and self.timeline.winfo_exists()
-                and self.timeline.winfo_viewable()
-            ):
-                canvases.append(self.timeline)
-            if (
-                getattr(self, "gallery_window", None) is not None
-                and self.gallery_window.winfo_exists()
-                and self.gallery_window.winfo_viewable()
-            ):
-                canvases.append(self.gallery.canvas)
-            for canvas in canvases:
-                for index, item in enumerate(canvas.find_all()):
-                    if canvas.type(item) == "text":
-                        canvas.itemconfigure(item, fill=color(index * 0.07))
-        # Minimized/full-size-hidden views need no animation; poll only for a
-        # possible restore, keeping the compact companion's idle work small.
-        self.rgb_job = self.after(66 if self.winfo_viewable() else 500, self.rgb_tick)
 
     def build_journal(self):
         actions = ctk.CTkFrame(self.body, fg_color="transparent")
@@ -771,6 +584,7 @@ class Features(JourneyFeatures):
             if folder:
                 status.configure(text=folder)
                 # Executable installation and roaming save are separate locations.
+                self.pending_installation_folder = str(Path(folder).resolve())
                 paths = discover(folder)
                 if len(paths) == 1:
                     self.begin_import(paths[0], window, status, policy=None)
@@ -832,6 +646,11 @@ class Features(JourneyFeatures):
 
             def finish():
                 characters = self.import_future.result()
+                self.remember_sources(paths)
+                folder = getattr(self, "pending_installation_folder", "")
+                if folder:
+                    self.profiles.data["installation_folder"] = folder
+                    self.pending_installation_folder = ""
                 ids = import_characters(
                     self.profiles, characters, self.data, replace_manual=policy == "replace"
                 )
@@ -864,9 +683,7 @@ class Features(JourneyFeatures):
         self.after(80, poll)
 
     def refresh_import(self):
-        link = self.data["save_link"]
-        if link:
-            self.begin_import(link["path"])
+        return self.rescan_game()
 
     def save_farm_spot(self):
         self.read_farm()
@@ -976,14 +793,3 @@ class Features(JourneyFeatures):
                 record["frame"].destroy()
                 del self.views[page]
                 self.wallet_vars.pop(page, None)
-        if getattr(self, "background_job", None):
-            self.after_cancel(self.background_job)
-            self.background_job = None
-        for layer in getattr(self, "background_layers", []):
-            if layer.winfo_exists():
-                layer.destroy()
-        self.background_layers = []
-        for widget, _ in getattr(self, "background_text", []):
-            if widget.winfo_exists():
-                widget._label.configure(image="")
-        self.background_text = []

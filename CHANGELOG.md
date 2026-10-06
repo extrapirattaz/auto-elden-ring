@@ -1,5 +1,19 @@
 # Changelog
 
+## 6.1.0 — 2026-10-06
+
+- Remove the Rainbow style, RGB animation, decorative backgrounds and background controls.
+- Limit Modern to Porcelain White and Charcoal Black; keep one Classic Windows XP palette.
+- Rename the fantasy presentation Gothic and its original palette Antique Gold; preserve its layout and three static color choices.
+- Migrate retired preferences without losing characters, goals, inventory or checkpoints.
+- Remember imported save paths and the selected installation folder locally.
+- Rescan remembered PC saves asynchronously on startup and through a persistent Rescan game saves button.
+- Refresh current progression without reopening the main window, replacing calculator pages or cancelling farm timers.
+- Retry transient save reads in a bounded background worker and retain the previous snapshot on failure.
+- Add timeline events for changed stats, runes, inventory or equipment; ignore opaque-only slot changes and repeated scans.
+- Preserve manual profiles, selected characters and planned targets during rescans.
+- Refresh English documentation, screenshots, matching x64 artifacts and per-version GitHub publishing instructions.
+
 ## 6.0.1 — 2026-10-05
 
 - Replace imitation dropdown lists with native Tk menus throughout the application.
