@@ -35,6 +35,7 @@ class Features(SaveSync, JourneyFeatures):
 
     def normalize_surfaces(self, root=None):
         """Use semantic roles, never compare the previous palette's hex values."""
+        tab = self.style_spec["selector"] == "tab"
 
         def parent_color(widget):
             parent = widget.master
@@ -63,18 +64,22 @@ class Features(SaveSync, JourneyFeatures):
         def visit(widget):
             color = parent_color(widget)
             if isinstance(widget, ctk.CTkScrollableFrame):
-                configure(
-                    widget,
-                    fg_color=self.bg,
-                    bg_color=color,
-                    scrollbar_button_color=self.soft,
-                    scrollbar_button_hover_color=self.accent,
-                )
-                widget._parent_canvas.configure(bg=self.bg)
+                configure(widget, fg_color=self.bg, bg_color=color)
+                # CTk does not expose the scrollbar's button colors through cget, so they
+                # are compared on the scrollbar itself. Redrawing it on every page change
+                # was the main cost of showing a page.
+                scrollbar = widget._scrollbar
+                configure(scrollbar, fg_color=self.bg, bg_color=self.bg)
+                if (scrollbar._button_color, scrollbar._button_hover_color) != (
+                    self.soft,
+                    self.accent,
+                ):
+                    scrollbar.configure(button_color=self.soft, button_hover_color=self.accent)
+                configure(widget._parent_canvas, bg=self.bg)
                 # Its inner Tk frame is a separate surface from CTk's fg_color.
                 # Retained controls can leave this native background in an old palette.
-                tk.Frame.configure(widget, bg=self.bg)
-                widget._scrollbar.configure(fg_color=self.bg, bg_color=self.bg)
+                if tk.Frame.cget(widget, "bg") != self.bg:
+                    tk.Frame.configure(widget, bg=self.bg)
             elif isinstance(widget, ctk.CTkBaseClass):
                 try:
                     configure(widget, bg_color=color)
@@ -93,9 +98,12 @@ class Features(SaveSync, JourneyFeatures):
                     configure(
                         widget,
                         fg_color=self.soft,
-                        button_color=self.accent,
-                        button_hover_color=self.accent,
+                        # Selectors are an accent tab or a quiet dark tab, per style.
+                        button_color=self.bg if tab else self.accent,
+                        button_hover_color=self.paper if tab else self.accent,
                         text_color=self.ink,
+                        # Disabled menus keep a readable tone on every palette.
+                        text_color_disabled=self.muted,
                         dropdown_fg_color=self.paper,
                         dropdown_text_color=self.ink,
                         dropdown_hover_color=self.soft,
@@ -115,15 +123,23 @@ class Features(SaveSync, JourneyFeatures):
                     secondary = getattr(widget, "_secondary", False)
                     if isinstance(widget.master, ctk.CTkSegmentedButton):
                         secondary = widget.master.get() != widget.cget("text")
+                    # The ledger marks the active character with a ruled outline, not a block.
+                    ruled = (
+                        getattr(widget, "_profile_active", False)
+                        and self.style_spec["current"] == "ruled"
+                    )
+                    secondary = secondary or ruled
                     configure(
                         widget,
                         fg_color=self.soft if secondary else self.accent,
-                        text_color=self.ink if secondary else "#FFFFFF",
-                        hover_color=self.accent,
+                        text_color=self.ink if secondary else self.on_accent,
+                        hover_color=self.hover_fill(secondary),
+                        border_width=1 if ruled else 0,
+                        border_color=self.accent,
                     )
                 elif isinstance(widget, ctk.CTkEntry):
                     configure(
-                        widget, fg_color=self.paper, text_color=self.ink, border_color=self.soft
+                        widget, fg_color=self.paper, text_color=self.ink, border_color=self.line
                     )
                 elif isinstance(widget, ctk.CTkTextbox):
                     configure(
@@ -156,22 +172,23 @@ class Features(SaveSync, JourneyFeatures):
             for child in self.winfo_children():
                 visit(child)
         self.refresh_nav()
-        self.profile_button.configure(
+        configure(
+            self.profile_button,
             text=(
                 self.data["character_name"]
                 if self.data["profile_created"]
                 else self.t("switch_character")
-            )
+            ),
         )
 
     def build_journal(self):
         actions = ctk.CTkFrame(self.body, fg_color="transparent")
         actions.pack(anchor="w", pady=(0, 18))
-        for key, command in (
-            ("new_character", self.new_profile),
-            ("import_save", self.import_dialog),
+        for key, command, secondary in (
+            ("new_character", self.new_profile, False),
+            ("import_save", self.import_dialog, True),
         ):
-            self.button(actions, key, command).pack(side="left", padx=(0, 12))
+            self.button(actions, key, command, secondary).pack(side="left", padx=(0, 12))
         self.profiles.sync(self.data)
         people = [
             (ident, p)
@@ -186,7 +203,9 @@ class Features(SaveSync, JourneyFeatures):
             return
         profiles = ctk.CTkFrame(self.body, fg_color="transparent")
         profiles.pack(fill="x", pady=12)
+        ruled = self.style_spec["current"] == "ruled"
         for index, (ident, profile) in enumerate(people):
+            active = ident == self.profiles.data["active"]
             state = profile["state"]
             text = (
                 state["character_name"]
@@ -204,15 +223,20 @@ class Features(SaveSync, JourneyFeatures):
                 height=88,
                 width=230,
                 corner_radius=12,
-                fg_color=self.accent if ident == self.profiles.data["active"] else self.soft,
+                fg_color=self.soft if ruled or not active else self.accent,
                 text_color=self.ink,
                 command=lambda i=ident: self.action(lambda: self.open_timeline(i)),
             )
+            # Normalizing reads these to color the card for the current style.
+            button._secondary = not active
+            button._profile_active = active
             button.grid(row=index // 3, column=index % 3, padx=(0, 12), pady=6, sticky="ew")
         if not self.data["profile_created"]:
             self.timeline = None
             return
-        self.label(self.body, self.data["character_name"], 24).pack(anchor="w", pady=16)
+        self.label(self.body, self.data["character_name"], 24, display=True).pack(
+            anchor="w", pady=16
+        )
         actions = ctk.CTkFrame(self.body, fg_color="transparent")
         actions.pack(anchor="w", pady=(0, 16))
         self.button(actions, "add_event", self.event_dialog).pack(side="left", padx=(0, 12))
@@ -274,8 +298,17 @@ class Features(SaveSync, JourneyFeatures):
             self.timeline_controls.pack_forget()
         if not points:
             canvas.configure(height=100)
+            canvas.create_text(
+                24,
+                12,
+                anchor="nw",
+                text=self.t("timeline_empty"),
+                fill=self.muted,
+                width=max(160, canvas.winfo_width() - 48),
+                font=(self.font_family, 14),
+            )
             canvas.create_line(
-                24, 50, max(60, canvas.winfo_width() - 24), 50, fill=self.soft, width=3
+                24, 78, max(60, canvas.winfo_width() - 24), 78, fill=self.soft, width=3
             )
             return
         # A bounded canvas keeps long imported histories responsive.
@@ -544,20 +577,23 @@ class Features(SaveSync, JourneyFeatures):
 
     def animate_event(self, ident):
         canvas = getattr(self, "timeline", None)
-        if canvas is None or not canvas.winfo_exists() or self.data["style"] == "xp":
+        if canvas is None or not canvas.winfo_exists():
             return
         tag = "event_" + ident
+        steps = 15
 
         def frame(step=0):
             if not canvas.winfo_exists():
                 return
-            mix = step / 6
+            # Ease-out over about 240 ms at display rate: the new event lands quickly
+            # and settles into its ink color instead of stepping linearly.
+            mix = 1 - (1 - step / steps) ** 3
             start = bytes.fromhex(self.bg[1:])
             end = bytes.fromhex(self.ink[1:])
             color = "#" + "".join(f"{int(a+(b-a)*mix):02x}" for a, b in zip(start, end))
             canvas.itemconfigure(tag, fill=color)
-            if step < 6:
-                canvas.after(45, lambda: frame(step + 1))
+            if step < steps:
+                canvas.after(16, lambda: frame(step + 1))
 
         frame()
 

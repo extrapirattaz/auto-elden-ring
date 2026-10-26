@@ -52,7 +52,7 @@ class Gallery(tk.Frame):
             button_color=self.app.soft,
             button_hover_color=self.app.accent,
             corner_radius=self.app.style_spec["button_radius"],
-            width=18 if self.app.data["style"] == "xp" else 12,
+            width=12,
         )
         width = max(340, self.canvas.winfo_width())
         columns = max(1, width // 190)

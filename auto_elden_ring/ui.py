@@ -19,11 +19,17 @@ from .i18n import Translator, LANGUAGE_NAMES
 from .storage import save_project, load_project
 
 
-from .styles import STYLES, PALETTES, appearance
+from .styles import STYLES, appearance, emphasis, shade, text_on_accent
 from .gallery import Gallery
 from .profiles import Profiles, timestamp
 from .audio import Music
-from .windows import load_reading_font, caption_color, cancel_widget_jobs, presentation_transaction
+from .windows import (
+    load_reading_font,
+    caption_color,
+    cancel_widget_jobs,
+    presentation_transaction,
+    set_text,
+)
 
 
 class ManagedWindow(ctk.CTkToplevel):
@@ -97,7 +103,7 @@ class App(Features, ctk.CTk):
         load_reading_font()
         self.translator = Translator(self.data["language"])
         self.style_spec, palette = appearance(self.data)
-        self.bg, self.paper, self.soft, self.ink, self.muted, self.accent = palette
+        self.bg, self.paper, self.soft, self.ink, self.muted, self.accent, self.line = palette
         self.font_family = "OpenDyslexic" if self.data["dyslexic"] else self.style_spec["font"]
         self.geometry("1280x860")
         self.minsize(1080, 730)
@@ -120,27 +126,45 @@ class App(Features, ctk.CTk):
     def data(self):
         return self.planner.state
 
+    @property
+    def on_accent(self):
+        return text_on_accent(self.accent, self.bg)
+
+    def hover_fill(self, secondary):
+        # Hover must stay distinct from rest and keep the label readable. Secondary
+        # hover deepens toward the ink; primary hover moves away from its white label.
+        if secondary:
+            return shade(self.soft, self.ink, 0.14)
+        return emphasis(self.accent, self.on_accent, 0.14)
+
     def t(self, key, **values):
         return self.translator.t(key, **values)
 
-    def label(self, parent, text, size=14, muted=False, **kwargs):
+    def label(self, parent, text, size=14, muted=False, display=False, **kwargs):
         label = ctk.CTkLabel(
             parent,
             text=text,
             text_color=self.muted if muted else self.ink,
-            font=self.font(size),
+            font=self.font(size, display=display),
             **kwargs,
         )
         label._reading_size = size
         label._text_role = "muted" if muted else "ink"
+        label._display_role = display
         return label
 
-    def font(self, size=14, bold=False):
+    @property
+    def display_family(self):
+        return "OpenDyslexic" if self.data["dyslexic"] else self.style_spec["display"]
+
+    def font(self, size=14, bold=False, display=False):
+        # Headings take the style's display face; everything else takes its interface face.
+        family = self.display_family if display else self.font_family
         actual = size + 2 if self.data["dyslexic"] else size
-        key = (self.font_family, actual, bold)
+        key = (family, actual, bold)
         if key not in self.fonts:
             self.fonts[key] = ctk.CTkFont(
-                family=self.font_family, size=actual, weight="bold" if bold else "normal"
+                family=family, size=actual, weight="bold" if bold else "normal"
             )
         return self.fonts[key]
 
@@ -152,7 +176,9 @@ class App(Features, ctk.CTk):
             if size is None:
                 size = font.cget("size") - (2 if font.cget("family") == "OpenDyslexic" else 0)
                 widget._reading_size = size
-            desired = self.font(size, font.cget("weight") == "bold")
+            desired = self.font(
+                size, font.cget("weight") == "bold", getattr(widget, "_display_role", False)
+            )
             return {"font": desired} if font is not desired else {}
         except ValueError, AttributeError, tk.TclError:
             return {}
@@ -183,8 +209,8 @@ class App(Features, ctk.CTk):
             corner_radius=self.style_spec["button_radius"],
             font=self.font(13),
             fg_color=self.soft if secondary else self.accent,
-            hover_color=self.accent,
-            text_color=self.ink if secondary else "#FFFFFF",
+            hover_color=self.hover_fill(secondary),
+            text_color=self.ink if secondary else self.on_accent,
             **kwargs,
         )
         widget._translation_key = key
@@ -196,10 +222,8 @@ class App(Features, ctk.CTk):
             parent,
             fg_color=self.paper,
             corner_radius=self.style_spec["radius"],
-            border_width=(
-                2 if self.data["style"] == "xp" else 1 if self.data["style"] == "elden" else 0
-            ),
-            border_color=self.soft,
+            border_width=self.style_spec["border"],
+            border_color=self.line,
         )
         frame._surface_role = "paper"
         return frame
@@ -233,7 +257,7 @@ class App(Features, ctk.CTk):
         self.sidebar._surface_role = "paper"
         self.sidebar.grid(row=0, column=0, sticky="ns")
         self.sidebar.grid_propagate(False)
-        self.brand = self.label(self.sidebar, "AUTO\nELDEN RING", 24)
+        self.brand = self.label(self.sidebar, "AUTO\nELDEN RING", 24, display=True, justify="left")
         self.tagline = self.label(
             self.sidebar, self.t("tagline"), muted=True, wraplength=190, justify="left"
         )
@@ -262,8 +286,6 @@ class App(Features, ctk.CTk):
         self.show(self.page)
 
     def layout_style(self):
-        classic = self.data["style"] == "xp" and not self.data["dyslexic"]
-        self._layout_signature = classic
         self.sidebar.configure(width=self.style_spec["sidebar"], fg_color=self.paper)
         for widget in self.sidebar.winfo_children():
             widget.pack_forget()
@@ -271,57 +293,37 @@ class App(Features, ctk.CTk):
             self.grid_rowconfigure(row, weight=0)
         for col in (0, 1):
             self.grid_columnconfigure(col, weight=0)
-        if classic:
-            self.grid_rowconfigure(1, weight=1)
-            self.grid_columnconfigure(0, weight=1)
-            self.sidebar.grid_configure(row=0, column=0, columnspan=2, sticky="ew")
-            self.sidebar.grid_propagate(True)
-            self.host.grid_configure(row=1, column=0, columnspan=2, sticky="nsew", padx=18, pady=14)
-            self.brand.configure(text="AUTO ELDEN RING", font=self.font(13, True))
-            self.brand.pack(side="left", padx=12, pady=14)
-            self.profile_button.pack(side="left", padx=4, pady=10)
-            for button in self.nav.values():
-                button.configure(width=96, height=32)
-                button.pack(side="left", padx=3, pady=10)
-        else:
-            self.grid_rowconfigure(0, weight=1)
-            self.grid_columnconfigure(1, weight=1)
-            self.sidebar.grid_configure(row=0, column=0, columnspan=1, sticky="ns")
-            self.sidebar.grid_propagate(False)
-            self.host.grid_configure(row=0, column=1, columnspan=1, sticky="nsew", padx=24, pady=20)
-            self.brand.configure(text="AUTO\nELDEN RING", font=self.font(24))
-            self.brand.pack(anchor="w", padx=24, pady=(26, 8))
-            self.tagline.pack(anchor="w", padx=24, pady=(0, 16))
-            self.profile_button.configure(
-                text=(
-                    self.data["character_name"]
-                    if self.data["profile_created"]
-                    else self.t("switch_character")
-                )
+        self.grid_rowconfigure(0, weight=1)
+        self.grid_columnconfigure(1, weight=1)
+        self.sidebar.grid_configure(row=0, column=0, columnspan=1, sticky="ns")
+        self.sidebar.grid_propagate(False)
+        self.host.grid_configure(row=0, column=1, columnspan=1, sticky="nsew", padx=24, pady=20)
+        self.brand.configure(text="AUTO\nELDEN RING", font=self.font(24, display=True))
+        self.brand.pack(anchor="w", padx=24, pady=(26, 8))
+        self.tagline.pack(anchor="w", padx=24, pady=(0, 16))
+        self.profile_button.configure(
+            text=(
+                self.data["character_name"]
+                if self.data["profile_created"]
+                else self.t("switch_character")
             )
-            self.profile_button.pack(pady=(0, 12), padx=16)
-            for key, button in self.nav.items():
-                button.configure(width=180, height=38)
-                button.pack(pady=5, padx=20)
-            self.version_label.pack(side="bottom", pady=18)
-            self.rescan_status.pack(side="bottom", padx=16, pady=6)
-            self.rescan_button.pack(side="bottom", padx=16, pady=6)
-        if classic:
-            self.rescan_button.configure(width=100, height=32)
-            self.rescan_button.pack(side="right", padx=8, pady=10)
-        else:
-            self.rescan_button.configure(width=180, height=38)
-        self.equipment_button.configure(width=110 if classic else 180)
-        self.equipment_button.pack(side="left" if classic else "top", padx=12, pady=8)
+        )
+        self.profile_button.pack(pady=(0, 12), padx=16)
+        for button in self.nav.values():
+            button.configure(width=180, height=38)
+            button.pack(pady=5, padx=20)
+        self.version_label.pack(side="bottom", pady=18)
+        self.rescan_status.pack(side="bottom", padx=16, pady=6)
+        self.rescan_button.pack(side="bottom", padx=16, pady=6)
+        self.rescan_button.configure(width=180, height=38)
+        self.equipment_button.configure(width=180)
+        self.equipment_button.pack(side="top", padx=12, pady=8)
         self.refresh_nav()
 
     def blend_titlebar(self):
         # Native caption, movement and resize loops are deliberately retained.
         if not self._closing:
-            classic = self.data["style"] == "xp" and not self.data["dyslexic"]
-            caption_color(
-                self, self.accent if classic else self.bg, "#FFFFFF" if classic else self.ink
-            )
+            caption_color(self, self.bg, self.ink)
 
     def toggle_maximize(self):
         self.state("normal" if self.state() == "zoomed" else "zoomed")
@@ -343,7 +345,7 @@ class App(Features, ctk.CTk):
             frame._surface_role = "bg"
             record = {"frame": frame}
             self.views[page] = record
-            title = self.label(frame, self.t(page + "_title"), 28)
+            title = self.label(frame, self.t(page + "_title"), 28, display=True)
             title.pack(anchor="w", pady=(0, 5))
             title._translation_key = page + "_title"
             hint = page + "_hint"
@@ -386,35 +388,43 @@ class App(Features, ctk.CTk):
             and self.data["weapon_mode"] == "manual"
         ):
             self.update_price_prompt()
-        self.refresh_nav()
         self.refresh_page_fonts(page)
+        # normalize_surfaces also refreshes the navigation state.
         self.normalize_surfaces(self.views[page]["frame"])
         if page == "journal":
             self.draw_timeline()
         if page == "farm":
             self.update_timer_display()
-        if self.data["style"] == "elden":
-            self.body.pack_configure(padx=24, pady=18)
-        else:
-            self.body.pack_configure(padx=0, pady=0)
+        self.body.pack_configure(padx=0, pady=0)
 
     def refresh_nav(self):
-        icons = {
-            "character": "◇",
-            "weapons": "⚔",
-            "stones": "◈",
-            "farm": "◷",
-            "journal": "✦",
-            "settings": "⚙",
-        }
-        for index, (key, button) in enumerate(self.nav.items()):
-            color = self.accent
-            prefix = icons[key] + "  " if self.data["style"] == "elden" else ""
-            button.configure(
-                text=prefix + self.t(key),
-                fg_color=color if key == self.page else self.soft,
-                text_color="#FFFFFF" if key == self.page else self.ink,
-            )
+        ruled = self.style_spec["current"] == "ruled"
+        for key, button in self.nav.items():
+            active = key == self.page
+            if ruled:
+                # The ledger keeps accent for the current page only: a ruled outline and
+                # accent type, so the index stays quiet beside the content.
+                values = {
+                    "text": self.t(key),
+                    "fg_color": self.soft,
+                    "text_color": self.accent if active else self.ink,
+                    "border_width": 1 if active else 0,
+                    "border_color": self.accent,
+                    "hover_color": self.hover_fill(True),
+                }
+            else:
+                values = {
+                    "text": self.t(key),
+                    "fg_color": self.accent if active else self.soft,
+                    "text_color": self.on_accent if active else self.ink,
+                    "border_width": 0,
+                    # The current page keeps its active fill on hover; others show the tint.
+                    "hover_color": self.hover_fill(not active),
+                }
+            # Each CTkButton redraws on configure; unchanged navigation stays idle.
+            changed = {name: value for name, value in values.items() if button.cget(name) != value}
+            if changed:
+                button.configure(**changed)
 
     def navigate(self, page):
         if not self.data["profile_created"] or self.profile_selection_pending:
@@ -457,7 +467,7 @@ class App(Features, ctk.CTk):
             font=self.font(),
             fg_color=self.bg,
             text_color=self.ink,
-            border_color=self.soft,
+            border_color=self.line,
             corner_radius=self.style_spec["button_radius"],
         )
         widget.grid(row=row, column=1, sticky="e", padx=18, pady=9)
@@ -576,7 +586,7 @@ class App(Features, ctk.CTk):
                     textvariable=variable,
                     width=100,
                     font=self.font(),
-                    border_color=self.soft,
+                    border_color=self.line,
                     fg_color=self.bg,
                     text_color=self.ink,
                     corner_radius=self.style_spec["button_radius"],
@@ -663,6 +673,7 @@ class App(Features, ctk.CTk):
             controls,
             values=[self.t("manual_mode"), self.t("catalogue_mode")],
             selected_color=self.accent,
+            height=38,
             font=self.font(13),
             command=lambda value: self.action(
                 lambda: self.switch_mode(
@@ -742,7 +753,7 @@ class App(Features, ctk.CTk):
                     font=self.font(),
                     fg_color=self.bg,
                     text_color=self.ink,
-                    border_color=self.soft,
+                    border_color=self.line,
                     corner_radius=self.style_spec["button_radius"],
                 ).grid(row=2, column=1, padx=18, pady=9)
                 self.manual_vars["observed"] = variable
@@ -952,7 +963,11 @@ class App(Features, ctk.CTk):
             for i in affordable
         )
         self.weapon_affordable.configure(
-            text=self.t("affordable_weapon", route=route, left=fmt(left))
+            text=(
+                self.t("affordable_weapon", route=route, left=fmt(left))
+                if affordable
+                else self.t("affordable_none", left=fmt(left))
+            )
         )
         self.weapon_dragon.configure(text=self.t("dragon_notice") if plan["dragon_needed"] else "")
         self.refresh_selected_overview()
@@ -985,10 +1000,7 @@ class App(Features, ctk.CTk):
 
         def present():
             self.normalize_surfaces(window)
-            classic = self.data["style"] == "xp" and not self.data["dyslexic"]
-            caption_color(
-                window, self.accent if classic else self.bg, "#FFFFFF" if classic else self.ink
-            )
+            caption_color(window, self.bg, self.ink)
 
         # Some CTk constructors process idle work before their child scrollbars
         # exist. Present on the next event cycle, after construction is complete.
@@ -1532,20 +1544,23 @@ class App(Features, ctk.CTk):
             if self.deadline
             else (0 if self.awaiting_result else self.timer_duration)
         )
-        self.timer_label.configure(text=f"{remaining//60:02d}:{remaining%60:02d}")
-        self.start_test_button.configure(
-            text=self.t("next_test" if self.full_index is not None else "start_minute")
+        # This runs every 100 ms while the timer is active; only changed text redraws.
+        set_text(self.timer_label, f"{remaining//60:02d}:{remaining%60:02d}")
+        set_text(
+            self.start_test_button,
+            self.t("next_test" if self.full_index is not None else "start_minute"),
         )
         if self.full_index is not None:
-            self.test_label.configure(
-                text=self.t(
+            set_text(
+                self.test_label,
+                self.t(
                     "test_step", index=self.full_index + 1, seconds=(60, 60, 180)[self.full_index]
-                )
+                ),
             )
         elif self.awaiting_result:
-            self.test_label.configure(text=self.t("test_finished"))
+            set_text(self.test_label, self.t("test_finished"))
         else:
-            self.test_label.configure(text="")
+            set_text(self.test_label, "")
 
     def record_result(self):
         self.read_farm()
@@ -1579,17 +1594,9 @@ class App(Features, ctk.CTk):
             self.set_visual_style,
             0,
         )
-        self.theme_option = self.option(
-            form,
-            "color_palette",
-            STYLES[self.data["style"]]["themes"],
-            self.data["theme"],
-            self.set_palette,
-            1,
-        )
         label = self.label(form, self.t("language"))
         label._translation_key = "language"
-        label.grid(row=2, column=0, padx=18, pady=18, sticky="w")
+        label.grid(row=1, column=0, padx=18, pady=18, sticky="w")
         self.language_var = tk.StringVar(value=LANGUAGE_NAMES[self.data["language"]])
         self.language_option = NativeOptionMenu(
             form,
@@ -1604,7 +1611,7 @@ class App(Features, ctk.CTk):
                 next(k for k, name in LANGUAGE_NAMES.items() if name == v)
             ),
         )
-        self.language_option.grid(row=2, column=1, padx=18, pady=18)
+        self.language_option.grid(row=1, column=1, padx=18, pady=18)
         self.dyslexic_var = tk.BooleanVar(value=self.data["dyslexic"])
         self.reading_check = ctk.CTkCheckBox(
             form,
@@ -1616,12 +1623,12 @@ class App(Features, ctk.CTk):
             text_color=self.ink,
         )
         self.reading_check._translation_key = "dyslexic"
-        self.reading_check.grid(row=3, column=0, columnspan=2, padx=18, pady=14, sticky="w")
+        self.reading_check.grid(row=2, column=0, columnspan=2, padx=18, pady=14, sticky="w")
         reading = self.label(
             form, self.t("reading_hint"), muted=True, wraplength=830, justify="left"
         )
         reading._translation_key = "reading_hint"
-        reading.grid(row=4, column=0, columnspan=2, padx=18, pady=(0, 16), sticky="w")
+        reading.grid(row=3, column=0, columnspan=2, padx=18, pady=(0, 16), sticky="w")
         self.style_description = self.label(
             self.body,
             self.t("style_hint_" + self.data["style"]),
@@ -1647,8 +1654,10 @@ class App(Features, ctk.CTk):
         label = self.label(audio, self.t("music_hint"), muted=True, wraplength=830, justify="left")
         label._translation_key = "music_hint"
         label.pack(anchor="w", padx=18, pady=(0, 16))
-        self.button(self.body, "small_mode", self.compact_mode, True).pack(anchor="w", pady=8)
-        self.button(self.body, "import_save", self.import_dialog, True).pack(anchor="w", pady=8)
+        tools = ctk.CTkFrame(self.body, fg_color="transparent")
+        tools.pack(anchor="w", pady=8)
+        self.button(tools, "small_mode", self.compact_mode, True).pack(side="left", padx=(0, 12))
+        self.button(tools, "import_save", self.import_dialog, True).pack(side="left")
         for key in ("autosave_note", "scan_hint"):
             label = self.label(self.body, self.t(key), muted=True, wraplength=900, justify="left")
             label._translation_key = key
@@ -1667,14 +1676,7 @@ class App(Features, ctk.CTk):
             self.autosave()
 
     def set_visual_style(self, value):
-        style = value.removeprefix("style_")
-        self.data["style"] = style
-        if self.data["theme"] not in STYLES[style]["themes"]:
-            self.data["theme"] = STYLES[style]["themes"][0]
-        self.apply_appearance()
-
-    def set_palette(self, value):
-        self.data["theme"] = value
+        self.data["style"] = value.removeprefix("style_")
         self.apply_appearance()
 
     def set_language(self, value):
@@ -1686,7 +1688,7 @@ class App(Features, ctk.CTk):
         self.apply_appearance()
 
     def update_controls_appearance(self):
-        old = (self.bg, self.paper, self.soft, self.ink, self.muted, self.accent)
+        old = (self.bg, self.paper, self.soft, self.ink, self.muted, self.accent, self.line)
         previous = self.translator
         language_changed = previous.language != self.data["language"]
         if language_changed:
@@ -1697,7 +1699,7 @@ class App(Features, ctk.CTk):
             else {}
         )
         self.style_spec, palette = appearance(self.data)
-        self.bg, self.paper, self.soft, self.ink, self.muted, self.accent = palette
+        self.bg, self.paper, self.soft, self.ink, self.muted, self.accent, self.line = palette
         self.font_family = "OpenDyslexic" if self.data["dyslexic"] else self.style_spec["font"]
         mapping = dict(zip(old, palette))
         self.configure(fg_color=self.bg)
@@ -1793,21 +1795,13 @@ class App(Features, ctk.CTk):
         if self.page in self.views:
             self.views[self.page]["font_signature"] = (self.font_family, self.data["dyslexic"])
         if "settings" in self.views:
-            ids = STYLES[self.data["style"]]["themes"]
-            self.theme_option._enum_ids = ids
-            self.theme_option._enum_current = self.data["theme"]
-            self.theme_option.configure(values=[self.t(k) for k in ids])
-            self.theme_option.set(self.t(self.data["theme"]))
             self.style_option._enum_current = "style_" + self.data["style"]
             self.style_option.set(self.t(self.style_option._enum_current))
             self.language_var.set(LANGUAGE_NAMES[self.data["language"]])
             self.style_description.configure(text=self.t("style_hint_" + self.data["style"]))
             self.dyslexic_var.set(self.data["dyslexic"])
-        classic = self.data["style"] == "xp" and not self.data["dyslexic"]
-        if getattr(self, "_layout_signature", None) != classic:
-            self.layout_style()
-        else:
-            self.refresh_nav()
+        self.brand.configure(font=self.font(24, display=True))
+        self.refresh_nav()
         self.refresh_character()
         self.refresh_weapons()
         self.refresh_farm_results()
@@ -1890,7 +1884,6 @@ class App(Features, ctk.CTk):
             for key in (
                 "language",
                 "style",
-                "theme",
                 "dyslexic",
                 "character_name",
                 "journey_name",

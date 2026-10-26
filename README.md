@@ -1,132 +1,113 @@
 # Auto Elden Ring
 
-A Windows companion for character levels, weapon upgrades, smithing materials,
-rune farming and character timelines. Written in Python with a standalone x64 EXE.
+**An offline Windows planner for Elden Ring characters, weapon upgrades, smithing
+stones and rune farming.** It calculates exact costs from the supplied regulation
+tables, keeps a timeline for each character and reads your PC save files without
+changing them. Written in Python (Tkinter / CustomTkinter), distributed as a
+standalone Windows x64 executable.
 
-![Character planner](docs/screenshots/character.png)
+Keywords: Elden Ring, rune farming, build planner, level calculator, weapon upgrade
+calculator, smithing stones, save file reader, offline, Windows, Python, CustomTkinter.
 
-## Run version 6.1.1
+![Readable style](docs/screenshots/readable-character.png)
+![Ledger style](docs/screenshots/ledger-character.png)
 
-- Without Python: run Auto-Elden-Ring-6.1.1-win-x64.exe from the Windows ZIP.
-  Images, translations, fonts and cost tables are included.
-- From source: install Python 3.14 x64 and run START_AUTO_ELDEN_RING.bat, or install
-  requirements.txt with pip and run main.py. First-time dependency installation
-  needs internet; using the application does not.
+## Download and run
 
-English is the default language. French, Czech, German, Spanish and Japanese
-are available in Settings. Modern has two palettes: Porcelain White and Charcoal
-Black. Gothic keeps its serif lettering, compact layout and Antique Gold,
-Ember and Moonlight colors on solid surfaces. Windows XP has one classic
-blue/grey palette with square controls. No decorative backgrounds or animated
-colors are loaded. Optional reading mode uses bundled
-OpenDyslexic, larger text and a cream palette. Local MP3/WAV/FLAC/OGG playback is optional.
+- **Without Python:** download `Auto-Elden-Ring-7.0.0-win-x64.exe` (or the Windows ZIP)
+  from the [Releases page](../../releases). Images, translations, fonts and cost
+  tables are included. Check the file against `SHA256SUMS.txt`.
+- **From source:** install Python 3.14 x64, then either run `START_AUTO_ELDEN_RING.bat`
+  or install the runtime dependencies with `python -m pip install -r requirements.txt`
+  and run `python main.py`. Installing dependencies needs internet access; using the
+  application does not.
 
-## Your characters and progress
+English is the default language. French, Czech, German, Spanish and Japanese are
+available in Settings.
 
-The application opens maximized with an in-window character chooser. A fresh
-installation contains no demo profiles. New characters remain saved locally on
-future launches. Forms, imports, the catalogue, equipment and checkpoint details
-use the same main window, with Back navigation.
+## Features
 
-Dropdowns use native menus. Settings update retained controls without hiding or
-recreating the main window. The project layout and maintenance workflow are
-documented in [Architecture](docs/ARCHITECTURE.md).
+**Characters and progress**
+- A journal of characters, each with its own timeline of dated checkpoints and custom events.
+- Import a PC save (`.sl2` / `.co2`) read-only: checksum-validated, never modified.
+  Names, classes, attributes, levels, runes, weapons, armor, talismans and stones are
+  imported; the installation folder or the save file can be chosen once and remembered.
+- **Rescan game saves** updates progress while keeping the current window and your goals.
+  Repeated scans do not duplicate timeline events.
 
-Imported save files and the installation folder are remembered locally. Startup
-checks the latest disk saves in a background worker. The **Rescan game saves**
-button updates progression while keeping the current window and goals. It also
-finds newly available saves in linked folders/roaming accounts. Only meaningful
-changes add timeline events; repeated scans do not duplicate them. Every valid
-scan accepts the latest save and fingerprint, even without an event. The last
-accepted game snapshot is kept independently of plans and timeline dates. Manual
-characters are kept. If an autosave is being written, reading retries briefly;
-on failure the previous snapshot remains available. Unsaved game progress is
-not available until the game writes it to disk.
+**Calculations**
+- **Character:** current and target attributes derive both levels; exact rune costs,
+  spending since the class level, cost to level 713 and affordable levels.
+- **Weapons:** enter the first upgrade price, invert a next-upgrade quote, or pick
+  weapons from an illustrated catalogue. Each selected weapon keeps its own current
+  and target upgrade and copy count.
+- **Smithing stones:** record stock and check off purchases; held runes only calculate
+  the farming deficit.
+- **Rune farming:** measure one minute, or run the 60 + 60 + 180-second trial. Save
+  named farming spots, reuse their weighted rates and compare rune buffs.
+- **Small companion:** an always-on-top window with your current objectives and an
+  editable rune count.
 
-The journal starts empty. Create a character using its in-game name and original
-class, or import a PC save. Character cards open individual timelines.
-The character name is also the journey name; its starting class is fixed.
-Add current-progress snapshots or custom dated events with attributes and
-acquired/upgraded weapons. Levels are derived from permanent attributes.
-Confirming weapon upgrades automatically records a timeline event.
-
-Import game save reads checksum-valid PC .sl2/.co2 files without modifying them.
-Choose the installation folder to locate the roaming save, or select the file
-directly. Imported names, starting classes, attributes, levels, held runes,
-catalogue weapons/upgrades, armor, talismans, goods, key items and ordinary stones
-populate each profile. Equipment displays the six weapon, four armor and four
-talisman slots separately from all acquired weapons.
-Inventory and storage counts are combined. Non-weapon item metadata and small
-icons are bundled offline. Unresolved IDs remain visible; some new item names
-fall back to English. Smithing bell bearings held in inventory are shown, while
-delivery to the shop remains unverified.
-Refresh from save records changes without duplicating unchanged snapshots.
-The reader uses saved progress rather than live game memory.
-
-![Journey journal](docs/screenshots/journal.png)
-
-## Calculate and farm
-
-- Character: current/target attributes derive both levels. Calculate exact rune
-  costs, spending since the class level, cost to 713 and affordable levels.
-  Imported profiles already supply the class and current attributes.
-- Weapons: enter the first upgrade price, invert a next-upgrade quote, or select
-  illustrated catalogue cards. Each selected weapon keeps its own current/target
-  upgrade and copy count. Imported owned upgrades initialize selected weapons.
-- Materials: record stock and check off actual purchases. Held runes only
-  calculate the farming deficit; they do not block an acknowledgement.
-- Upgrades completed: confirm the in-game result. Weapon levels reach their
-  targets, all recorded ordinary stones and held runes reset to zero, and a
-  created character receives a journal event. Enter any actual surplus again.
-- Farm: measure one minute or complete separate 60 + 60 + 180-second trials.
-  Save named spots, reuse their weighted rates and compare rune buffs.
-  Character and weapon planners can choose a recorded spot to estimate time.
-- Small companion: an always-on-top window for character, weapons and farming
-  objectives, with editable held runes. Inactive full-size pages are released;
-  return to the full application at any time.
-
-There is no shopping cart or save/open-build workflow. Local progress autosaves.
-The planner assumes the relevant miner's bell bearings are available.
-Ancient dragon stones have no fictitious purchase price or ordinary stock count.
-
-![Weapon catalogue](docs/screenshots/catalogue.png)
+**Interface**
+- Two visual styles, **Readable** (default: black text on white) and **Ledger** (a dark
+  journal with serif headings and a brass accent). Each has one fixed palette.
+- Reading mode for dyslexic readers: bundled OpenDyslexic font, larger text and a cream palette.
+- Optional local MP3 / WAV / FLAC / OGG background music.
+- Native Windows menus and dialogs; no internet connection is required.
 
 ## Data and precision
 
-The unchanged supplied elden_ring_costs.json declares regulation 1.17.1:
-712 level transitions and 487 catalogue entries across 42 categories.
-Level costs and catalogue upgrade tariffs use integer tables.
-Manual profiles can have exceptions; choose known catalogue weapons when possible.
-Farming projections depend on route, downtime, rounding and buff uptime.
-Silver discovery buffs contribute 0% to rune gains.
+- `elden_ring_costs.json` is the supplied cost table, unchanged. It declares regulation
+  1.17.1, with 712 level transitions and 487 catalogue entries across 42 categories.
+- Level costs and catalogue upgrade tariffs use integer tables. Rational arithmetic and
+  ties-to-even rounding follow the supplied helper model.
+- Farming projections depend on route, downtime, rounding and buff uptime.
+- Manual profiles can carry exceptions; choose known catalogue weapons when possible.
+- The planner assumes the relevant miner's bell bearings are available. Ancient dragon
+  stones have no invented purchase price or stock count.
 
-All 487 weapons have bundled icons and display names in six languages.
-Editorial localization and game-media provenance are described in
-[SOURCES.md](docs/SOURCES.md); native-speaker review has not been performed.
-See the [guide](docs/GUIDE.md), [verification](docs/VERIFICATION.md) and
-[changelog](CHANGELOG.md).
+Provenance of every data file, icon and localized name is documented in
+[docs/SOURCES.md](docs/SOURCES.md). Editorial translations have not been reviewed by
+native speakers; see the same file.
 
-## Build and distribute
+## Disclaimer
 
-Run BUILD_RELEASE.ps1 on Windows x64. The builder tests real widgets/calculations,
-builds the EXE, checks embedded resources and produces:
+Auto Elden Ring is an unofficial fan tool. It is not affiliated with, endorsed by or
+sponsored by FromSoftware, Bandai Namco Entertainment or any of their partners.
+*Elden Ring* and all related names, images and game media belong to their owners.
+The application reads only save files you own, never modifies the game and never
+connects to the internet.
 
-- auto-elden-ring-6.1.1-source.zip: architecture-independent Python source.
-- auto-elden-ring-6.1.1-windows-x64.zip: standalone Windows x64 package.
-- Auto-Elden-Ring-6.1.1-win-x64.exe: executable for release downloads.
-- RELEASE_MANIFEST.json and SHA256SUMS.txt: artifact/source correspondence.
+## Versions
 
-Each version lives in the sibling Release/version folder; existing versions are
-never overwritten. The workspace contains only Release and Code source actuel.
-The latter contains the application, its assets, tests and documentation.
-The version in auto_elden_ring/__init__.py controls all three artifact names.
-Source, comments and documentation are in English. No GitHub CLI or publishing
-tools are required. Native-menu input tests require an interactive Windows desktop.
+Every released version is a tag (`v1.0.1` … `v7.0.0`) and a [GitHub release](../../releases)
+with its Windows executable and checksums. Release notes are in [CHANGELOG.md](CHANGELOG.md).
 
-Profiles and immutable snapshots save atomically to
-%LOCALAPPDATA%/AutoEldenRing/profiles-v3.json. Back up that library for the full
-history. Previous schema-2/3 states are migrated; schema-1 projects require version 1.
-Save files are never copied into source archives or releases.
+- `main` is the current version (7.0.0).
+- `legacy/6.x` keeps the last version with the earlier styles (Modern, Gothic and Windows XP
+  with their palettes), for anyone who preferred them.
+
+## Project layout
+
+| Path | Responsibility |
+| --- | --- |
+| `main.py` | Entry point and the packaged verification commands |
+| `auto_elden_ring/core.py` | Exact level and weapon costs, inverse costs, stone requirements |
+| `auto_elden_ring/planner.py` | Character, weapon, budget, stock and farming state |
+| `auto_elden_ring/ui.py`, `presentation.py`, `journey_ui.py` | Desktop windows, pages and the small companion |
+| `auto_elden_ring/styles.py` | The two styles, their palettes and contrast helpers |
+| `auto_elden_ring/save_reader.py`, `save_sync.py`, `history.py` | Read-only save parsing, rescans and history import |
+| `auto_elden_ring/profiles.py`, `storage.py` | Atomic persistence, migrations and immutable snapshots |
+| `auto_elden_ring/i18n.py`, `style_text.py`, `journey_text.py` | Six-language interface text |
+| `classes_data.py`, `elden_ring_costs.json` | Starting classes and the supplied cost table |
+| `assets/` | Icons, fonts, translations, provenance and licences |
+| `tests/` | Calculation boundaries, save fixtures and widget workflows |
+| `scripts/` | Release builder and an explicit local-data reset |
+| `docs/` | User guide, architecture, verification and data sources |
+
+## Build and test
+
+Tests need Windows with an interactive desktop for the native-menu checks.
 
 ~~~powershell
 python -m unittest discover -s tests -v
@@ -134,15 +115,24 @@ python main.py --self-test --report verification.json
 python main.py --ui-smoke --report verification-ui.json
 ~~~
 
-## Source layout and performance
+Release builds run `BUILD_RELEASE.ps1` on Windows x64 with Python 3.14. The builder runs
+the tests, builds the executable with PyInstaller, checks the packaged executable and
+writes a version-matched source ZIP, Windows ZIP, EXE and SHA-256 manifest into a
+sibling `Release/<version>` folder. Existing releases are never overwritten. The
+version in `auto_elden_ring/__init__.py` names all artifacts.
 
-core.py owns exact costs; planner.py owns calculations/state; ui.py, presentation.py
-and journey_ui.py render the desktop; save_reader.py reads bounded PC save sections; save_sync.py rescans remembered files; history.py
-imports changes; profiles.py saves timelines; i18n.py localizes controls.
-The virtualized weapon gallery draws visible cards with a 64-image cache.
-Theme/language updates preserve the visible native window and retained controls.
-Catalogue opening measured 0.149 seconds and 58.89 MiB working
-memory on this host. See verification for measurement limits.
+## Your data
 
-![Gothic solid-color style](docs/screenshots/style-gothic.png)
-![Small companion](docs/screenshots/compact.png)
+Profiles and timelines are saved atomically to `%LOCALAPPDATA%/AutoEldenRing/profiles-v3.json`.
+Back up that file to keep your full history. `python scripts/reset_local_data.py --confirm`
+removes only the application's own state; it never deletes game saves, audio or custom images.
+Save files are never copied into source archives or releases.
+
+See the [guide](docs/GUIDE.md), [architecture](docs/ARCHITECTURE.md) and
+[verification](docs/VERIFICATION.md) for details.
+
+## License
+
+Released under the [MIT License](LICENSE). Copyright (c) 2026 extrapirattaz.
+The MIT License covers the source code in this repository. Game-related media and data
+keep their own rights; see [docs/SOURCES.md](docs/SOURCES.md).

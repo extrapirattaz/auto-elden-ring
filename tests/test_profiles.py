@@ -61,5 +61,5 @@ class Journals(unittest.TestCase):
                 data["state"].pop(key)
             path.write_text(json.dumps(data), encoding="utf-8")
             state = load_project(path, self.db)
-            self.assertEqual(state["style"], "modern")
+            self.assertEqual(state["style"], "readable")
             self.assertEqual(state["purchased"], {})

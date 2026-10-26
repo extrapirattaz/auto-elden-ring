@@ -34,9 +34,7 @@ runes|Runes|Runes|Runy|Runen|Runas|ルーン
 weapon_acquired|Acquired|Récupérée|Získaná|Erhalten|Obtenida|入手
 weapon_upgraded|Upgraded|Améliorée|Vylepšená|Verbessert|Mejorada|強化
 autosave_note|Progress and character timelines are saved automatically on this computer.|La progression et les frises de tes personnages sont enregistrées automatiquement sur cet ordinateur.|Postup a historie postav se automaticky ukládají v tomto počítači.|Fortschritt und Charakter-Zeitleisten werden automatisch auf diesem Computer gespeichert.|El progreso y las cronologías se guardan automáticamente en este equipo.|進行状況とキャラクターの履歴は、このパソコンに自動保存されます。
-xp_blue|Classic Windows XP|Windows XP classique|Klasické Windows XP|Klassisches Windows XP|Windows XP clásico|クラシック Windows XP
 older_events|Show older events|Afficher les événements précédents|Zobrazit starší události|Ältere Ereignisse anzeigen|Mostrar eventos anteriores|以前のイベントを表示
-style_hint_xp|Classic Windows XP blue, grey panels and square buttons.|Bleu Windows XP classique, panneaux gris et boutons carrés.|Klasická modrá Windows XP, šedé panely a hranatá tlačítka.|Klassisches Windows-XP-Blau, graue Flächen und eckige Tasten.|Azul clásico de Windows XP, paneles grises y botones cuadrados.|Windows XPの青色、灰色のパネル、四角いボタン。
 add_event|Add event|Ajouter un événement|Přidat událost|Ereignis hinzufügen|Añadir evento|イベントを追加
 current_event|Save current progress|Enregistrer la progression actuelle|Uložit aktuální postup|Aktuellen Fortschritt speichern|Guardar progreso actual|現在の進行状況を保存
 custom_event|Custom event|Événement personnalisé|Vlastní událost|Eigenes Ereignis|Evento personalizado|カスタムイベント

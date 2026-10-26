@@ -57,13 +57,9 @@ def self_check():
     checks["bundled reading font"] = resource_path(
         "assets/fonts/OpenDyslexic-Regular.otf"
     ).is_file()
-    from .styles import STYLES
+    from .styles import STYLES, PALETTES
 
-    checks["static style palettes"] = (
-        len(STYLES) == 3
-        and len(STYLES["modern"]["themes"]) == 2
-        and len(STYLES["xp"]["themes"]) == 1
-    )
+    checks["static style palettes"] = set(STYLES) == set(PALETTES) and len(STYLES) == 2
     p = Planner(db)
     p.add_sample(1000, 60)
     p.add_sample(2000, 60)

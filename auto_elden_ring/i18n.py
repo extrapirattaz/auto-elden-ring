@@ -63,6 +63,7 @@ recovered_base|Recovered base price: {price} runes.|Prix de base retrouvé : {pr
 standard_warning|Manual prices use a standard profile. Use catalogue cards for weapon-specific prices.|Le prix manuel suit un profil standard. Les cartes du catalogue donnent les tarifs propres aux armes.|Ruční cena používá běžný vzorec. Pro ceny konkrétních zbraní použij katalog.|Manuelle Preise nutzen ein Standardprofil. Waffenabhängige Preise stehen im Katalog.|El precio manual usa un perfil estándar. El catálogo contiene los precios específicos.|手動入力は標準の費用計算を使用します。武器ごとの費用はカタログを使用してください。
 dragon_notice|Ancient dragon stones: obtain separately. Their cost and inventory are outside this estimate.|Pierres de dragon : à obtenir séparément. Leur prix et leur stock sont hors estimation.|Prastaré dračí kameny získej zvlášť. Jejich cena a zásoba nejsou zahrnuty.|Uralte Drachenschmiedesteine separat beschaffen. Kosten und Bestand sind nicht enthalten.|Consigue las piedras de dragón aparte. Su precio y existencias no se incluyen.|古竜の鍛石は別途入手してください。価格と所持数は計算の対象外です。
 affordable_weapon|With your runes: {route}. Left: {left} runes.|Avec tes runes : {route}. Reste : {left} runes.|S tvými runami: {route}. Zbude {left} run.|Mit deinen Runen: {route}. Übrig: {left} Runen.|Con tus runas: {route}. Sobran {left} runas.|所持ルーンで：{route}。残り：{left}ルーン。
+affordable_none|No target fits your runes yet. Left: {left} runes.|Aucune cible ne tient encore dans tes runes. Reste : {left} runes.|Zatím se do tvých run nevejde žádný cíl. Zbude {left} run.|Noch kein Ziel passt zu deinen Runen. Übrig: {left} Runen.|Ningún objetivo cabe aún en tus runas. Sobran {left} runas.|所持ルーンではまだ目標に届きません。残り：{left}ルーン。
 selected_count|{count} weapon(s) selected|{count} arme(s) sélectionnée(s)|Vybráno zbraní: {count}|{count} Waffe(n) ausgewählt|{count} arma(s) seleccionada(s)|{count}本を選択中
 empty_selection|Choose the weapons you want to improve.|Choisis les armes que tu veux améliorer.|Vyber zbraně, které chceš vylepšit.|Wähle die Waffen, die du verbessern möchtest.|Elige las armas que quieres mejorar.|強化したい武器を選んでください。
 search|Search weapons…|Rechercher une arme…|Hledat zbraň…|Waffen suchen…|Buscar un arma…|武器を検索…
@@ -136,9 +137,7 @@ no_measurement|Record a positive rune gain to see your estimate.|Enregistre un g
 settings_title|Make it yours|À ta façon|Podle tvého gusta|Ganz nach deinem Geschmack|A tu manera|自分に合った設定に
 language|Language|Langue|Jazyk|Sprache|Idioma|言語
 theme|Appearance|Apparence|Vzhled|Darstellung|Apariencia|外観
-calm|Porcelain white|Blanc porcelaine|Porcelánová bílá|Porzellanweiß|Blanco porcelana|ポーセリンホワイト
 elden|Antique gold|Or ancien|Staré zlato|Antikgold|Oro antiguo|アンティークゴールド
-slate|Charcoal black|Noir charbon|Uhlová černá|Kohleschwarz|Negro carbón|チャコールブラック
 apply_settings|Apply language and appearance|Appliquer la langue et l’apparence|Použít jazyk a vzhled|Sprache und Darstellung anwenden|Aplicar idioma y apariencia|言語と外観を適用
 save_project|Save build project…|Enregistrer le projet de build…|Uložit projekt sestavy…|Build-Projekt speichern…|Guardar proyecto de build…|ビルドを保存…
 open_project|Open build project…|Ouvrir un projet de build…|Otevřít projekt sestavy…|Build-Projekt öffnen…|Abrir proyecto de build…|ビルドを開く…
@@ -239,8 +238,6 @@ for row in ROWS.strip().splitlines():
         raise RuntimeError(f"Invalid translation row: {key}")
     for language, value in zip(TEXT, values):
         TEXT[language][key] = value
-for language in TEXT:
-    TEXT[language]["style_xp"] = "Windows XP"
 
 
 from functools import lru_cache

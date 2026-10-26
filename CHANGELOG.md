@@ -1,5 +1,20 @@
 # Changelog
 
+## 7.0.0 — 2026-10-26
+
+Improved with the help of Claude (Anthropic) in this version: visual style (with the
+frontend-design, impeccable and emil-design-eng skills), performance, tests and the
+reduction to two visual styles. The calculations, save reader, data and every earlier
+version were written without Claude.
+
+- Reduce the interface to two visual styles, each with one fixed palette: Readable (default, black text on white) and Ledger (dark journal with serif headings and a brass accent).
+- Remove Windows XP, Gothic, the palette picker and the glyph icons in navigation.
+- Keep text and borders at or above WCAG AA contrast in both styles; reading mode stays available.
+- Redesign Ledger: Constantia headings, Bahnschrift interface text, ruled cards, quiet selectors and a ruled active page.
+- Add an empty-state message to the journey timeline.
+- Migrate saved preferences: dark palettes become Ledger, all others become Readable; progress is unchanged.
+- Smooth the timeline highlight with an ease-out curve; redraw page changes, the timer and hover states only when they change.
+
 ## 6.1.1 — 2026-10-06
 
 - Always accept the latest valid save during a rescan, even when its game data is unchanged.

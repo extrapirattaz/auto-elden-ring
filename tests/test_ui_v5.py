@@ -130,7 +130,7 @@ class CompanionFlows(unittest.TestCase):
     def test_long_native_dropdown_does_not_move_the_page_on_cancel(self):
         a = self.create()
         a.deiconify()
-        a.set_visual_style("style_xp")
+        a.set_visual_style("style_readable")
         a.show("settings")
         option = a.language_option if hasattr(a, "language_option") else a.style_option
         option.configure(values=[f"Item {i}" for i in range(70)])
@@ -177,22 +177,22 @@ class CompanionFlows(unittest.TestCase):
         window.reopen()
         self.assertEqual(a.data["farm"]["samples"][-1]["runes"], 2400)
 
-    def test_only_three_static_styles_are_available(self):
+    def test_only_two_static_styles_are_available(self):
         from auto_elden_ring.styles import STYLES
 
         a = self.create()
         a.show("settings")
-        self.assertEqual(tuple(STYLES), ("modern", "elden", "xp"))
+        self.assertEqual(tuple(STYLES), ("readable", "ledger"))
         self.assertEqual(a.style_option.cget("values"), [a.t("style_" + k) for k in STYLES])
         self.assertFalse(hasattr(a, "rgb_tick"))
 
-    def test_gothic_palettes_keep_pages_without_artwork(self):
+    def test_both_styles_keep_pages_in_place(self):
         a = self.create()
         a.deiconify()
-        a.set_visual_style("style_elden")
+        a.set_visual_style("style_ledger")
         frame = a.views[a.page]["frame"]
-        for palette in ("elden", "moon", "ember"):
-            a.set_palette(palette)
+        for style in ("style_readable", "style_ledger"):
+            a.set_visual_style(style)
             a.update()
             a.body._parent_canvas.yview_moveto(0.5)
             a.update()

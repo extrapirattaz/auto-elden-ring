@@ -10,7 +10,7 @@ The supplied cost JSON remains unchanged (Smithing Stone [4] costs 900 runes).
 - Native settings menus: real mouse clicks, keyboard selection, Escape and
   wheel isolation. The same visible root HWND and control instances survive
   language, palette, style and reading-mode changes.
-- Three static styles: Modern has two palettes, Windows XP one, Gothic three.
+- Two static styles, one palette each: Readable (default) and Ledger.
   No RGB scheduler, decorative image renderer or background settings remain.
   Retired preferences migrate without losing progress. Scrolling/movement
   keep opaque, correctly colored native/CTk surfaces.

@@ -44,19 +44,17 @@ def save_project(path, state, db):
 
 
 def upgrade_state(state):
-    """Import version-2 preferences without discarding build progress."""
+    """Import older preferences without discarding build progress.
+
+    Retired looks map to the nearest remaining style: dark palettes become Ledger,
+    everything light or retro becomes Readable. Goals, inventory and timelines stay.
+    """
+    legacy = state.get("style") or ("elden" if state.get("theme") == "elden" else "modern")
+    theme = state.get("theme")
+    dark = legacy in ("elden", "rainbow") or theme in ("ledger", "slate", "elden", "ember", "moon")
     result = default_state()
     result.update(state)
-    if "style" not in state:
-        result["style"] = "elden" if state.get("theme") == "elden" else "modern"
-    if result["style"] == "xp":
-        result["theme"] = "xp_blue"
-    from .styles import STYLES
-
-    # Retired styles migrate without discarding goals, inventory or timelines.
-    if result["style"] == "rainbow":
-        result.update(style="modern", theme="slate")
-    if result["style"] in STYLES and result["theme"] not in STYLES[result["style"]]["themes"]:
-        result["theme"] = STYLES[result["style"]]["themes"][0]
-    result.pop("custom_background", None)
+    result["style"] = "ledger" if dark and legacy != "xp" else "readable"
+    for retired in ("theme", "custom_background"):
+        result.pop(retired, None)
     return result

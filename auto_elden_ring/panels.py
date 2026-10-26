@@ -14,7 +14,7 @@ class Panel(ctk.CTkFrame):
         heading.pack(fill="x", pady=(0, 12))
         self.back = app.button(heading, "back", self.leave, True)
         self.back.pack(side="left", padx=12, pady=10)
-        app.label(heading, title, 23).pack(side="left", padx=18)
+        app.label(heading, title, 23, display=True).pack(side="left", padx=18)
         super().__init__(self.shell, fg_color=app.bg, corner_radius=0)
         self._surface_role = "bg"
         self.pack(fill="both", expand=True)

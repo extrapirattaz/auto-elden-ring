@@ -59,7 +59,6 @@ class Profiles:
         if preferences:
             for key in (
                 "style",
-                "theme",
                 "language",
                 "dyslexic",
                 "music_file",

@@ -75,6 +75,12 @@ def cancel_widget_jobs(widget):
             widget.tk.call("after", "cancel", job)
 
 
+def set_text(widget, text):
+    """Configure a label or button only when its text actually changes."""
+    if widget.cget("text") != text:
+        widget.configure(text=text)
+
+
 def monitor_workarea(widget):
     """Return the current monitor's usable rectangle, including negative origins."""
     if os.name != "nt":

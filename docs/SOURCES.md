@@ -68,7 +68,7 @@ requirements files.
 Catalogue PNGs were resized to at most 136px and encoded as WebP quality 84.
 The manifest retains source URLs, source SHA-256 hashes and processed hashes.
 Decorative generated landscapes from earlier releases were removed in 6.1.0.
-The current Gothic style uses solid colors and ships no background artwork.
+The current styles use solid colors and ship no background artwork.
 
 [OpenDyslexic](https://github.com/antijingoist/opendyslexic) Regular and Bold
 are bundled from commit 1824da5c0e41dc3e13ffc7f3a636dcaf695d61b7.

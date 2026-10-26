@@ -29,7 +29,7 @@ class NativeMenusAndAppearance(unittest.TestCase):
     def test_native_clicks_apply_each_setting_once_and_escape_does_not_select(self):
         a = self.app
         native = a.winfo_id()
-        controls = (a.style_option, a.theme_option, a.language_option)
+        controls = (a.style_option, a.language_option)
         for option in controls:
             self.assertIsInstance(option, NativeOptionMenu)
             command = option.cget("command")
@@ -71,14 +71,14 @@ class NativeMenusAndAppearance(unittest.TestCase):
         self.assertEqual(a.level_label.cget("font").cget("family"), "Segoe UI")
         self.assertEqual(a.level_label.cget("font").cget("size"), 18)
 
-    def test_reading_language_and_palette_keep_native_visibility_and_control_identity(self):
+    def test_reading_language_and_style_keep_native_visibility_and_control_identity(self):
         a = self.app
         user = ctypes.windll.user32
         user.GetParent.argtypes = [wintypes.HWND]
         user.GetParent.restype = wintypes.HWND
         user.IsWindowVisible.argtypes = [wintypes.HWND]
         hwnd = user.GetParent(a.winfo_id())
-        controls = (a.style_option, a.theme_option, a.language_option, a.reading_check)
+        controls = (a.style_option, a.language_option, a.reading_check)
         visibility = []
         original = a.update_controls_appearance
 
@@ -88,16 +88,14 @@ class NativeMenusAndAppearance(unittest.TestCase):
             visibility.append(bool(user.IsWindowVisible(hwnd)))
 
         with patch.object(a, "update_controls_appearance", inspect_during_change):
-            for style in ("style_elden", "style_xp", "style_modern"):
+            for style in ("style_ledger", "style_readable"):
                 a.set_visual_style(style)
                 a.reading_check.toggle()
                 a.update()
                 a.reading_check.toggle()
                 a.update()
         self.assertTrue(all(visibility))
-        self.assertEqual(
-            controls, (a.style_option, a.theme_option, a.language_option, a.reading_check)
-        )
+        self.assertEqual(controls, (a.style_option, a.language_option, a.reading_check))
         self.assertEqual(user.GetParent(a.winfo_id()), hwnd)
         self.assertEqual(a.callback_errors, [])
 

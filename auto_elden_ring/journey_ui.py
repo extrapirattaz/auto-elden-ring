@@ -12,7 +12,7 @@ from PIL import Image
 from classes_data import ATTRIBUTES
 from .core import integer, resource_path
 from .profiles import timestamp
-from .windows import monitor_workarea, snap_position, position_window
+from .windows import monitor_workarea, set_text, snap_position, position_window
 
 
 @lru_cache(maxsize=1)
@@ -44,7 +44,7 @@ class JourneyFeatures:
             self.grid_columnconfigure(1, weight=0)
             self.host.grid_configure(column=0, columnspan=2)
             window.heading.pack_forget()
-        self.label(window, self.t("choose_profile"), 26).pack(pady=(24, 8))
+        self.label(window, self.t("choose_profile"), 26, display=True).pack(pady=(24, 8))
         self.label(window, self.t("profile_hint"), muted=True, wraplength=740).pack(pady=8)
         actions = ctk.CTkFrame(window, fg_color="transparent")
         actions.pack(pady=14)
@@ -234,7 +234,7 @@ class JourneyFeatures:
 
         state = point["state"]
         window = self.popup(self.t("view_checkpoint"), "920x740")
-        self.label(window, state["character_name"], 28).pack(pady=(18, 6))
+        self.label(window, state["character_name"], 28, display=True).pack(pady=(18, 6))
         self.label(
             window, display_date(point["date"]) + " · " + self.t(state["class_name"]), muted=True
         ).pack(pady=6)
@@ -400,7 +400,7 @@ class JourneyFeatures:
         window.attributes("-topmost", True)
         heading = self.card(window)
         heading.pack(fill="x", padx=8, pady=8)
-        title = self.label(heading, self.data["character_name"], 19)
+        title = self.label(heading, self.data["character_name"], 19, display=True)
         title.pack(side="left", padx=14, pady=12)
         drag = {}
 
@@ -603,7 +603,7 @@ class JourneyFeatures:
                 if self.deadline
                 else (0 if self.awaiting_result else self.timer_duration)
             )
-            timer.configure(text=f"{remaining//60:02d}:{remaining%60:02d}")
+            set_text(timer, f"{remaining//60:02d}:{remaining%60:02d}")
             window.after(250, pulse)
 
         refresh()

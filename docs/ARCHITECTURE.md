@@ -39,7 +39,7 @@ application callbacks run after posting ends. Root visibility is never suspended
 with WM_SETREDRAW. All palettes are static; decorative background decoding,
 resize rendering and RGB scheduling are absent.
 Hidden pages keep their controls, but update font metrics only when shown. The
-sidebar layout changes only when entering or leaving XP's horizontal toolbar.
+sidebar layout is fixed; a style change only recolors and refonts it.
 
 Historical releases are independent snapshots, not folders to merge into current
 source. Each source ZIP is hashed against its own manifest and paired EXE. Existing
@@ -55,7 +55,7 @@ Tests use temporary directories; the application never resets future users on la
 
 The profile library stores save_sources and installation_folder outside shared
 source. Legacy libraries derive linked paths from each save_link; migration
-also normalizes retired palettes and removes obsolete background preferences.
+maps retired styles to Readable or Ledger and removes obsolete background preferences.
 Rescans submit one worker and do not overlap imports. Parsing checks file size,
 mtime and slot checksums before accepting any data. The UI commits valid edits
 at submission and completion, then merges into the current active library.

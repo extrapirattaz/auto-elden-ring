@@ -42,7 +42,7 @@ class Interface(unittest.TestCase):
         a.max_without_dragon()
         self.assertEqual(a.data["manual"]["target"], 24)
 
-    def test_all_languages_and_themes_render_every_page(self):
+    def test_all_languages_and_styles_render_every_page(self):
         a = self.app
         for language in ("en", "fr", "cs", "de", "es", "ja"):
             a.data["language"] = language
@@ -76,7 +76,7 @@ class Interface(unittest.TestCase):
         a.planner.toggle_weapon("Dagger")
         self.assertEqual(a.data["selected"][0]["name"], "Black Knife")
 
-    def test_calculation_and_palette_preserve_page_widgets(self):
+    def test_calculation_and_style_switch_preserve_page_widgets(self):
         a = self.app
         a.show("weapons")
         frame = a.views["weapons"]["frame"]
@@ -85,7 +85,7 @@ class Interface(unittest.TestCase):
         self.assertIs(a.weapon_metrics, metric)
         a.show("settings")
         settings = a.views["settings"]["frame"]
-        a.set_palette("slate")
+        a.set_visual_style("style_ledger")
         self.assertIs(a.views["settings"]["frame"], settings)
         self.assertIs(a.views["weapons"]["frame"], frame)
         a.dyslexic_var.set(True)
@@ -93,7 +93,7 @@ class Interface(unittest.TestCase):
         self.assertEqual(a.font_family, "OpenDyslexic")
         a.dyslexic_var.set(False)
         a.set_reading_mode()
-        self.assertEqual(a.data["theme"], "slate")
+        self.assertEqual(a.data["style"], "ledger")
 
     def test_zero_wallet_checklist_and_upgrade_reset(self):
         a = self.app

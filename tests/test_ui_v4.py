@@ -35,7 +35,8 @@ class ProgressInterface(unittest.TestCase):
         self.create()
         a.show("journal")
         self.assertIsNotNone(a.timeline)
-        self.assertEqual(len(a.timeline.find_all()), 1)
+        # The empty journal draws its rule and the guidance text.
+        self.assertEqual(len(a.timeline.find_all()), 2)
         self.assertEqual(a.data["journey_name"], "Test Tarnished")
         a.show("character")
         self.assertEqual(a.class_option.cget("state"), "disabled")
@@ -163,10 +164,9 @@ class ProgressInterface(unittest.TestCase):
         for page in ("character", "weapons", "stones", "farm", "journal", "settings"):
             a.show(page)
         frames = {key: value["frame"] for key, value in a.views.items()}
-        for style, spec in STYLES.items():
+        for style in STYLES:
             a.set_visual_style("style_" + style)
-            for palette in spec["themes"]:
-                a.set_palette(palette)
+            with self.subTest(style=style):
                 self.assertEqual(a.weapon_form.cget("fg_color"), a.paper)
                 self.assertEqual(a.weapon_form.cget("bg_color"), a.bg)
                 self.assertEqual(a.views["stones"]["body"]._parent_canvas.cget("bg"), a.bg)
@@ -197,7 +197,7 @@ class ProgressInterface(unittest.TestCase):
         a = self.app
         a.deiconify()
         a.show("stones")
-        a.set_visual_style("style_elden")
+        a.set_visual_style("style_ledger")
         a.update()
         frame = a.views["stones"]["frame"]
         a.geometry("1280x860+350+80")

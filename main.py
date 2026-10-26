@@ -60,19 +60,19 @@ def main():
             app.update()
             checks["bundled images"] = len(app.gallery.cache) > 0
             checks["selected catalogue costs"] = app.planner.weapons()["total"] > 0
-            checks["three static styles"] = True
-            for style in ("modern", "elden", "xp"):
+            checks["two static styles"] = True
+            for style in ("readable", "ledger"):
                 app.set_visual_style("style_" + style)
                 app.update()
             app.data["dyslexic"] = True
             app.apply_appearance()
             checks["reading font"] = app.font_family == "OpenDyslexic"
             app.data["dyslexic"] = False
-            app.set_visual_style("style_modern")
+            app.set_visual_style("style_readable")
             state = app.profiles.create("Release fixture", "Release fixture", "Warrior", app.data)
             app.activate_profile(state)
             app.show("journal")
-            checks["empty character timeline"] = len(app.timeline.find_all()) == 1
+            checks["empty character timeline"] = len(app.timeline.find_all()) == 2
             app.profiles.checkpoint(app.data, "Release checkpoint")
             app.draw_timeline()
             checks["timeline event"] = len(app.timeline.find_all()) > 1

@@ -139,10 +139,9 @@ Character and weapon pages can also select saved spots for their own goals.
 
 ## Appearance, music and small mode
 
-Modern uses rounded panels and two palettes: Porcelain White and Charcoal Black.
-Gothic retains its compact serif layout and Antique Gold, Ember and Moonlight
-colors, with solid backgrounds. Windows XP uses square controls, blue accents
-and grey surfaces with one palette. All styles are static.
+Readable is the default: black text on white, Segoe UI, visible borders and
+blue accents. Ledger is a dark journal with serif headings, ruled cards and a
+brass accent. Each style has one fixed palette. Both are static.
 Reading mode applies larger OpenDyslexic text and a calm cream palette, then
 restores the selected style when disabled. Changes retain existing page widgets
 and batch presentation updates without reopening the main window.
@@ -234,16 +233,16 @@ closes a list without changing its selection. Only a click or Enter commits.
 
 The current version does not load decorative images or animate text. Old
 background preferences are removed during migration, without touching the
-personal image file. Old Rainbow profiles migrate to Modern / Charcoal Black;
-Modern Mint profiles migrate to Porcelain White. Goals and timelines remain.
+personal image file. Earlier styles migrate to the nearest of the two: dark
+palettes become Ledger, everything else becomes Readable. Goals and timelines remain.
 
 ## Startup and manual rescans
 
 Import a supported PC save or choose its installation folder once. The app
 remembers those locations in its local profile library. Later launches rescan
 in a worker while the in-window character chooser stays available. The bottom
-**Rescan game saves** button performs the same check during play. In the XP
-layout it sits on the toolbar. The chooser also provides the rescan button.
+**Rescan game saves** button performs the same check during play. The chooser
+also provides the rescan button.
 Fresh installations do not scan/import the game without your initial choice.
 
 Rescans check remembered files, related save folders and roaming accounts,

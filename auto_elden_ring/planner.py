@@ -16,10 +16,9 @@ from .core import (
     STONE_PRICES,
     MAX_LEVEL,
 )
-from .styles import STYLES, PALETTES
+from .styles import STYLES
 
 LANGUAGES = ("en", "fr", "cs", "de", "es", "ja")
-THEMES = tuple(PALETTES)
 TALISMANS = {"none": 100, "gold": 120, "silver": 100}
 CONSUMABLES = {
     "none": 100,
@@ -34,8 +33,7 @@ def default_state():
     stats = deepcopy(CLASS_DATA["Vagabond"]["stats"])
     return {
         "language": "en",
-        "theme": "calm",
-        "style": "modern",
+        "style": "readable",
         "dyslexic": False,
         "character_name": "Tarnished",
         "journey_name": "Journey 1",
@@ -94,10 +92,8 @@ def buff_multiplier(talisman, consumable):
 def validate_state(state, db):
     if not isinstance(state, dict) or set(state) != set(default_state()):
         raise ValueError("Invalid project structure.")
-    if state["language"] not in LANGUAGES or state["theme"] not in THEMES:
-        raise ValueError("Unknown language or theme.")
-    if state["style"] not in STYLES or state["theme"] not in STYLES[state["style"]]["themes"]:
-        raise ValueError("The selected color palette does not belong to this style.")
+    if state["language"] not in LANGUAGES or state["style"] not in STYLES:
+        raise ValueError("Unknown language or visual style.")
     if not isinstance(state["dyslexic"], bool):
         raise ValueError("Invalid reading preference.")
     for key in ("character_name", "journey_name", "music_file"):

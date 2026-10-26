@@ -68,13 +68,19 @@ class InWindowFlows(unittest.TestCase):
         a.profiles.active["state"] = old
         a.profiles.validate()
         migrated = a.profiles.active["state"]
-        self.assertEqual((migrated["style"], migrated["theme"]), ("modern", "slate"))
+        self.assertEqual(migrated["style"], "ledger")
+        self.assertNotIn("theme", migrated)
         self.assertNotIn("custom_background", migrated)
         self.assertEqual(migrated["character_name"], "Demo")
-        self.assertEqual(upgrade_state(dict(a.data, theme="mint"))["theme"], "calm")
+        self.assertEqual(
+            upgrade_state(dict(a.data, style="modern", theme="calm"))["style"], "readable"
+        )
+        self.assertEqual(
+            upgrade_state(dict(a.data, style="xp", theme="xp_blue"))["style"], "readable"
+        )
         a.show("settings")
         self.assertFalse(hasattr(a, "background_actions"))
-        self.assertEqual(len(a.theme_option.cget("values")), 2)
+        self.assertFalse(hasattr(a, "theme_option"))
 
     def test_equipment_overview_does_not_list_all_upgraded_weapons(self):
         a = self.app
