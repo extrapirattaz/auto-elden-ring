@@ -6,6 +6,8 @@ tables, keeps a timeline for each character and reads your PC save files without
 changing them. Written in Python (Tkinter / CustomTkinter), distributed as a
 standalone Windows x64 executable.
 
+Full project overview, feature by feature: [docs/PROJECT.md](docs/PROJECT.md).
+
 Keywords: Elden Ring, rune farming, build planner, level calculator, weapon upgrade
 calculator, smithing stones, save file reader, offline, Windows, Python, CustomTkinter.
 
